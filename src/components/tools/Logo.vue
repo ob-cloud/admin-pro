@@ -13,7 +13,7 @@
 export default {
   name: 'Logo',
   components: {
-    LogoSvg
+    // LogoSvg
   },
   props: {
     title: {

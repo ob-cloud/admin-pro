@@ -93,7 +93,6 @@
         </a-button>
         <router-link class="login" :to="{ name: 'login' }">使用已有账户登录</router-link>
       </a-form-item>
-
     </a-form>
   </div>
 </template>
@@ -223,6 +222,7 @@ export default {
     getCaptcha (e) {
       e.preventDefault()
       const { form: { validateFields }, state, $message, $notification } = this
+      console.log($message, $notification)
 
       validateFields(['mobile'], { force: true },
         (err, values) => {
@@ -237,7 +237,7 @@ export default {
               }
             }, 1000)
 
-            const hide = $message.loading('验证码发送中..', 0)
+            // const hide = $message.loading('验证码发送中..', 0)
 
             // getSmsCaptcha({ mobile: values.mobile }).then(res => {
             //   setTimeout(hide, 2500)

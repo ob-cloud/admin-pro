@@ -32,7 +32,7 @@ module.exports = {
       .set('@$', resolve('src'))
       .set('@api', resolve('src/api'))
       .set('@assets', resolve('src/assets'))
-      .set('@comp', resolve('src/components'))
+      .set('@components', resolve('src/components'))
       .set('@views', resolve('src/views'))
       .set('@layout', resolve('src/layout'))
       .set('@static', resolve('src/static'))

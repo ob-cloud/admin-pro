@@ -1,29 +1,29 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
+  <a-locale-provider :locale="locale">
+    <div id="app">
+      <router-view/>
+    </div>
+  </a-locale-provider>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import HelloWorld from './components/HelloWorld.vue'
+<script>
+import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+import { AppDeviceEnquire } from '@/utils/mixin'
 
-@Component({
-  components: {
-    HelloWorld
+export default {
+  mixins: [AppDeviceEnquire],
+  data () {
+    return {
+      locale: zhCN
+    }
+  },
+  mounted () {
+
   }
-})
-export default class App extends Vue {}
-</script>
-
-<style lang="less">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
+</script>
+<style>
+  #app {
+    height: 100%;
+  }
 </style>
