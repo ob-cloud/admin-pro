@@ -34,7 +34,7 @@ module.exports = {
       .set('@assets', resolve('src/assets'))
       .set('@components', resolve('src/components'))
       .set('@views', resolve('src/views'))
-      .set('@layout', resolve('src/layout'))
+      .set('@layout', resolve('src/components/Layouts'))
       .set('@static', resolve('src/static'))
   },
 
