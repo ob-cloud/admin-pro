@@ -201,7 +201,7 @@ export default {
             }
           }, 1000)
 
-          const hide = this.$message.loading('验证码发送中..', 0)
+          // const hide = this.$message.loading('验证码发送中..', 0)
           // getSmsCaptcha({ mobile: values.mobile }).then(res => {
           //   setTimeout(hide, 2500)
           //   this.$notification['success']({

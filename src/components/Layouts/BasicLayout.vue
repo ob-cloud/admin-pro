@@ -78,7 +78,7 @@ export default {
     RouteView,
     SideMenu,
     GlobalHeader,
-    GlobalFooter,
+    GlobalFooter
     // SettingDrawer
   },
   data () {
