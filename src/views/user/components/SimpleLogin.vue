@@ -13,8 +13,8 @@ export default {
     return {
       LoginForm: this.$form.createForm(this),
       LoginRules: {
-        username: [ 'username', { rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: this.handleUsernameOrEmail }], validateTrigger: ['blur', 'change'] } ],
-        password: [ 'password', { rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur' } ]
+        username: [ 'username', { initialValue: 'admin', rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: this.handleUsernameOrEmail }], validateTrigger: ['blur', 'change'] } ],
+        password: [ 'password', { initialValue: '123456', rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur' } ]
       },
       state: {
         time: 60,
@@ -28,7 +28,7 @@ export default {
     ...mapActions(['Login', 'Logout']),
     handleUsernameOrEmail (rule, value, callback) {
       const { state } = this
-      state.loginType = +isEmail(value)
+      state.loginType = 1 - isEmail(value)
       callback()
     },
     handleSubmit (e) {
@@ -63,7 +63,6 @@ export default {
     },
     loginSuccess (res) {
       this.$router.push({ path: '/' })
-      // 延迟 1 秒显示欢迎信息
       setTimeout(() => {
         this.$notification.success({
           message: '欢迎',

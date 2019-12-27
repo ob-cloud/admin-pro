@@ -5,6 +5,9 @@ import store from './store'
 
 import './core/lib'
 
+// mock
+import './mock'
+
 Vue.config.productionTip = false
 
 new Vue({
