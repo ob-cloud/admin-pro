@@ -1,75 +1,13 @@
-<template>
-  <a-layout :class="['layout', device]">
-    <!-- SideMenu -->
-    <a-drawer
-      v-if="isMobile()"
-      placement="left"
-      :wrapClassName="`drawer-sider ${navTheme}`"
-      :closable="false"
-      :visible="collapsed"
-      @close="drawerClose"
-    >
-      <side-menu
-        mode="inline"
-        :menus="menus"
-        :theme="navTheme"
-        :collapsed="false"
-        :collapsible="true"
-        @menuSelect="menuSelect"
-      ></side-menu>
-    </a-drawer>
-
-    <side-menu
-      v-else-if="isSideMenu()"
-      mode="inline"
-      :menus="menus"
-      :theme="navTheme"
-      :collapsed="collapsed"
-      :collapsible="true"
-    ></side-menu>
-
-    <a-layout :class="[layoutMode, `content-width-${contentWidth}`]" :style="{ paddingLeft: contentPaddingLeft, minHeight: '100vh' }">
-      <!-- layout header -->
-      <global-header
-        :mode="layoutMode"
-        :menus="menus"
-        :theme="navTheme"
-        :collapsed="collapsed"
-        :device="device"
-        @toggle="toggle"
-      />
-
-      <!-- layout content -->
-      <a-layout-content :style="{ height: '100%', margin: '24px 24px 0', paddingTop: fixedHeader ? '64px' : '0' }">
-        <multi-tab v-if="multiTab"></multi-tab>
-        <transition name="page-transition">
-          <route-view />
-        </transition>
-      </a-layout-content>
-
-      <!-- layout footer -->
-      <a-layout-footer>
-        <global-footer />
-      </a-layout-footer>
-
-      <!-- Setting Drawer (show in development mode) -->
-      <!-- <setting-drawer v-if="!production"></setting-drawer> -->
-    </a-layout>
-  </a-layout>
-
-</template>
-
 <script>
 import { triggerWindowResizeEvent } from '@/utils/util'
 import { mapState, mapActions } from 'vuex'
 import { mixin, mixinDevice } from '@/utils/mixin'
 import config from '@/config/defaultSettings'
 
-import RouteView from './RouteView'
+import RouteView from '@layout/RouteView'
 import SideMenu from '@/components/Menu/SideMenu'
 import GlobalHeader from '@/components/GlobalHeader'
 import GlobalFooter from '@/components/GlobalFooter'
-// import SettingDrawer from '@/components/SettingDrawer'
 
 export default {
   name: 'BasicLayout',
@@ -143,21 +81,79 @@ export default {
     },
     drawerClose () {
       this.collapsed = false
+    },
+    renderMobileSidebar () {
+      return (
+        <a-drawer
+          placement="left"
+          wrapClassName={`drawer-sider ${this.navTheme}`}
+          closable={false}
+          visible={this.collapsed}
+          onClose={this.drawerClose}
+        >
+          <side-menu
+            mode="inline"
+            menus={this.menus}
+            theme={this.navTheme}
+            collapsed={false}
+            collapsible={true}
+            onMenuSelect={this.menuSelect}
+          ></side-menu>
+        </a-drawer>
+      )
+    },
+    renderSidebar () {
+      return (
+        <side-menu
+          mode="inline"
+          menus={this.menus}
+          theme={this.navTheme}
+          collapsed={this.collapsed}
+          collapsible={true}
+        ></side-menu>
+      )
     }
+  },
+  render () {
+    const sidebar = this.isMobile() ? this.renderMobileSidebar() : (this.isSideMenu() && this.renderSidebar())
+    return (
+      <a-layout class={['layout', this.device]}>
+        {sidebar}
+        <a-layout class={[this.layoutMode, `content-width-${this.contentWidth}`]} style={{ paddingLeft: this.contentPaddingLeft, minHeight: '100vh' }}>
+          {/* layout header */}
+          <global-header
+            mode={this.layoutMode}
+            menus={this.menus}
+            theme={this.navTheme}
+            collapsed={this.collapsed}
+            device={this.device}
+            onToggle={this.toggle}
+          />
+
+          {/* <!-- layout content --> */}
+          <a-layout-content style={{ height: '100%', margin: '24px 24px 0', paddingTop: this.fixedHeader ? '64px' : '0' }}>
+            {
+              this.multiTab && (<multi-tab></multi-tab>)
+            }
+            <transition name="page-transition">
+              <route-view />
+            </transition>
+          </a-layout-content>
+
+          {/* <!-- layout footer --> */}
+          <a-layout-footer>
+            <global-footer />
+          </a-layout-footer>
+
+          {/* <!-- Setting Drawer (show in development mode) --> */}
+          {/* <!-- <setting-drawer v-if="!production"></setting-drawer> --> */}
+        </a-layout>
+      </a-layout>
+    )
   }
 }
 </script>
-
 <style lang="less">
-/*
- * The following styles are auto-applied to elements with
- * transition="page-transition" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the page transition by editing
- * these styles.
- */
-
 .page-transition-enter {
   opacity: 0;
 }

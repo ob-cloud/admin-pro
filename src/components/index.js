@@ -6,5 +6,5 @@ import ExceptionPage from '@/components/Exception'
 
 export {
   Result,
-  ExceptionPage,
+  ExceptionPage
 }

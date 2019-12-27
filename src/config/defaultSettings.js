@@ -13,6 +13,20 @@
  *
  */
 
+const structSettings = {
+  LoginLayout: {
+    mode: 'simple', // mode: simple, multiple
+    forgetPassword: true, // password forgotten
+    otherLoginTypes: [{ // third-part login
+      iconCls: 'alipay-circle'
+    }, {
+      iconCls: 'taobao-circle'
+    }, {
+      iconCls: 'weibo-circle'
+    }]
+  }
+}
+
 export default {
   primaryColor: '#52C41A', // primary color of ant design
   navTheme: 'dark', // theme for nav menu
@@ -31,11 +45,18 @@ export default {
     storage: 'local' // storage name session, local, memory
   },
   userLayoutOptions: {
-    logo: '',
+    logo: 'http://placehold.it/50x50/333/fff/?text=pro',
     title: 'Admin-Pro',
-    description: '',
+    // description: 'On-Bright Admin Pro',
     hasFooter: false,
-    copyright: '',
-    links: []
-  }
+    copyright: 'OnBright.tld',
+    links: [{
+      href: 'www.baidu.com',
+      label: '条款'
+    }, {
+      href: 'www.baidu.com',
+      label: '声明'
+    }]
+  },
+  ...structSettings
 }
