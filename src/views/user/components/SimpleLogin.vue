@@ -2,12 +2,13 @@
 import md5 from 'md5'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
+import { isEmail } from '@/utils/validator'
 import config from '@/config/defaultSettings'
 export default {
-  name: 'SingleLogin',
-  beforeCreate () {
-    config.LoginLayout.mode === 'simple' && require('./login.less')
-  },
+  name: 'SimpleLogin',
+  // beforeCreate () {
+  //   config.LoginLayout.mode === 'simple' && require('./login.less')
+  // },
   data () {
     return {
       LoginForm: this.$form.createForm(this),
@@ -17,10 +18,9 @@ export default {
       },
       state: {
         time: 60,
-        loginBtn: false,
+        loginStatus: false,
         // login type: 0 email, 1 username, 2 telephone
-        loginType: 0,
-        smsSendBtn: false
+        loginType: 0
       }
     }
   },
@@ -28,12 +28,7 @@ export default {
     ...mapActions(['Login', 'Logout']),
     handleUsernameOrEmail (rule, value, callback) {
       const { state } = this
-      const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
-      if (regex.test(value)) {
-        state.loginType = 0
-      } else {
-        state.loginType = 1
-      }
+      state.loginType = +isEmail(value)
       callback()
     },
     handleSubmit (e) {
@@ -44,7 +39,7 @@ export default {
         Login
       } = this
 
-      state.loginBtn = true
+      state.loginStatus = true
 
       validateFields(['username', 'password'], { force: true }, (err, values) => {
         if (!err) {
@@ -57,11 +52,11 @@ export default {
             .then((res) => this.loginSuccess(res))
             .catch(err => this.requestFailed(err))
             .finally(() => {
-              state.loginBtn = false
+              state.loginStatus = false
             })
         } else {
           setTimeout(() => {
-            state.loginBtn = false
+            state.loginStatus = false
           }, 600)
         }
       })
@@ -118,8 +113,8 @@ export default {
             size="large"
             type="primary"
             class="login-button"
-            loading={this.state.loginBtn}
-            disabled={this.state.loginBtn}
+            loading={this.state.loginStatus}
+            disabled={this.state.loginStatus}
           >确定</a-button>
         </a-form-item>
         {

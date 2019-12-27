@@ -17,13 +17,13 @@ const structSettings = {
   LoginLayout: {
     mode: 'simple', // mode: simple, multiple
     forgetPassword: true, // password forgotten
-    otherLoginTypes: [{ // third-part login
-      iconCls: 'alipay-circle'
-    }, {
-      iconCls: 'taobao-circle'
-    }, {
-      iconCls: 'weibo-circle'
-    }]
+    // otherLoginTypes: [{ // third-part login
+    //   iconCls: 'alipay-circle'
+    // }, {
+    //   iconCls: 'taobao-circle'
+    // }, {
+    //   iconCls: 'weibo-circle'
+    // }]
   }
 }
 
