@@ -29,10 +29,8 @@
     "vue-ls": "^3.2.1",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.1.2",
-    "vuex": "^3.1.1",
     "vue-svg-component-runtime": "^1.0.1",
-    "vue-class-component": "^7.0.2",
-    "vue-property-decorator": "^8.3.0"
+    "vuex": "^3.1.1"
   },
   "devDependencies": {
     "@ant-design/colors": "^3.2.1",
@@ -42,11 +40,11 @@
     "@vue/cli-plugin-vuex": "^4.0.4",
     "@vue/cli-service": "^4.1.0",
     "@vue/eslint-config-standard": "^4.0.0",
+    "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
-    "typescript": "~3.5.3",
     "vue-template-compiler": "^2.6.10"
   }
 }

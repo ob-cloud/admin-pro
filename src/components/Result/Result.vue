@@ -1,7 +1,7 @@
 <template>
   <div class="result">
     <div>
-      <a-icon :class="{ 'icon': true, [`${type}`]: true }" :type="localIsSuccess ? 'check-circle' : 'close-circle'"/>
+      <a-icon :class="{ 'icon': true, [`${type}`]: true }" :type="localIsSuccess ? 'check-circle' : 'close-circle'" />
     </div>
     <div class="title">
       <slot name="title">
@@ -29,6 +29,7 @@ export default {
   name: 'Result',
   props: {
     /** @Deprecated */
+    /* eslint-disable no-unused-vars */
     isSuccess: {
       type: Boolean,
       default: false
@@ -36,7 +37,7 @@ export default {
     type: {
       type: String,
       default: resultEnum[0],
-      validator (val) {
+      validator(val) {
         return (val) => resultEnum.includes(val)
       }
     },

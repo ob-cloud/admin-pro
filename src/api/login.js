@@ -13,33 +13,26 @@ import { axios } from '@/utils/request'
  */
 export function login (parameter) {
   return axios({
-    url: '/auth/login',
+    url: '/pro/auth/login',
     method: 'post',
     data: parameter
   })
 }
 
-export function getInfo () {
+export function logout () {
   return axios({
-    url: '/api/user/info',
-    method: 'get',
+    url: '/pro/auth/logout',
+    method: 'post',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }
   })
 }
 
-export function getCurrentUserNav (token) {
+export function queryPermissionList () {
   return axios({
-    url: '/user/nav',
-    method: 'get'
-  })
-}
-
-export function logout () {
-  return axios({
-    url: '/auth/logout',
-    method: 'post',
+    url: '/pro/user/queryPermissionList',
+    method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }

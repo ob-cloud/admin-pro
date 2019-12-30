@@ -766,7 +766,7 @@ const userNav = (options) => {
   return json
 }
 
-const getPermissionList = (options) => {
+const queryPermissionList = (options) => {
   const menu = [
     {
       component: 'dashboard/Analysis',
@@ -793,7 +793,7 @@ const getPermissionList = (options) => {
       }],
       component: 'layouts/RouteView',
       id: 'f0675b52d89100ee88472b6800754a08',
-      meta: {keepAlive: false, icon: 'bar-chart', title: '统计报表'},
+      meta: { keepAlive: false, icon: 'bar-chart', title: '统计报表' },
       name: 'report',
       path: '/report',
       redirect: null,
@@ -802,23 +802,27 @@ const getPermissionList = (options) => {
   ]
   const auth = [
     {
-      action: "online:goGenerateCode",
-      describe: "代码生成按钮",
-      type: "1"
+      action: 'online:goGenerateCode',
+      describe: '代码生成按钮',
+      type: '1'
     },
     {
-      action: "user:form:phone",
-      describe: "手机号禁用",
-      type: "2"
+      action: 'user:form:phone',
+      describe: '手机号禁用',
+      type: '2'
     },
     {
-      action: "user:add",
-      describe: "添加用户按钮",
-      type: "1"
+      action: 'user:add',
+      describe: '添加用户按钮',
+      type: '1'
     }
   ]
+  return {
+    menu,
+    auth
+  }
 }
 
 Mock.mock(/\/api\/user\/info/, 'get', info)
 Mock.mock(/\/api\/user\/nav/, 'get', userNav)
-Mock.mock(/\/api\/user\/getPermissionList/, 'get', getPermissionList)
+Mock.mock(/\/api\/user\/queryPermissionList/, 'get', queryPermissionList)

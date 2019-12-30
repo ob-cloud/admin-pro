@@ -69,6 +69,12 @@ const permission = {
         commit('SET_ROUTERS', accessedRouters)
         resolve()
       })
+    },
+    UpdateAppRouter ({ commit }, routes) {
+      return new Promise(resolve => {
+        commit('SET_ROUTERS', routes.constRoutes)
+        resolve()
+      })
     }
   }
 }

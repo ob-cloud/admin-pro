@@ -12,6 +12,7 @@ export const DEFAULT_MULTI_TAB = 'DEFAULT_MULTI_TAB'
 
 export const USER_NAME = 'USER_NAME'
 export const USER_INFO = 'USER_INFO'
+export const USER_AUTH = 'USER_AUTH'
 
 export const CONTENT_WIDTH_TYPE = {
   Fluid: 'Fluid',
