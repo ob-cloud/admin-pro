@@ -96,7 +96,7 @@ function  generateChildRouters (data) {
   const routers = [];
   for (let item of data) {
     let component = ''
-    if (item.component.indexOf('layouts') >= 0) {
+    if (item.component.indexOf('Layouts') >= 0) {
       component = 'components/' + item.component
     } else {
       component = 'views/' + item.component

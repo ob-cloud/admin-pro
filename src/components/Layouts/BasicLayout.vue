@@ -1,6 +1,6 @@
 <template>
   <global-layout>
-    <multi-tab v-if="multiTab"></multi-tab>
+    <multi-tab v-if="!isMobile() && multiTab"></multi-tab>
     <transition name="page-transition">
       <IRouteView />
     </transition>
@@ -10,10 +10,10 @@
 <script>
 import GlobalLayout from '@/components/Base/GlobalLayout'
 import IRouteView from '@layout/RouteView'
-import { mixin } from '@/utils/mixin'
+import { mixin, mixinDevice } from '@/utils/mixin'
 export default {
   name: "BasicLayout",
-  mixins: [ mixin ],
+  mixins: [ mixin, mixinDevice ],
   components: {
     GlobalLayout,
     IRouteView
