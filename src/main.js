@@ -5,6 +5,7 @@ import store from './store'
 
 import './core/lib'
 import bootstrap from './core/bootstrap'
+import './assets/styles/global.less'
 
 // mock
 // import './mock'

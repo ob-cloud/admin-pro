@@ -24,6 +24,22 @@ const structSettings = {
     // }, {
     //   iconCls: 'weibo-circle'
     // }]
+  },
+  GlobalFooter: {
+    // links: [{
+    //   href: '',
+    //   iconType: '',
+    //   target: '_blank',
+    //   text: ''
+    // }, {
+    //   href: '',
+    //   iconType: '',
+    //   target: '_self',
+    //   text: ''
+    // }],
+    // copyright: {
+    //   text: ''
+    // }
   }
 }
 
@@ -36,7 +52,7 @@ export default {
   fixSiderbar: false, // sticky siderbar
   autoHideHeader: false, //  auto hide header
   colorWeak: false,
-  multiTab: false,
+  multiTab: true,
   production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
   // vue-ls options
   storageOptions: {

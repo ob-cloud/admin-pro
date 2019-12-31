@@ -56,11 +56,11 @@ module.exports = {
   },
 
   devServer: {
-    port: 3000,
+    port: 3001,
     proxy: {
      '/pro': {
         // target: 'http://yapi.demo.qunar.com/mock/66959', //mock API接口系统
-        target: 'http://127.0.0.1:3000/mock/11/',
+        target: 'http://192.168.200.163:3000/mock/11',
         ws: false,
         changeOrigin: true,
         // pathRewrite: {
