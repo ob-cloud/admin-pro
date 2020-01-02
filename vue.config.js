@@ -60,12 +60,12 @@ module.exports = {
     proxy: {
      '/pro': {
         // target: 'http://yapi.demo.qunar.com/mock/66959', //mock API接口系统
-        target: 'http://192.168.200.163:3000/mock/11',
+        target: 'http://192.168.200.163:3000/mock/11/pro',
         ws: false,
         changeOrigin: true,
-        // pathRewrite: {
-        //   '/pro': ''  //默认所有请求都加了boot前缀，需要去掉
-        // }
+        pathRewrite: {
+          '/pro': ''  //默认所有请求都加了boot前缀，需要去掉
+        }
       },
     }
   },

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { login, logout, queryPermissionList } from '@/api/login'
+import { login, logout, getUserPermissionList } from '@/api/login'
 import { ACCESS_TOKEN, USER_NAME, USER_INFO, USER_AUTH } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 
@@ -63,7 +63,7 @@ const user = {
 
     GetPermissionList ({ commit }) {
       return new Promise((resolve, reject) => {
-        queryPermissionList().then(response => {
+        getUserPermissionList().then(response => {
           console.log(response)
           const menu = response.result.menu
           const auth = response.result.auth

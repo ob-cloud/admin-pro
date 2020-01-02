@@ -1,6 +1,6 @@
 const envConfig = {
   dev: {
-    baseApi: 'http://localhost:3001'
+    baseApi: 'http://localhost:3001/pro'
   },
   prod: {
     baseApi: 'https://aliiot.on-bright.com'

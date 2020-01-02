@@ -6,8 +6,8 @@ import config from '@/config/defaultSettings'
 
 import RouteView from '@layout/RouteView'
 import SideMenu from '@/components/Menu/SideMenu'
-import GlobalHeader from '@/components/GlobalHeader'
-import GlobalFooter from '@/components/GlobalFooter'
+import GlobalHeader from '@/components/Base/GlobalHeader'
+import GlobalFooter from '@/components/Base/GlobalFooter'
 
 export default {
   name: 'BasicLayout',

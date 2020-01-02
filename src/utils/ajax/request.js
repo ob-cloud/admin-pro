@@ -4,10 +4,11 @@ import store from '@/store'
 import notification from 'ant-design-vue/es/notification'
 import { VueAxios } from './axios'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
+import { getReqBaseUrl } from '@/config/env.config'
 
 // 创建 axios 实例
 const service = axios.create({
-  baseURL: process.env.VUE_APP_API_BASE_URL, // api base_url
+  baseURL: getReqBaseUrl(), // api base_url
   timeout: 6000 // 请求超时时间
 })
 

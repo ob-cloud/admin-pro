@@ -1,11 +1,24 @@
-import { axios } from '@/utils/ajax'
+import { getAction, postAction, putAction } from '@/utils/ajax'
 
-export function queryPermissionList () {
-  return axios({
-    url: '/pro/user/queryPermissionList',
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
-  })
+////// Menu
+
+const getMenuList = (params) => getAction('/sys/menu/list', params)
+const addMenu = (params) => postAction('/sys/menu/add', params)
+const editMenu = (params) => putAction('/sys/menu/edit', params)
+
+const queryTreeList = (params) => getAction('/sys/menu/queryTreeList', params)
+// const queryTreeListForRole = (params)=>getAction('/sys/role/queryTreeList',params);
+// const queryListAsync = (params)=>getAction('/sys/permission/queryListAsync',params);
+
+///// Dict
+
+const ajaxGetDictItems = (code, params) => getAction(`/sys/dict/getDictItems/${code}`, params)
+
+export {
+  getMenuList,
+  addMenu,
+  editMenu,
+  queryTreeList,
+
+  ajaxGetDictItems
 }
