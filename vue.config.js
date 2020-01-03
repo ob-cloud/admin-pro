@@ -1,3 +1,4 @@
+import { isProEnv } from '@/config/env.config'
 const path = require('path')
 
 function resolve(dir) {
@@ -6,6 +7,7 @@ function resolve(dir) {
 
 // vue.config.js
 module.exports = {
+  publicPath: isProEnv() ? './' : '/',
   /*
     Vue-cli3:
     Crashed when using Webpack `import()` #2463
