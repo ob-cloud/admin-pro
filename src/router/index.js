@@ -4,7 +4,7 @@ import store from '../store'
 import { constantRouterMap } from '@/config/router.config'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { generateIndexRouter } from "@/utils/util"
-import { isProEnv } from "@/config/env.config"
+// import { isProEnv } from "@/config/env.config"
 
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css' // progress bar style
@@ -19,8 +19,8 @@ VueRouter.prototype.push = function push (location, onResolve, onReject) {
 Vue.use(VueRouter)
 
 const router = new VueRouter({
-  mode: 'history',
-  base: isProEnv() ? 'pro' : '/',
+  mode: 'hash',
+  // base: isProEnv() ? 'pro' : '/',
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
