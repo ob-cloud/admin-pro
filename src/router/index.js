@@ -19,7 +19,6 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
   mode: 'history',
-  base: 'pro',
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
