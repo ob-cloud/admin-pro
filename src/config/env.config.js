@@ -3,7 +3,7 @@ const envConfig = {
     baseApi: 'http://localhost:3001/pro'
   },
   prod: {
-    baseApi: 'https://aliiot.on-bright.com'
+    baseApi: 'http://192.168.200.163:3000/mock/11/pro'
   }
 }
 
