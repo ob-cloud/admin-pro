@@ -236,9 +236,7 @@
       add () {
         this.picUrl = ''
         this.refresh()
-        this.edit({
-          activitiSync: '1'
-        })
+        this.edit({})
       },
       edit (record) {
         this.resetScreenSize() // 调用此方法,根据屏幕宽度自适应调整抽屉的宽度
@@ -253,7 +251,7 @@
         that.visible = true;
         that.model = Object.assign({}, record)
         that.$nextTick(() => {
-          that.form.setFieldsValue(pick(this.model, 'username', 'sex', 'realname', 'email', 'phone', 'activitiSync'))
+          that.form.setFieldsValue(pick(this.model, 'username', 'sex', 'realname', 'email', 'phone'))
         })
       },
       close () {
@@ -424,7 +422,8 @@
         }
       },
       getAvatarView(){
-        return this.url.imgerver + '/' + this.model.avatar
+        // return this.url.imgerver + '/' + this.model.avatar
+        return this.model.avatar
       },
 
       // 根据屏幕变化,设置抽屉尺寸
