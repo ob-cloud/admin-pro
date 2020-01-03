@@ -147,7 +147,12 @@
         this.$refs.modalForm.title = "添加子菜单"
         this.$refs.modalForm.localMenuType = 1
         this.$refs.modalForm.disableSubmit = false
-        this.$refs.modalForm.edit({status:'1',permsType:'1',route:true,'parentId':record.id})
+        this.$refs.modalForm.edit({
+          status: '1',
+          permsType: '1',
+          route: true,
+          parentId: record.id
+        })
       }
     }
   }
