@@ -8,7 +8,7 @@ const isProEnv = process.env.NODE_ENV === 'production'
 
 // vue.config.js
 module.exports = {
-  publicPath: isProEnv ? './' : '/',
+  // publicPath: isProEnv ? './' : '/',
   /*
     Vue-cli3:
     Crashed when using Webpack `import()` #2463
