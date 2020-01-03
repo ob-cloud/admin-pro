@@ -25,17 +25,19 @@ const editRole = (params) => putAction('/sys/role/edit', params)
 // const deleteRoleList = (params)=>deleteAction('/sys/role/deleteBatch',params);
 const checkRoleCode = (params) => getAction('/sys/role/checkRoleCode', params)
 const queryAllRole = (params) => getAction('/sys/role/all', params)
+const queryRoleTreeList = (params) => getAction('/sys/role/queryTreeList', params)
 
 ///// Dict
 const ajaxGetDictItems = (code, params) => getAction(`/sys/dict/getDictItems/${code}`, params)
-
 const addDict = (params) => postAction('/sys/dict/add', params)
 const editDict = (params) => putAction('/sys/dict/edit', params)
-
 const addDictItem = (params) => postAction('/sys/dictItem/add', params)
 const editDictItem = (params) => putAction('/sys/dictItem/edit', params)
-
 const duplicateCheck = (params) => getAction('/sys/duplicate/check', params)
+
+///// Permission
+const queryRolePermission = (params) => getAction('/sys/permission/queryRolePermission', params)
+const saveRolePermission = (params) => postAction('/sys/permission/saveRolePermission', params)
 
 export {
   // Menu
@@ -50,6 +52,11 @@ export {
   editRole,
   checkRoleCode,
   queryAllRole,
+  queryRoleTreeList,
+
+  // Permission
+  queryRolePermission,
+  saveRolePermission,
 
   // User
   addUser,
