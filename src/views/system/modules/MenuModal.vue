@@ -66,9 +66,9 @@
             <a-input placeholder="多个用逗号分隔, 如: user:list,user:create" v-decorator="[ 'perms', {}]" :readOnly="disableSubmit" />
           </a-form-item>
 
-          <a-form-item v-show="!show" :labelCol="labelCol" :wrapperCol="wrapperCol" label="授权策略">
+          <!-- <a-form-item v-show="!show" :labelCol="labelCol" :wrapperCol="wrapperCol" label="授权策略">
             <dict-select-tag v-decorator="['permsType', {initialValue: ''}]" placeholder="请选择授权策略" :type="'radio'" :triggerChange="true" dictCode="global_perms_type" />
-          </a-form-item>
+          </a-form-item> -->
 
           <a-form-item v-show="!show" :labelCol="labelCol" :wrapperCol="wrapperCol" label="状态">
             <dict-select-tag v-decorator="['status', {initialValue: ''}]" placeholder="请选择状态" :type="'radio'" :triggerChange="true" dictCode="valid_status" />
