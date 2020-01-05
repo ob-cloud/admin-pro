@@ -3,7 +3,8 @@ const envConfig = {
     baseApi: 'http://localhost:3001/pro'
   },
   prod: {
-    baseApi: 'http://192.168.200.163:3000/mock/11/pro'
+   // baseApi: 'http://192.168.200.163:3000/mock/11/pro'
+    baseApi: 'http://47.110.228.31/mock/13/pro'
   }
 }
 
