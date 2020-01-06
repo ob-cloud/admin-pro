@@ -240,18 +240,17 @@
       },
       edit (record) {
         this.resetScreenSize() // 调用此方法,根据屏幕宽度自适应调整抽屉的宽度
-        let that = this
-        that.initialRoleList()
-        that.form.resetFields()
-        if(record.hasOwnProperty("id")) {
-          that.loadUserRoles(record.id)
-          this.picUrl = "Has no pic url yet"
+        this.initialRoleList()
+        this.form.resetFields()
+        if (record.hasOwnProperty('id')) {
+          this.loadUserRoles(record.id)
+          this.picUrl = 'Has no pic url yet'
         }
-        that.userId = record.id;
-        that.visible = true;
-        that.model = Object.assign({}, record)
-        that.$nextTick(() => {
-          that.form.setFieldsValue(pick(this.model, 'username', 'sex', 'realname', 'email', 'phone'))
+        this.userId = record.id
+        this.visible = true
+        this.model = Object.assign({}, record)
+        this.$nextTick(() => {
+          this.form.setFieldsValue(pick(this.model, 'username', 'sex', 'realname', 'email', 'phone'))
         })
       },
       close () {
@@ -268,9 +267,9 @@
           if (!err) {
             that.confirmLoading = true
             let avatar = that.model.avatar
-            if(!values.birthday){
+            if (!values.birthday) {
               values.birthday = ''
-            }else{
+            } else {
               values.birthday = values.birthday.format(this.dateFormat)
             }
             let formData = Object.assign(this.model, values)

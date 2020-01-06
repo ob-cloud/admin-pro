@@ -22,10 +22,10 @@
           :expandedKeys="expandedKeysss"
           :checkStrictly="checkStrictly"
         >
-          <span slot="hasDatarule" slot-scope="{slotTitle,ruleFlag}">
+          <!-- <span slot="hasDatarule" slot-scope="{slotTitle,ruleFlag}">
             {{ slotTitle }}
             <a-icon v-if="ruleFlag" type="align-left" style="margin-left:5px;color: red;"></a-icon>
-          </span>
+          </span> -->
         </a-tree>
       </a-form-item>
     </a-form>
@@ -54,7 +54,7 @@
 
 </template>
 <script>
-  import { queryRoleTreeList, queryRolePermission, saveRolePermission } from '@/api/system'
+  import { queryPermissionTreeList, queryRolePermission, saveRolePermission } from '@/api/system'
 
   export default {
     name: 'UserRoleModal',
@@ -82,7 +82,7 @@
         this.checkedKeys = this.checkStrictly ? o.checked : o
       },
       show (roleId) {
-        this.roleId=roleId
+        this.roleId = roleId
         this.visible = true
       },
       close () {
@@ -146,7 +146,7 @@
   watch: {
     visible () {
       if (this.visible) {
-        queryRoleTreeList().then((res) => {
+        queryPermissionTreeList().then((res) => {
           this.treeData = res.result.treeList
           this.allTreeKeys = res.result.ids
           queryRolePermission({

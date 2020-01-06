@@ -127,9 +127,9 @@
         columns: columns,
         loading: false,
         url: {
-          list: '/sys/permission/list',
-          delete: '/sys/permission/delete',
-          deleteBatch: '/sys/permission/deleteBatch'
+          list: '/sys/menu/list',
+          delete: '/sys/menu/delete',
+          deleteBatch: '/sys/menu/deleteBatch'
         }
       }
     },

@@ -25,7 +25,7 @@ const editRole = (params) => putAction('/sys/role/edit', params)
 // const deleteRoleList = (params)=>deleteAction('/sys/role/deleteBatch',params);
 const checkRoleCode = (params) => getAction('/sys/role/checkRoleCode', params)
 const queryAllRole = (params) => getAction('/sys/role/all', params)
-const queryRoleTreeList = (params) => getAction('/sys/role/queryTreeList', params)
+const queryRoleTreeList = (params) => getAction('/sys/role/queryRoleTreeList', params)
 
 ///// Dict
 const ajaxGetDictItems = (code, params) => getAction(`/sys/dict/getDictItems/${code}`, params)
@@ -38,6 +38,11 @@ const duplicateCheck = (params) => getAction('/sys/duplicate/check', params)
 ///// Permission
 const queryRolePermission = (params) => getAction('/sys/permission/queryRolePermission', params)
 const saveRolePermission = (params) => postAction('/sys/permission/saveRolePermission', params)
+const queryPermissionTreeList = (params) => getAction('/sys/role/queryPermissionTreeList', params)
+
+///// Annoucement
+const doReleaseData = (params) => getAction('/sys/announcement/doReleaseData', params)
+const doReovkeData = (params) => getAction('/sys/announcement/doReovkeData', params)
 
 export {
   // Menu
@@ -57,6 +62,7 @@ export {
   // Permission
   queryRolePermission,
   saveRolePermission,
+  queryPermissionTreeList,
 
   // User
   addUser,
@@ -71,5 +77,9 @@ export {
   editDict,
   addDictItem,
   editDictItem,
-  duplicateCheck
+  duplicateCheck,
+
+  // Annoucement
+  doReleaseData,
+  doReovkeData
 }
