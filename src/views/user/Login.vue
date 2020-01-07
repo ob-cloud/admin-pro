@@ -8,7 +8,7 @@ export default {
     // config.LoginLayout.mode === 'simple' && require('./components/login.less')
     require('./components/login.less')
   },
-  render (h) {
+  render () {
     return (
       <div class="main">
         {
