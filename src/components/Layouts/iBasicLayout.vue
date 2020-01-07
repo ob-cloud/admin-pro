@@ -23,7 +23,11 @@ export default {
     return {
       production: config.production,
       collapsed: false,
-      menus: []
+      menus: [],
+      tabConfig: {
+        fix: config.routerOptions.isStaticHomeTab,
+        index: config.routerOptions.index
+      }
     }
   },
   computed: {
@@ -47,7 +51,6 @@ export default {
     }
   },
   created () {
-    // this.menus = this.mainMenu.find(item => item.path === '/').children
     this.menus = this.permissionMenuList
     this.collapsed = !this.sidebarOpened
   },
@@ -137,7 +140,7 @@ export default {
           {/* <!-- layout content --> */}
           <a-layout-content style={{ height: '100%', margin: '24px 24px 0', paddingTop: this.fixedHeader ? '64px' : '0' }}>
             {
-              this.multiTab && (<multi-tab></multi-tab>)
+              this.multiTab && (<multi-tab isHomeTabFix={this.tabConfig.fix} homeIndex={this.tabConfig.index}></multi-tab>)
             }
             <transition name="page-transition">
               <route-view />

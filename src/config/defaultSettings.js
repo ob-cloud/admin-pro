@@ -14,6 +14,7 @@
  */
 
 const structSettings = {
+  // 登录页面配置
   LoginLayout: {
     mode: 'simple', // mode: simple, multiple
     forgetPassword: true, // password forgotten
@@ -25,6 +26,7 @@ const structSettings = {
     //   iconCls: 'weibo-circle'
     // }]
   },
+  // 全局脚注配置
   GlobalFooter: {
     // links: [{
     //   href: '',
@@ -60,11 +62,12 @@ export default {
     name: 'ls', // name variable Vue.[ls] or this.[$ls],
     storage: 'local' // storage name session, local, memory
   },
+  // 用户登录布局配置
   userLayoutOptions: {
     logo: 'http://placehold.it/50x50/333/fff/?text=pro',
     title: 'Admin-Pro',
     // description: 'On-Bright Admin Pro',
-    hasFooter: false,
+    hasFooter: false, // hasFooter 为 true 时， 下面脚注配置生效
     copyright: 'OnBright.tld',
     links: [{
       href: 'www.baidu.com',
@@ -73,6 +76,19 @@ export default {
       href: 'www.baidu.com',
       label: '声明'
     }]
+  },
+  // 路由业务配置
+  routerOptions: {
+    isStaticHomeTab: true,  // 首页固定显示
+    index: {
+      name: 'dashboard-analysis',
+      path: '/dashboard/analysis',
+      fullPath: '/dashboard/analysis',
+      meta: {
+        icon: 'dashboard',
+        title: '首页'
+      }
+    }
   },
   ...structSettings
 }

@@ -1,6 +1,6 @@
 <template>
   <global-layout>
-    <multi-tab v-if="!isMobile() && multiTab"></multi-tab>
+    <multi-tab v-if="!isMobile() && multiTab" :isHomeTabFix="tabConfig.fix" :homeIndex="tabConfig.index"></multi-tab>
     <transition name="page-transition">
       <IRouteView />
     </transition>
@@ -11,6 +11,8 @@
 import GlobalLayout from '@/components/Base/GlobalLayout'
 import IRouteView from '@layout/RouteView'
 import { mixin, mixinDevice } from '@/utils/mixin'
+import config from '@/config/defaultSettings'
+
 export default {
   name: "BasicLayout",
   mixins: [ mixin, mixinDevice ],
@@ -20,7 +22,10 @@ export default {
   },
   data () {
     return {
-
+      tabConfig: {
+        fix: config.routerOptions.isStaticHomeTab,
+        index: config.routerOptions.index
+      }
     }
   }
 }

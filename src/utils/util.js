@@ -152,7 +152,7 @@ export function filterObj(obj) {
     return
   }
 
-  for (var key in obj) {
+  for (let key in obj) {
     if (obj.hasOwnProperty(key) && !obj[key]) {
       delete obj[key]
     }

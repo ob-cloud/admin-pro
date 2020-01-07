@@ -1,8 +1,22 @@
 <script>
 import events from './events'
-
 export default {
   name: 'MultiTab',
+  props: {
+    isHomeTabFix: {
+      type: Boolean,
+      default: true
+    },
+    homeIndex: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  computed: {
+    isHomeTabFixValid () {
+      return this.isHomeTabFix && !this.isEmptyObj(this.homeIndex) && this.homeIndex.path
+    }
+  },
   data () {
     return {
       fullPathList: [],
@@ -35,15 +49,32 @@ export default {
       }
     })
 
+    if (this.isHomeTabFixValid && this.$route.path !== this.homeIndex.path) {
+      this.pages.push({...this.homeIndex})
+      this.fullPathList.push(this.homeIndex.path)
+    }
+
     this.pages.push(this.$route)
     this.fullPathList.push(this.$route.fullPath)
     this.selectedLastPath()
   },
   methods: {
+    isEmptyObj (obj) {
+      if (!(typeof obj === 'object')) {
+        return true
+      }
+      for (let key in obj) {
+        return false
+      }
+      return true
+    },
     onEdit (targetKey, action) {
       this[action](targetKey)
     },
     remove (targetKey) {
+      if (this.isHomeTabFixValid && targetKey === this.homeIndex.path) {
+        return this.$message.warning('首页不能关闭!')
+      }
       this.pages = this.pages.filter(page => page.fullPath !== targetKey)
       this.fullPathList = this.fullPathList.filter(path => path !== targetKey)
       // 判断当前标签是否关闭，若关闭则跳转到最后一个还存在的标签页
