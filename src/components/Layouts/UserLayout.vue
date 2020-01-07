@@ -21,17 +21,17 @@ export default {
           <div class="header">
             <a href="/">
               {
-                config.userLayoutOptions.logo && (
-                  <img src={config.userLayoutOptions.logo} class="logo" alt="logo" />
+                config.pageOptions.logo && (
+                  <img src={config.pageOptions.logo} class="logo" alt="logo" />
                 )
               }
-              <span class="title">{config.userLayoutOptions.title || 'Admin-Pro'}</span>
+              <span class="title">{config.pageOptions.title || 'Admin-Pro'}</span>
             </a>
           </div>
           {
-            config.userLayoutOptions.description && (
+            config.pageOptions.description && (
               <div class="desc">
-                {config.userLayoutOptions.description}
+                {config.pageOptions.description}
               </div>
             )
           }
@@ -43,15 +43,15 @@ export default {
         <div class="footer">
           <div class="links">
             {
-              config.userLayoutOptions.links.map(item => {
+              config.pageOptions.links.map(item => {
                 return (<a href={item.href || '_self'}>{item.label}</a>)
               })
             }
           </div>
           {
-            config.userLayoutOptions.copyright && (
+            config.pageOptions.copyright && (
               <div class="copyright">
-                Copyright &copy; {config.userLayoutOptions.copyright}
+                Copyright &copy; {config.pageOptions.copyright}
               </div>
             )
           }
@@ -66,7 +66,7 @@ export default {
           {this.renderHeader()}
           <route-view></route-view>
           {
-            config.userLayoutOptions.hasFooter && this.renderFooter()
+            config.pageOptions.hasFooter && this.renderFooter()
           }
         </div>
       </div>

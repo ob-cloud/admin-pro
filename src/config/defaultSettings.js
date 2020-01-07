@@ -62,8 +62,7 @@ export default {
     name: 'ls', // name variable Vue.[ls] or this.[$ls],
     storage: 'local' // storage name session, local, memory
   },
-  // TODO 用户登录布局配置
-  userLayoutOptions: {
+  pageOptions: {
     logo: 'http://placehold.it/50x50/333/fff/?text=pro',
     title: 'Admin-Pro',
     // description: 'On-Bright Admin Pro',
