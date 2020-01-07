@@ -1,4 +1,4 @@
-import { getAction, postAction, putAction, deleteAction, httpAction, downloadAction, getRequestUrl } from './action'
+import { getAction, postAction, putAction, deleteAction, httpAction, downloadAction, downloadActionByWin, getRequestUrl } from './action'
 import { axios } from './request'
 
 export {
@@ -9,5 +9,6 @@ export {
   deleteAction,
   httpAction,
   downloadAction,
+  downloadActionByWin,
   getRequestUrl
 }

@@ -276,7 +276,7 @@ export const ProListMixin = {
       return window._CONFIG['imgDomainURL'] + "/" + text
     },
     /* 文件下载 */
-    uploadFile (text) {
+    downloadFile (text) {
       if (!text) {
         this.$message.warning("未知的文件")
         return

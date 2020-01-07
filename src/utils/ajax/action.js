@@ -32,6 +32,10 @@ export function downloadAction (url, parameter = {}, extra = {}) {
   return getAction(url, parameter, { responseType: 'blob', ...extra })
 }
 
+export function downloadActionByWin (url, parameter) {
+  window.open(getRequestUrl(url, parameter))
+}
+
 export function getRequestUrl (url, parameter = {}) {
   return getReqBaseUrl() + url + (qs.stringify(parameter) && ('?' + qs.stringify(parameter)))
 }
