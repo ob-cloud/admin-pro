@@ -54,6 +54,16 @@ export function isIE () {
   return compare('MSIE') || ie11
 }
 
+export function isEmptyObj (obj = {}) {
+  if (!(typeof obj === 'object')) {
+    console.log('Warning: the argument should be an object!')
+  }
+  for (let key in obj) {
+    return false
+  }
+  return true
+}
+
 /**
  * Remove loading animate
  * @param id parent element id or class

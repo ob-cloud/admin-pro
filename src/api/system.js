@@ -6,8 +6,8 @@ const addMenu = (params) => postAction('/sys/menu/add', params)
 const editMenu = (params) => putAction('/sys/menu/edit', params)
 
 const queryTreeList = (params) => getAction('/sys/menu/queryTreeList', params)
-// const queryTreeListForRole = (params)=>getAction('/sys/role/queryTreeList',params);
-// const queryListAsync = (params)=>getAction('/sys/permission/queryListAsync',params);
+// const queryTreeListForRole = (params) => getAction('/sys/role/queryTreeList', params)
+// const queryListAsync = (params) => getAction('/sys/permission/queryListAsync', params)
 
 ////// User
 const addUser = (params) => postAction('/sys/user/add', params)
@@ -16,13 +16,14 @@ const queryUserRole = (params) => getAction('/sys/user/queryUserRole', params)
 const getUserList = (params) => getAction('/sys/user/list', params)
 const frozenBatch = (params) => putAction('/sys/user/frozenBatch', params)
 const changPassword = (params) => putAction('/sys/user/changPassword', params)
+const getUserPermissionList = (params) => getAction('/sys/user/getUserPermissionList', params)
 
 ///// Role
 const addRole = (params) => postAction('/sys/role/add', params)
 const editRole = (params) => putAction('/sys/role/edit', params)
-// const getRoleList = (params)=>getAction('/sys/role/list',params);
-// const deleteRole = (params)=>deleteAction('/sys/role/delete',params);
-// const deleteRoleList = (params)=>deleteAction('/sys/role/deleteBatch',params);
+// const getRoleList = (params) => getAction('/sys/role/list', params)
+// const deleteRole = (params) => deleteAction('/sys/role/delete', params)
+// const deleteRoleList = (params) => deleteAction('/sys/role/deleteBatch', params)
 const checkRoleCode = (params) => getAction('/sys/role/checkRoleCode', params)
 const queryAllRole = (params) => getAction('/sys/role/all', params)
 const queryRoleTreeList = (params) => getAction('/sys/role/queryRoleTreeList', params)
@@ -70,6 +71,7 @@ export {
   queryUserRole,
   getUserList,
   frozenBatch,
+  getUserPermissionList,
 
   // Dict
   ajaxGetDictItems,

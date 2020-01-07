@@ -25,13 +25,3 @@ export function isPhone(s) {
 export function isURL(s) {
   return /^http[s]?:\/\/.*/.test(s)
 }
-
-export function isEmptyObj (obj = {}) {
-  if (!(typeof obj === 'object')) {
-    console.log('Warning: the argument should be an object!')
-  }
-  for (let key in obj) {
-    return false
-  }
-  return true
-}

@@ -62,7 +62,7 @@ export default {
     name: 'ls', // name variable Vue.[ls] or this.[$ls],
     storage: 'local' // storage name session, local, memory
   },
-  // 用户登录布局配置
+  // TODO 用户登录布局配置
   userLayoutOptions: {
     logo: 'http://placehold.it/50x50/333/fff/?text=pro',
     title: 'Admin-Pro',
@@ -77,9 +77,9 @@ export default {
       label: '声明'
     }]
   },
-  // 路由业务配置
+  // TODO 路由业务配置
   routerOptions: {
-    isStaticHomeTab: true,  // 首页固定显示
+    isStaticHomeTab: true,  // 首页固定显示 用于MultiTab
     index: {
       name: 'dashboard-analysis',
       path: '/dashboard/analysis',
