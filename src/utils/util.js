@@ -84,7 +84,6 @@ export function generateIndexRouter (data) {
     path: '/',
     name: 'dashboard',
     component: () => import('@components/Layouts/BasicLayout.vue'),
-    // component: resolve => require(['@/components/layouts/TabLayout'], resolve),
     meta: {
       title: '首页'
     },
@@ -93,16 +92,16 @@ export function generateIndexRouter (data) {
       ...generateChildRouters(data)
     ]
   }, {
-    "path": "*",
-    "redirect": "/404",
-    "hidden": true
+    path: '*',
+    redirect: '/404',
+    hidden: true
   }]
 
   return indexRouter
 }
 
 // 生成嵌套路由（子路由）
-function  generateChildRouters (data) {
+function generateChildRouters (data) {
   const routers = [];
   for (let item of data) {
     let component = ''
@@ -122,7 +121,6 @@ function  generateChildRouters (data) {
       path: item.path,
       name: item.name,
       redirect: item.redirect,
-      // component: resolve => require(['@/' + component + '.vue'], resolve),
       component: () => import(`@/${component}.vue`),
       hidden: item.hidden,
       meta: {
@@ -146,7 +144,7 @@ function  generateChildRouters (data) {
       //console.log(' 不生成路由 item.route：  '+item.route);
       //console.log(' 不生成路由 item.path：  '+item.path);
     } else {
-      routers.push(menu);
+      routers.push(menu)
     }
   }
   return routers

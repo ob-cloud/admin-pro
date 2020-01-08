@@ -2,6 +2,10 @@ import Vue from 'vue'
 import VueStorage from 'vue-ls'
 import config from '@/config/defaultSettings'
 
+// styles
+import '@/assets/styles/global.less'
+import '@/assets/styles/pro.less'
+
 // base library
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.less'
