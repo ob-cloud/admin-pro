@@ -1,6 +1,5 @@
 import { deviceEnquire, DEVICE_TYPE } from '@/utils/device'
 import { mapState } from 'vuex'
-// import { getAction } from '@/utils/ajax'
 
 const mixin = {
   computed: {
@@ -72,15 +71,7 @@ const AppDeviceEnquire = {
 
 const AppConfigMixin = {
   beforeCreate () {
-    // getAction('/sys/common/setting').then(response => {
-    //   if (response.success) {
-    //     try {
-    //       window._CONFIG = JSON.parse(response.result)
-    //     } catch (error) {
-    //       window._CONFIG = {}
-    //     }
-    //   }
-    // })
+    this.$store.dispatch('GetSystemSetting')
   },
 }
 

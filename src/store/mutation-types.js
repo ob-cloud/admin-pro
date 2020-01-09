@@ -1,4 +1,4 @@
-export const ACCESS_TOKEN = 'Access-Token'
+export const ACCESS_TOKEN = 'ACCESS-TOKEN'
 export const SIDEBAR_TYPE = 'SIDEBAR_TYPE'
 export const DEFAULT_THEME = 'DEFAULT_THEME'
 export const DEFAULT_LAYOUT_MODE = 'DEFAULT_LAYOUT_MODE'
@@ -13,6 +13,8 @@ export const DEFAULT_MULTI_TAB = 'DEFAULT_MULTI_TAB'
 export const USER_NAME = 'USER_NAME'
 export const USER_INFO = 'USER_INFO'
 export const USER_AUTH = 'USER_AUTH'
+
+export const SYSTEM_SETTING = 'SYSTEM_SETTING'
 
 export const CONTENT_WIDTH_TYPE = {
   Fluid: 'Fluid',

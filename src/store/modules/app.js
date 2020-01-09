@@ -9,8 +9,11 @@ import {
   DEFAULT_FIXED_SIDEMENU,
   DEFAULT_FIXED_HEADER_HIDDEN,
   DEFAULT_CONTENT_WIDTH_TYPE,
-  DEFAULT_MULTI_TAB
+  DEFAULT_MULTI_TAB,
+  SYSTEM_SETTING
 } from '@/store/mutation-types'
+
+import { getSystemConfig } from '@/api/system'
 
 const app = {
   state: {
@@ -24,7 +27,8 @@ const app = {
     autoHideHeader: false,
     color: null,
     weak: false,
-    multiTab: true
+    multiTab: true,
+    setting: {}
   },
   mutations: {
     SET_SIDEBAR_TYPE: (state, type) => {
@@ -74,6 +78,10 @@ const app = {
     TOGGLE_MULTI_TAB: (state, bool) => {
       Vue.ls.set(DEFAULT_MULTI_TAB, bool)
       state.multiTab = bool
+    },
+    GET_SYSTEM_SETTING: (state, setting) => {
+      Vue.ls.set(SYSTEM_SETTING, setting)
+      state.setting = setting
     }
   },
   actions: {
@@ -115,6 +123,20 @@ const app = {
     },
     ToggleMultiTab ({ commit }, bool) {
       commit('TOGGLE_MULTI_TAB', bool)
+    },
+    GetSystemSetting ({ commit }) {
+      return new Promise((resolve, reject) => {
+        getSystemConfig.then(response => {
+          if (response.success) {
+            try {
+              commit('GET_SYSTEM_SETTING', JSON.parse(response.result))
+            } catch (error) {
+              commit('GET_SYSTEM_SETTING', {})
+            }
+          }
+          resolve(response)
+        }).catch(reject)
+      })
     }
   }
 }

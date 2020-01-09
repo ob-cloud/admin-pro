@@ -45,6 +45,10 @@ const queryPermissionTreeList = (params) => getAction('/sys/role/queryPermission
 const doReleaseData = (params) => getAction('/sys/announcement/doReleaseData', params)
 const doReovkeData = (params) => getAction('/sys/announcement/doReovkeData', params)
 
+///// System Setting
+///// 通过ajaxGetDictItems 使用
+const getSystemConfig = () => getAction('/sys/common/setting')
+
 export {
   // Menu
   getMenuList,
@@ -83,5 +87,8 @@ export {
 
   // Annoucement
   doReleaseData,
-  doReovkeData
+  doReovkeData,
+
+  // System
+  getSystemConfig
 }
