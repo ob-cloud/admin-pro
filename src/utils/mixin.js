@@ -69,10 +69,4 @@ const AppDeviceEnquire = {
   }
 }
 
-const AppConfigMixin = {
-  beforeCreate () {
-    this.$store.dispatch('GetSystemSetting')
-  },
-}
-
-export { mixin, AppDeviceEnquire, mixinDevice, AppConfigMixin }
+export { mixin, AppDeviceEnquire, mixinDevice }

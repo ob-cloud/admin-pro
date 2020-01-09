@@ -15,6 +15,7 @@ export const initRouteHook = (router) => {
     NProgress.start() // start progress bar
 
     if (Vue.ls.get(ACCESS_TOKEN)) {
+      // store.dispatch('GetSystemSetting')
       /* has token */
       if (to.path === '/user/login') {
         next({ path: '/dashboard/analysis' })

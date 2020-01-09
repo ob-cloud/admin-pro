@@ -80,7 +80,7 @@ const app = {
       state.multiTab = bool
     },
     GET_SYSTEM_SETTING: (state, setting) => {
-      Vue.ls.set(SYSTEM_SETTING, setting)
+      window.localStorage.setItem(SYSTEM_SETTING, setting)
       state.setting = setting
     }
   },
@@ -126,14 +126,8 @@ const app = {
     },
     GetSystemSetting ({ commit }) {
       return new Promise((resolve, reject) => {
-        getSystemConfig.then(response => {
-          if (response.success) {
-            try {
-              commit('GET_SYSTEM_SETTING', JSON.parse(response.result))
-            } catch (error) {
-              commit('GET_SYSTEM_SETTING', {})
-            }
-          }
+        getSystemConfig().then(response => {
+          commit('GET_SYSTEM_SETTING', response.success ? response.result : '\'{}\'')
           resolve(response)
         }).catch(reject)
       })

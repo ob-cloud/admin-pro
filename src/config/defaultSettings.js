@@ -13,8 +13,52 @@
  *
  */
 
-const structSettings = {
-  // 登录页面配置
+export default {
+  primaryColor: '#52C41A', // primary color of ant design
+  navTheme: 'light', // theme for nav menu
+  layout: 'sidemenu', // nav menu position: sidemenu or topmenu
+  contentWidth: 'Fixed', // layout of content: Fluid or Fixed, only works when layout is topmenu
+  fixedHeader: false, // sticky header
+  fixSiderbar: false, // sticky siderbar
+  autoHideHeader: false, //  auto hide header
+  colorWeak: false,
+  multiTab: true,
+  production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
+  // vue-ls options
+  storageOptions: {
+    namespace: 'PRO__', // key prefix
+    name: 'ls', // name variable Vue.[ls] or this.[$ls],
+    storage: 'local' // storage name session, local, memory
+  },
+  // TODO Delete
+  pageOptions: {
+    logo: 'http://placehold.it/50x50/333/fff/?text=pro',
+    title: 'Admin-Pro',
+    // description: 'On-Bright Admin Pro',
+    hasFooter: false, // hasFooter 为 true 时， 下面脚注配置生效
+    copyright: 'OnBright.tld',
+    links: [{
+      href: 'www.baidu.com',
+      label: '条款'
+    }, {
+      href: 'www.baidu.com',
+      label: '声明'
+    }]
+  },
+  // TODO 路由业务配置
+  routerOptions: {
+    isStaticHomeTab: true,  // 首页固定显示 用于MultiTab
+    index: {
+      name: 'dashboard-analysis',
+      path: '/dashboard/analysis',
+      fullPath: '/dashboard/analysis',
+      meta: {
+        icon: 'dashboard',
+        title: '首页'
+      }
+    }
+  },
+  // TODO Delete 登录页面配置
   LoginLayout: {
     mode: 'simple', // mode: simple, multiple
     forgetPassword: true, // password forgotten
@@ -43,51 +87,4 @@ const structSettings = {
     //   text: ''
     // }
   }
-}
-
-export default {
-  primaryColor: '#52C41A', // primary color of ant design
-  navTheme: 'light', // theme for nav menu
-  layout: 'sidemenu', // nav menu position: sidemenu or topmenu
-  contentWidth: 'Fixed', // layout of content: Fluid or Fixed, only works when layout is topmenu
-  fixedHeader: false, // sticky header
-  fixSiderbar: false, // sticky siderbar
-  autoHideHeader: false, //  auto hide header
-  colorWeak: false,
-  multiTab: true,
-  production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
-  // vue-ls options
-  storageOptions: {
-    namespace: 'PRO__', // key prefix
-    name: 'ls', // name variable Vue.[ls] or this.[$ls],
-    storage: 'local' // storage name session, local, memory
-  },
-  pageOptions: {
-    logo: 'http://placehold.it/50x50/333/fff/?text=pro',
-    title: 'Admin-Pro',
-    // description: 'On-Bright Admin Pro',
-    hasFooter: false, // hasFooter 为 true 时， 下面脚注配置生效
-    copyright: 'OnBright.tld',
-    links: [{
-      href: 'www.baidu.com',
-      label: '条款'
-    }, {
-      href: 'www.baidu.com',
-      label: '声明'
-    }]
-  },
-  // TODO 路由业务配置
-  routerOptions: {
-    isStaticHomeTab: true,  // 首页固定显示 用于MultiTab
-    index: {
-      name: 'dashboard-analysis',
-      path: '/dashboard/analysis',
-      fullPath: '/dashboard/analysis',
-      meta: {
-        icon: 'dashboard',
-        title: '首页'
-      }
-    }
-  },
-  ...structSettings
 }
