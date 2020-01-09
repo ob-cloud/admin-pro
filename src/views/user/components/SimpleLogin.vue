@@ -6,9 +6,6 @@ import { isEmail } from '@/utils/validator'
 import config from '@/config/defaultSettings'
 export default {
   name: 'SimpleLogin',
-  // beforeCreate () {
-  //   config.LoginLayout.mode === 'simple' && require('./login.less')
-  // },
   data () {
     return {
       LoginForm: this.$form.createForm(this),
@@ -61,7 +58,7 @@ export default {
         }
       })
     },
-    loginSuccess (res) {
+    loginSuccess () {
       this.$router.push({ path: '/' })
       setTimeout(() => {
         this.$notification.success({

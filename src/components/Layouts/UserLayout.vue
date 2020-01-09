@@ -6,7 +6,7 @@ import config from '@/config/defaultSettings'
 export default {
   name: 'UserLayout',
   components: { RouteView },
-  mixins: [mixinDevice],
+  mixins: [ mixinDevice ],
   mounted () {
     document.body.classList.add('userLayout')
     config.LoginLayout.mode === 'simple' && document.body.classList.add('simple')

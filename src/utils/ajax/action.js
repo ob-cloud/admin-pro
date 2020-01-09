@@ -5,7 +5,7 @@ import { getReqBaseUrl } from '@/config/env.config'
 export function httpAction (url, parameter = {}, method = '', extra = {}) {
   const opts = ['post', 'put'].includes(method.toLowerCase()) ? { data: parameter } : { params: parameter }
   return axios({
-    url: url,
+    url,
     method: method,
     ...opts,
     ...extra

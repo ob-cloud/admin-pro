@@ -14,7 +14,7 @@ import { mixin, mixinDevice } from '@/utils/mixin'
 import config from '@/config/defaultSettings'
 
 export default {
-  name: "BasicLayout",
+  name: 'BasicLayout',
   mixins: [ mixin, mixinDevice ],
   components: {
     GlobalLayout,

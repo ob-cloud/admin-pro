@@ -1,5 +1,6 @@
 import { deviceEnquire, DEVICE_TYPE } from '@/utils/device'
 import { mapState } from 'vuex'
+// import { getAction } from '@/utils/ajax'
 
 const mixin = {
   computed: {
@@ -69,4 +70,18 @@ const AppDeviceEnquire = {
   }
 }
 
-export { mixin, AppDeviceEnquire, mixinDevice }
+const AppConfigMixin = {
+  beforeCreate () {
+    // getAction('/sys/common/setting').then(response => {
+    //   if (response.success) {
+    //     try {
+    //       window._CONFIG = JSON.parse(response.result)
+    //     } catch (error) {
+    //       window._CONFIG = {}
+    //     }
+    //   }
+    // })
+  },
+}
+
+export { mixin, AppDeviceEnquire, mixinDevice, AppConfigMixin }

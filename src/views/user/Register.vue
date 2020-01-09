@@ -15,9 +15,10 @@
         placement="rightTop"
         :trigger="['focus']"
         :getPopupContainer="(trigger) => trigger.parentElement"
-        v-model="state.passwordLevelChecked">
+        v-model="state.passwordLevelChecked"
+      >
         <template slot="content">
-          <div :style="{ width: '240px' }" >
+          <div :style="{ width: '240px' }">
             <div :class="['user-register', passwordLevelClass]">强度：<span>{{ passwordLevelName }}</span></div>
             <a-progress :percent="state.percent" :showInfo="false" :strokeColor=" passwordLevelColor " />
             <div style="margin-top: 10px;">
@@ -67,7 +68,7 @@
         <a-col class="gutter-row" :span="16">
           <a-form-item>
             <a-input size="large" type="text" placeholder="验证码" v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]">
-              <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+              <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input>
           </a-form-item>
         </a-col>
@@ -77,19 +78,14 @@
             size="large"
             :disabled="state.smsSendBtn"
             @click.stop.prevent="getCaptcha"
-            v-text="!state.smsSendBtn && '获取验证码'||(state.time+' s')"></a-button>
+            v-text="!state.smsSendBtn && '获取验证码'||(state.time+' s')"
+          ></a-button>
         </a-col>
       </a-row>
 
       <a-form-item>
-        <a-button
-          size="large"
-          type="primary"
-          htmlType="submit"
-          class="register-button"
-          :loading="registerBtn"
-          @click.stop.prevent="handleSubmit"
-          :disabled="registerBtn">注册
+        <a-button size="large" type="primary" htmlType="submit" class="register-button" :loading="registerBtn" @click.stop.prevent="handleSubmit" :disabled="registerBtn">
+          注册
         </a-button>
         <router-link class="login" :to="{ name: 'login' }">使用已有账户登录</router-link>
       </a-form-item>
@@ -224,8 +220,7 @@ export default {
       const { form: { validateFields }, state, $message, $notification } = this
       console.log($message, $notification)
 
-      validateFields(['mobile'], { force: true },
-        (err, values) => {
+      validateFields(['mobile'], { force: true }, (err) => {
           if (!err) {
             state.smsSendBtn = true
 

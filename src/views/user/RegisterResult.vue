@@ -3,7 +3,8 @@
     :isSuccess="true"
     :content="false"
     :title="email"
-    :description="description">
+    :description="description"
+  >
 
     <template slot="action">
       <a-button size="large" type="primary">查看邮箱</a-button>

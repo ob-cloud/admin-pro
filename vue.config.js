@@ -59,7 +59,7 @@ module.exports = {
         ws: false,
         changeOrigin: true,
         pathRewrite: {
-          // '/pro': ''  //默认所有请求都加了/pro前缀，需要去掉
+          '/pro': ''  //默认所有请求都加了/pro前缀，需要去掉
         }
       },
     }
