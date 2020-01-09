@@ -58,7 +58,7 @@ export default {
       }
     }
   },
-  // TODO Delete 登录页面配置
+  // TODO Delete 登录页面配置 - 迁移至脚手架
   LoginLayout: {
     mode: 'simple', // mode: simple, multiple
     forgetPassword: true, // password forgotten
@@ -70,7 +70,7 @@ export default {
     //   iconCls: 'weibo-circle'
     // }]
   },
-  // 全局脚注配置
+  // TODO 全局脚注配置 - 迁移至脚手架
   GlobalFooter: {
     // links: [{
     //   href: '',
