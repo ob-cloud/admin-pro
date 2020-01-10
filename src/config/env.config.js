@@ -1,12 +1,15 @@
+const DEV_BASE_API = 'http://localhost:3001/pro'
+const PRO_BASE_API = 'https://aliiot.on-bright.com/mock/13/pro'
 const envConfig = {
   dev: {
-    baseApi: 'http://localhost:3001/pro'
+    baseApi: DEV_BASE_API
   },
   prod: {
-   // baseApi: 'http://192.168.200.163:3000/mock/11/pro'
-    baseApi: 'https://aliiot.on-bright.com/mock/13/pro'
+    baseApi: PRO_BASE_API
   }
 }
+
+export const WEBSOCKET_URL = 'https://aliiot.on-bright.com/pro/websocket/{topic}'
 
 export function isProEnv () {
   return process.env.NODE_ENV === 'production'

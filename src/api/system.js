@@ -44,6 +44,9 @@ const queryPermissionTreeList = (params) => getAction('/sys/role/queryPermission
 ///// Annoucement
 const doReleaseData = (params) => getAction('/sys/announcement/doReleaseData', params)
 const doReovkeData = (params) => getAction('/sys/announcement/doReovkeData', params)
+const getAnnouncementListByUser = (params) => getAction('/sys/announcement/listByUser', params)
+const editAnnouncementStatus = (params) => putAction('/sys/announcement/editStatus', params)
+const queryAnnouncementDetail = (params) => getAction('/sys/announcement/queryDetailById', params)
 
 ///// System Setting
 ///// 通过ajaxGetDictItems 使用
@@ -88,6 +91,9 @@ export {
   // Annoucement
   doReleaseData,
   doReovkeData,
+  getAnnouncementListByUser,
+  editAnnouncementStatus,
+  queryAnnouncementDetail,
 
   // System
   getSystemConfig

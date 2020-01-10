@@ -1,9 +1,8 @@
 import Vue from 'vue'
-import Api from '@/api'
+import { login, logout } from '@/api/login'
+import { getUserPermissionList } from '@/api/system'
 import { ACCESS_TOKEN, USER_NAME, USER_INFO, USER_AUTH } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
-
-const { login, logout, getUserPermissionList } = Api
 
 const user = {
   state: {

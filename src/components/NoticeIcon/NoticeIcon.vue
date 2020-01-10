@@ -12,64 +12,163 @@
     <template slot="content">
       <a-spin :spinning="loading">
         <a-tabs>
-          <a-tab-pane tab="通知" key="1">
+          <a-tab-pane :tab="noticeTitle" key="1">
             <a-list>
-              <a-list-item>
-                <a-list-item-meta title="你收到了 14 份新周报" description="一年前">
-                  <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png" />
-                </a-list-item-meta>
+              <a-list-item v-for="(record, index) in notice" :key="index">
+                <div style="margin-left: 5%; width: 80%">
+                  <p><a @click="showAnnouncement(record)">标题：{{ record.title }}</a></p>
+                  <p style="color: rgba(0,0,0,.45);margin-bottom: 0px">{{ record.createTime }} 发布</p>
+                </div>
+                <div style="text-align: right">
+                  <a-tag @click="showAnnouncement(record)" v-if="record.priority === 'L'" color="blue">一般消息</a-tag>
+                  <a-tag @click="showAnnouncement(record)" v-if="record.priority === 'M'" color="orange">重要消息</a-tag>
+                  <a-tag @click="showAnnouncement(record)" v-if="record.priority === 'H'" color="red">紧急消息</a-tag>
+                </div>
               </a-list-item>
-              <a-list-item>
-                <a-list-item-meta title="你推荐的 曲妮妮 已通过第三轮面试" description="一年前">
-                  <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/OKJXDXrmkNshAMvwtvhu.png" />
-                </a-list-item-meta>
-              </a-list-item>
-              <a-list-item>
-                <a-list-item-meta title="这种模板可以区分多种通知类型" description="一年前">
-                  <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/kISTdvpyTAhtGxpovNWd.png" />
-                </a-list-item-meta>
-              </a-list-item>
+              <div style="margin-top: 5px; text-align: center">
+                <a-button @click="toMyAnnouncement()" type="dashed" block>查看更多</a-button>
+              </div>
             </a-list>
           </a-tab-pane>
-          <a-tab-pane tab="消息" key="2">
-            123
-          </a-tab-pane>
-          <a-tab-pane tab="待办" key="3">
-            123
+          <a-tab-pane :tab="sysMsgTitle" key="2">
+            <a-list>
+              <a-list-item v-for="(record, index) in sysMsg" :key="index">
+                <div style="margin-left: 5%; width: 80%">
+                  <p><a @click="showAnnouncement(record)">标题：{{ record.title }}</a></p>
+                  <p style="color: rgba(0,0,0,.45); margin-bottom: 0px">{{ record.createTime }} 发布</p>
+                </div>
+                <div style="text-align: right">
+                  <a-tag @click="showAnnouncement(record)" v-if="record.priority === 'L'" color="blue">一般消息</a-tag>
+                  <a-tag @click="showAnnouncement(record)" v-if="record.priority === 'M'" color="orange">重要消息</a-tag>
+                  <a-tag @click="showAnnouncement(record)" v-if="record.priority === 'H'" color="red">紧急消息</a-tag>
+                </div>
+              </a-list-item>
+              <div style="margin-top: 5px; text-align: center">
+                <a-button @click="toMyAnnouncement()" type="dashed" block>查看更多</a-button>
+              </div>
+            </a-list>
           </a-tab-pane>
         </a-tabs>
       </a-spin>
     </template>
     <span @click="fetchNotice" class="header-notice" ref="noticeRef" style="padding: 0 18px">
-      <a-badge count="12">
+      <a-badge :count="noticeTotal">
         <a-icon style="font-size: 16px; padding: 4px" type="bell" />
       </a-badge>
     </span>
+    <show-announcement ref="ShowAnnouncement"></show-announcement>
   </a-popover>
 </template>
 
 <script>
+import { getAnnouncementListByUser, editAnnouncementStatus, queryAnnouncementDetail } from '@/api/system'
+import { initWebSocket, onWebSocketClose } from '@/utils/websocket'
+import ShowAnnouncement from '@components/tools/ShowAnnouncement'
+import store from '@/store'
+
 export default {
-  name: 'HeaderNotice',
+  name: 'NoticeIcon',
+  components: { ShowAnnouncement },
   data () {
     return {
       loading: false,
-      visible: false
+      visible: false,
+      hovered: false,
+      notice: [],
+      noticeCount: '0',
+      noticeTitle: '通知',
+      sysMsg: [],
+      sysMsgCount: '0',
+      sysMsgTitle: '系统消息',
+      websocket: null
     }
+  },
+  computed: {
+    noticeTotal () {
+      return +this.noticeCount + this.sysMsgCount
+    }
+  },
+  mounted () {
+    console.log(this.$store.getters)
+    this.websocket = initWebSocket(store.getters.userInfo.id)
+    this.websocket.onmessage = this.onWebSocketMessage
   },
   methods: {
     fetchNotice () {
       if (!this.visible) {
         this.loading = true
-        setTimeout(() => {
+        getAnnouncementListByUser().then(res => {
           this.loading = false
-        }, 2000)
+          if (res.success) {
+            this.notice = res.result.noticeList
+            this.noticeCount = res.result.noticeTotal
+            this.noticeTitle = `通知(${res.result.noticeTotal})`
+            this.sysMsg = res.result.sysMsgList
+            this.sysMsgCount = res.result.sysMsgTotal
+            this.sysMsgTitle = `系统消息(${this.sysMsgCount})`
+          }
+        }).catch(err => {
+          console.log(err)
+          this.loading = false
+        })
       } else {
         this.loading = false
       }
-      this.visible = !this.visible
+      // this.visible = !this.visible
+    },
+    toMyAnnouncement () {
+      this.$router.push({
+        path: '/isps/userAnnouncement',
+        name: 'isps-userAnnouncement'
+      })
+    },
+    handleHoverChange (visible) {
+      this.hovered = visible
+    },
+    onWebSocketMessage (e) {
+      const data = eval(`(${e.data})`)
+      this.fetchNotice()
+      this.handleNotification(data)
+    },
+    handleNotification (data) {
+      const text = data.msgText
+      const key = `open${Date.now()}`
+      this.$notification.open({
+        message: '消息提醒',
+        placement: 'bottomRight',
+        description: text,
+        key,
+        btn: (h) => {
+          return h('a-button', {
+            props: {
+              type: 'primary',
+              size: 'small'
+            },
+            on: {
+              click: () => this.showDetail(key, data)
+            }
+          }, '查看详情')
+        }
+      })
+    },
+    showDetail (key, data) {
+      this.$notification.close(key)
+      const id = data.msgId
+      queryAnnouncementDetail({id}).then(res => {
+        res.success && this.showAnnouncement(res.result)
+      })
+    },
+    showAnnouncement (record) {
+      editAnnouncementStatus({ anntId: record.id }).then(res => {
+        res.success && this.fetchNotice()
+      })
+      this.hovered = false
+      this.$refs.showAnnouncement.detail(record)
     }
-  }
+  },
+  destroyed () {
+    onWebSocketClose()
+  },
 }
 </script>
 
