@@ -57,6 +57,9 @@ export default {
     }
   },
   methods: {
+    isURL (s) {
+      return /^http[s]?:\/\/.*/.test(s)
+    },
     // select menu item
     onOpenChange (openKeys) {
       // 在水平模式下时执行，并且不再执行后续
@@ -138,8 +141,14 @@ export default {
       )
     },
     renderIcon (icon) {
-      if (icon === 'none' || icon === undefined) {
-        return null
+      // if (icon === 'none' || icon === undefined) {
+      //   return null
+      // }
+      if (!icon) return
+      if (this.isURL(icon)) {
+        return (
+          <img src={icon} alt="icon"></img>
+        )
       }
       const props = {}
       typeof (icon) === 'object' ? props.component = icon : props.type = icon
