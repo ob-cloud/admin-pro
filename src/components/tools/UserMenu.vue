@@ -8,7 +8,7 @@
           <span>{{ nickname }}</span>
         </span>
         <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
-          <a-menu-item key="0">
+          <!-- <a-menu-item key="0">
             <router-link :to="{ name: 'center' }">
               <a-icon type="user" />
               <span>个人中心</span>
@@ -19,10 +19,10 @@
               <a-icon type="setting" />
               <span>账户设置</span>
             </router-link>
-          </a-menu-item>
-          <a-menu-item key="2" disabled>
+          </a-menu-item> -->
+          <a-menu-item key="2" @click="updatePassword">
             <a-icon type="setting" />
-            <span>测试</span>
+            <span>密码修改</span>
           </a-menu-item>
           <a-menu-divider />
           <a-menu-item key="3">
@@ -33,22 +33,24 @@
           </a-menu-item>
         </a-menu>
       </a-dropdown>
+      <user-password ref="userPassword"></user-password>
     </div>
   </div>
 </template>
 
 <script>
 import NoticeIcon from '@/components/NoticeIcon'
+import UserPassword from './UserPassword'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'UserMenu',
   components: {
-    NoticeIcon
+    NoticeIcon,
+    UserPassword
   },
   computed: {
-    ...mapGetters(['nickname', 'avatar'])
-
+    ...mapGetters(['nickname', 'avatar', 'userInfo'])
   },
   methods: {
     ...mapActions(['Logout']),
@@ -71,7 +73,11 @@ export default {
         onCancel () {
         }
       })
-    }
+    },
+    updatePassword(){
+      let username = this.userInfo.username
+      this.$refs.userPassword.show(username)
+    },
   }
 }
 </script>
