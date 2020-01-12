@@ -1,10 +1,10 @@
 <template>
   <a-popover
-    v-model="visible"
     trigger="click"
     placement="bottomRight"
     overlayClassName="header-notice-wrapper"
-    :getPopupContainer="() => $refs.noticeRef.parentElement"
+    :visible="visible"
+    @visibleChange="handleHoverChange"
     :autoAdjustOverflow="true"
     :arrowPointAtCenter="true"
     :overlayStyle="{ width: '300px', top: '50px' }"
@@ -64,7 +64,6 @@
 import { getAnnouncementListByUser, editAnnouncementStatus, queryAnnouncementDetail } from '@/api/system'
 import { initWebSocket, onWebSocketClose } from '@/utils/websocket'
 import ShowAnnouncement from '@components/tools/ShowAnnouncement'
-import store from '@/store'
 
 export default {
   name: 'NoticeIcon',
@@ -73,7 +72,6 @@ export default {
     return {
       loading: false,
       visible: false,
-      hovered: false,
       notice: [],
       noticeCount: '0',
       noticeTitle: '通知',
@@ -89,32 +87,49 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$store.getters)
-    this.websocket = initWebSocket(store.getters.userInfo.id)
+    this.websocket = initWebSocket(this.$store.getters.userInfo.id)
     this.websocket.onmessage = this.onWebSocketMessage
+    this.loadData()
   },
   methods: {
+    loadData () {
+      getAnnouncementListByUser().then(res => {
+        if (res.success) {
+          this.notice = res.result.noticeList
+          this.noticeCount = res.result.noticeTotal
+          this.noticeTitle = `通知(${res.result.noticeTotal})`
+          this.sysMsg = res.result.sysMsgList
+          this.sysMsgCount = res.result.sysMsgTotal
+          this.sysMsgTitle = `系统消息(${this.sysMsgCount})`
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     fetchNotice () {
-      if (!this.visible) {
-        this.loading = true
-        getAnnouncementListByUser().then(res => {
-          this.loading = false
-          if (res.success) {
-            this.notice = res.result.noticeList
-            this.noticeCount = res.result.noticeTotal
-            this.noticeTitle = `通知(${res.result.noticeTotal})`
-            this.sysMsg = res.result.sysMsgList
-            this.sysMsgCount = res.result.sysMsgTotal
-            this.sysMsgTitle = `系统消息(${this.sysMsgCount})`
-          }
-        }).catch(err => {
-          console.log(err)
-          this.loading = false
-        })
-      } else {
+      if (this.loading) {
         this.loading = false
+        return
       }
-      // this.visible = !this.visible
+      this.loading = true
+      setTimeout(() => {
+        this.loading = false
+      }, 800)
+      // this.loading = true
+      // getAnnouncementListByUser().then(res => {
+      //   this.loading = false
+      //   if (res.success) {
+      //     this.notice = res.result.noticeList
+      //     this.noticeCount = res.result.noticeTotal
+      //     this.noticeTitle = `通知(${res.result.noticeTotal})`
+      //     this.sysMsg = res.result.sysMsgList
+      //     this.sysMsgCount = res.result.sysMsgTotal
+      //     this.sysMsgTitle = `系统消息(${this.sysMsgCount})`
+      //   }
+      // }).catch(err => {
+      //   console.log(err)
+      //   this.loading = false
+      // })
     },
     toMyAnnouncement () {
       this.$router.push({
@@ -123,11 +138,11 @@ export default {
       })
     },
     handleHoverChange (visible) {
-      this.hovered = visible
+      this.visible = visible
     },
     onWebSocketMessage (e) {
       const data = eval(`(${e.data})`)
-      this.fetchNotice()
+      this.loadData()
       this.handleNotification(data)
     },
     handleNotification (data) {
@@ -162,8 +177,8 @@ export default {
       editAnnouncementStatus({ anntId: record.id }).then(res => {
         res.success && this.fetchNotice()
       })
-      this.hovered = false
-      this.$refs.showAnnouncement.detail(record)
+      this.visible = false
+      this.$refs.ShowAnnouncement.detail(record)
     }
   },
   destroyed () {

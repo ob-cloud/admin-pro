@@ -44,7 +44,9 @@ const queryPermissionTreeList = (params) => getAction('/sys/role/queryPermission
 ///// Annoucement
 const doReleaseData = (params) => getAction('/sys/announcement/doReleaseData', params)
 const doReovkeData = (params) => getAction('/sys/announcement/doReovkeData', params)
+// 获取用户通告信息
 const getAnnouncementListByUser = (params) => getAction('/sys/announcement/listByUser', params)
+// 修改公告状态（已读）
 const editAnnouncementStatus = (params) => putAction('/sys/announcement/editStatus', params)
 const queryAnnouncementDetail = (params) => getAction('/sys/announcement/queryDetailById', params)
 
