@@ -15,7 +15,10 @@ const editUser = (params) => putAction('/sys/user/edit', params)
 const queryUserRole = (params) => getAction('/sys/user/queryUserRole', params)
 const getUserList = (params) => getAction('/sys/user/list', params)
 const frozenBatch = (params) => putAction('/sys/user/frozenBatch', params)
-const changPassword = (params) => putAction('/sys/user/changPassword', params)
+// 修改系统用户密码
+const changePassword = (params) => putAction('/sys/user/changePassword', params)
+// 修改个人账号密码
+const updatePassword = (params) => putAction('/sys/user/updatePassword', params)
 const getUserPermissionList = (params) => getAction('/sys/user/getUserPermissionList', params)
 
 ///// Role
@@ -60,7 +63,6 @@ export {
   addMenu,
   editMenu,
   queryTreeList,
-  changPassword,
 
   // Role
   addRole,
@@ -81,6 +83,8 @@ export {
   getUserList,
   frozenBatch,
   getUserPermissionList,
+  changePassword,
+  updatePassword,
 
   // Dict
   ajaxGetDictItems,

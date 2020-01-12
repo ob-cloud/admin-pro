@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import { changPassword } from '@/api/system'
+  import { changePassword } from '@/api/system'
 
   export default {
     name: 'PasswordModal',
@@ -94,7 +94,7 @@
           if (!err) {
             this.confirmLoading = true
             let formData = Object.assign(this.model, values)
-            changPassword(formData).then((res)=>{
+            changePassword(formData).then((res)=>{
               if(res.success){
                 this.$message.success(res.message)
                 this.$emit('ok')
