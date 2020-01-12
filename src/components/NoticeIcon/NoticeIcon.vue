@@ -114,7 +114,7 @@ export default {
       this.loading = true
       setTimeout(() => {
         this.loading = false
-      }, 800)
+      }, 500)
       // this.loading = true
       // getAnnouncementListByUser().then(res => {
       //   this.loading = false
@@ -136,6 +136,7 @@ export default {
         path: '/isps/userAnnouncement',
         name: 'isps-userAnnouncement'
       })
+      this.visible = false
     },
     handleHoverChange (visible) {
       this.visible = visible
