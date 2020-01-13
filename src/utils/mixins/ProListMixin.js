@@ -6,7 +6,7 @@
 import { filterObj } from '@/utils/util'
 import { deleteAction, getAction } from '@/utils/ajax'
 import Vue from 'vue'
-import { ACCESS_TOKEN } from "@/store/mutation-types"
+import { ACCESS_TOKEN } from '@/store/mutation-types'
 
 export const ProListMixin = {
   data () {
@@ -25,7 +25,7 @@ export const ProListMixin = {
         pageSize: 10,
         pageSizeOptions: ['10', '20', '30'],
         showTotal: (total, range) => {
-          return range[0] + "-" + range[1] + " 共" + total + "条"
+          return range[0] + '-' + range[1] + ' 共' + total + '条'
         },
         showQuickJumper: true,
         showSizeChanger: true,
@@ -49,7 +49,7 @@ export const ProListMixin = {
       /* 高级查询条件生效状态 */
       superQueryFlag: false,
       /* 高级查询条件 */
-      superQueryParams: ""
+      superQueryParams: ''
     }
   },
   created () {
@@ -60,7 +60,7 @@ export const ProListMixin = {
   methods: {
     loadData (arg) {
       if (!this.url.list) {
-        this.$message.error("请设置url.list属性!")
+        this.$message.error('请设置url.list属性!')
         return
       }
       //加载数据 若传入参数1则加载第一页的内容
@@ -81,7 +81,7 @@ export const ProListMixin = {
       })
     },
     initDictConfig () {
-      console.log("--这是一个假的方法!")
+      // console.log("--这是一个假的方法!")
     },
     handleSuperQuery (arg) {
       //高级查询方法
@@ -108,9 +108,9 @@ export const ProListMixin = {
     },
     getQueryField () {
       //TODO 字段权限控制
-      let str = "id,"
+      let str = 'id,'
       this.columns.forEach(function (value) {
-        str += "," + value.dataIndex
+        str += ',' + value.dataIndex
       })
       return str
     },
@@ -135,21 +135,21 @@ export const ProListMixin = {
     },
     batchDel () {
       if (!this.url.deleteBatch) {
-        this.$message.error("请设置url.deleteBatch属性!")
+        this.$message.error('请设置url.deleteBatch属性!')
         return
       }
       if (this.selectedRowKeys.length <= 0) {
         this.$message.warning('请选择一条记录！')
         return
       } else {
-        let ids = ""
+        let ids = ''
         for (let a = 0; a < this.selectedRowKeys.length; a++) {
-          ids += this.selectedRowKeys[a] + ","
+          ids += this.selectedRowKeys[a] + ','
         }
         let that = this;
         this.$confirm({
-          title: "确认删除",
-          content: "是否删除选中数据?",
+          title: '确认删除',
+          content: '是否删除选中数据?',
           onOk: function () {
             deleteAction(that.url.deleteBatch, {
               ids: ids
@@ -168,7 +168,7 @@ export const ProListMixin = {
     },
     handleDelete (id) {
       if (!this.url.delete) {
-        this.$message.error("请设置url.delete属性!")
+        this.$message.error('请设置url.delete属性!')
         return
       }
       let that = this
@@ -185,12 +185,12 @@ export const ProListMixin = {
     },
     handleEdit (record) {
       this.$refs.modalForm.edit(record)
-      this.$refs.modalForm.title = "编辑"
+      this.$refs.modalForm.title = '编辑'
       this.$refs.modalForm.disableSubmit = false
     },
     handleAdd () {
       this.$refs.modalForm.add()
-      this.$refs.modalForm.title = "新增"
+      this.$refs.modalForm.title = '新增'
       this.$refs.modalForm.disableSubmit = false
     },
     handleTableChange (pagination, filters, sorter) {
@@ -198,7 +198,7 @@ export const ProListMixin = {
       //TODO 筛选
       if (Object.keys(sorter).length > 0) {
         this.isorter.column = sorter.field
-        this.isorter.order = "ascend" == sorter.order ? "asc" : "desc"
+        this.isorter.order = 'ascend' == sorter.order ? 'asc' : 'desc'
       }
       this.ipagination = pagination
       this.loadData()
@@ -212,7 +212,7 @@ export const ProListMixin = {
     },
     handleDetail (record) {
       this.$refs.modalForm.edit(record)
-      this.$refs.modalForm.title = "详情"
+      this.$refs.modalForm.title = '详情'
       this.$refs.modalForm.disableSubmit = true
     },
     /* 导出 */
@@ -222,16 +222,16 @@ export const ProListMixin = {
       window.location.href = url
     },
     handleExportXls (fileName) {
-      if (!fileName || typeof fileName != "string") {
-        fileName = "导出文件"
+      if (!fileName || typeof fileName != 'string') {
+        fileName = '导出文件'
       }
       let param = {
         ...this.queryParam
       }
       if (this.selectedRowKeys && this.selectedRowKeys.length > 0) {
-        param['selections'] = this.selectedRowKeys.join(",")
+        param['selections'] = this.selectedRowKeys.join(',')
       }
-      console.log("导出参数", param)
+      console.log('导出参数', param)
       // downFile(this.url.exportXlsUrl, param).then((data) => {
       //   if (!data) {
       //     this.$message.warning("文件下载失败")
@@ -270,22 +270,21 @@ export const ProListMixin = {
     },
     /* 图片预览 */
     getImgView (text) {
-      if (text && text.indexOf(",") > 0) {
-        text = text.substring(0, text.indexOf(","))
+      if (text && text.indexOf(',') > 0) {
+        text = text.substring(0, text.indexOf(','))
       }
-      return window._CONFIG['imgDomainURL'] + "/" + text
+      return window._CONFIG['imgDomainURL'] + '/' + text
     },
     /* 文件下载 */
     downloadFile (text) {
       if (!text) {
-        this.$message.warning("未知的文件")
+        this.$message.warning('未知的文件')
         return
       }
-      if (text.indexOf(",") > 0) {
-        text = text.substring(0, text.indexOf(","))
+      if (text.indexOf(',') > 0) {
+        text = text.substring(0, text.indexOf(','))
       }
-      window.open(window._CONFIG['domianURL'] + "/sys/common/download/" + text)
+      window.open(window._CONFIG['domianURL'] + '/sys/common/download/' + text)
     },
   }
-
 }

@@ -10,6 +10,7 @@ import {
   DEFAULT_FIXED_HEADER_HIDDEN,
   DEFAULT_CONTENT_WIDTH_TYPE,
   DEFAULT_MULTI_TAB,
+  DEFAULT_FIXED_MULTITAB,
   SYSTEM_SETTING
 } from '@/store/mutation-types'
 
@@ -28,6 +29,7 @@ const app = {
     color: null,
     weak: false,
     multiTab: true,
+    fixedMultiTab: false,
     setting: {}
   },
   mutations: {
@@ -79,6 +81,10 @@ const app = {
       Vue.ls.set(DEFAULT_MULTI_TAB, bool)
       state.multiTab = bool
     },
+    TOGGLE_FIXED_MULTITAB: (state, bool) => {
+      Vue.ls.set(DEFAULT_FIXED_MULTITAB, bool)
+      state.fixedMultiTab = bool
+    },
     GET_SYSTEM_SETTING: (state, setting) => {
       window.localStorage.setItem(SYSTEM_SETTING, setting)
       state.setting = setting
@@ -123,6 +129,9 @@ const app = {
     },
     ToggleMultiTab ({ commit }, bool) {
       commit('TOGGLE_MULTI_TAB', bool)
+    },
+    ToggleFixedMultiTab ({ commit }, bool) {
+      commit('TOGGLE_FIXED_MULTITAB', bool)
     },
     GetSystemSetting ({ commit }) {
       return new Promise((resolve, reject) => {

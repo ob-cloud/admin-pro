@@ -246,10 +246,9 @@
             align: 'center',
             width: 170
           }
-
         ],
         url: {
-          imgerver: window._CONFIG['domianURL'] + '/sys/common/view',
+          imgServer: window._CONFIG['domianURL'] + '/sys/common/view',
           syncUser: '/process/extActProcess/doSyncUser',
           list: '/sys/user/list',
           delete: '/sys/user/delete',
@@ -266,7 +265,7 @@
     },
     methods: {
       getAvatarView (avatar) {
-        return this.url.imgerver + '/' + avatar
+        return this.url.imgServer + '/' + avatar
       },
 
       batchFrozen (status) {
@@ -316,27 +315,22 @@
         }
       },
       handleFrozen (id, status, username) {
-        let that = this
         //TODO 后台校验管理员角色
         if ('admin' == username) {
-          that.$message.warning('管理员账号不允许此操作！')
+          this.$message.warning('管理员账号不允许此操作！')
           return
         }
         frozenBatch({ids: id, status: status}).then((res) => {
           if (res.success) {
-            that.$message.success(res.message)
-            that.loadData()
+            this.$message.success(res.message)
+            this.loadData()
           } else {
-            that.$message.warning(res.message)
+            this.$message.warning(res.message)
           }
         });
       },
       handleChangePassword (username) {
         this.$refs.passwordmodal.show(username)
-      },
-      handleAgentSetting(username){
-        this.$refs.sysUserAgentModal.agentSettings(username)
-        this.$refs.sysUserAgentModal.title = '用户代理人设置'
       },
       passwordModalOk() {
         //TODO 密码修改完成 不需要刷新页面，可以把datasource中的数据更新一下

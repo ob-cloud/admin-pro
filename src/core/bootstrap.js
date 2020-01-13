@@ -11,7 +11,8 @@ import {
   DEFAULT_FIXED_HEADER_HIDDEN,
   DEFAULT_FIXED_SIDEMENU,
   DEFAULT_CONTENT_WIDTH_TYPE,
-  DEFAULT_MULTI_TAB
+  DEFAULT_MULTI_TAB,
+  DEFAULT_FIXED_MULTITAB
 } from '@/store/mutation-types'
 import config from '@/config/defaultSettings'
 
@@ -27,5 +28,6 @@ export default function Initializer() {
   store.commit('TOGGLE_WEAK', Vue.ls.get(DEFAULT_COLOR_WEAK, config.colorWeak))
   store.commit('TOGGLE_COLOR', Vue.ls.get(DEFAULT_COLOR, config.primaryColor))
   store.commit('TOGGLE_MULTI_TAB', Vue.ls.get(DEFAULT_MULTI_TAB, config.multiTab))
+  store.commit('TOGGLE_FIXED_MULTITAB', Vue.ls.get(DEFAULT_FIXED_MULTITAB, config.fixedMultiTab))
   store.commit('SET_TOKEN', Vue.ls.get(ACCESS_TOKEN))
 }
