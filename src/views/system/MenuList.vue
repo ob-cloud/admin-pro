@@ -73,6 +73,7 @@
   import { getMenuList } from '@/api/system'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
   import Ellipsis from '@/components/Ellipsis'
+  // import { isAjaxSuccess } from '@/utils/util'
 
   const columns = [
     {
@@ -137,7 +138,7 @@
       loadData () {
         this.dataSource = []
         getMenuList().then((res) => {
-          if (res.success) {
+          if (this.$isAjaxSuccess(res.code)) {
             console.log(res.result)
             this.dataSource = res.result
           }

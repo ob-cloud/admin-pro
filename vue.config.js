@@ -55,7 +55,9 @@ module.exports = {
     proxy: {
      '/pro': {
         // target: 'http://yapi.demo.qunar.com/mock/66959', //mock API接口系统
-        target: 'https://aliiot.on-bright.com/mock/13/pro',
+        // target: 'https://aliiot.on-bright.com/mock/13/pro',
+        // target: 'http://192.168.200.241',
+        target: 'http://10.10.92.161:8082/nurse',
         ws: false,
         changeOrigin: true,
         pathRewrite: {

@@ -14,7 +14,12 @@ import 'ant-design-vue/dist/antd.less'
 // ext library
 import MultiTab from '@/components/MultiTab'
 
+// util
+import { isAjaxSuccess } from '@/utils/util'
+
 Vue.use(Antd)
 // Vue.use(Viser)
 Vue.use(MultiTab)
 Vue.use(VueStorage, config.storageOptions)
+
+Vue.prototype.$isAjaxSuccess = isAjaxSuccess

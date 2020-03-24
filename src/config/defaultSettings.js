@@ -31,6 +31,7 @@ export default {
     name: 'ls', // name variable Vue.[ls] or this.[$ls],
     storage: 'local' // storage name session, local, memory
   },
+  ///// 此下面配置忽略
   // TODO Delete
   pageOptions: {
     logo: 'http://placehold.it/50x50/333/fff/?text=pro',

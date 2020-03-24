@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { login, logout } from '@/api/login'
 import { getUserPermissionList } from '@/api/system'
 import { ACCESS_TOKEN, USER_NAME, USER_INFO, USER_AUTH } from '@/store/mutation-types'
-import { welcome } from '@/utils/util'
+import { welcome, isAjaxSuccess } from '@/utils/util'
 
 const user = {
   state: {
@@ -42,7 +42,7 @@ const user = {
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
-          if (response.code === 0) {
+          if (isAjaxSuccess(response.code)) {
             const result = response.result
             const userInfo = result.userInfo
             Vue.ls.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
@@ -65,7 +65,9 @@ const user = {
     GetPermissionList ({ commit }) {
       return new Promise((resolve, reject) => {
         getUserPermissionList().then(response => {
-          console.log(response)
+          if (!isAjaxSuccess(response.code)) {
+            reject()
+          }
           const menu = response.result.menu
           const auth = response.result.auth
 

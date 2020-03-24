@@ -176,16 +176,17 @@
       loadTree (){
         var that = this
         queryTreeList().then((res)=>{
-          if(res.success){
+          if(this.$isAjaxSuccess(res.code)){
             console.log('----queryTreeList---')
             console.log(res)
             that.treeData = []
             let treeList = res.result.treeList
-            for (let a = 0; a < treeList.length; a++) {
-              let temp = treeList[a]
-              temp.isLeaf = temp.leaf
-              that.treeData.push(temp)
-            }
+            that.treeData = treeList
+            // for (let a = 0; a < treeList.length; a++) {
+            //   let temp = treeList[a]
+            //   // temp.isLeaf = temp.leaf
+            //   that.treeData.push(temp)
+            // }
           }
         });
       },

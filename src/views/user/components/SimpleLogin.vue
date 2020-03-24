@@ -1,7 +1,7 @@
 <script>
 import md5 from 'md5'
 import { mapActions } from 'vuex'
-import { timeFix } from '@/utils/util'
+import { timeFix, isAjaxSuccess } from '@/utils/util'
 import { isEmail } from '@/utils/validator'
 import config from '@/config/defaultSettings'
 export default {
@@ -11,7 +11,7 @@ export default {
       LoginForm: this.$form.createForm(this),
       LoginRules: {
         username: [ 'username', { initialValue: 'admin', rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: this.handleUsernameOrEmail }], validateTrigger: ['blur', 'change'] } ],
-        password: [ 'password', { initialValue: '123456', rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur' } ]
+        password: [ 'password', { initialValue: '12345678', rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur' } ]
       },
       state: {
         time: 60,
@@ -58,14 +58,16 @@ export default {
         }
       })
     },
-    loginSuccess () {
-      this.$router.push({ path: '/' })
-      setTimeout(() => {
-        this.$notification.success({
-          message: '欢迎',
-          description: `${timeFix()}，欢迎回来`
-        })
-      }, 1000)
+    loginSuccess (res) {
+      if (isAjaxSuccess(res.code)) {
+        this.$router.push({ path: '/' })
+        setTimeout(() => {
+          this.$notification.success({
+            message: '欢迎',
+            description: `${timeFix()}，欢迎回来`
+          })
+        }, 1000)
+      }
       this.isLoginError = false
     },
     requestFailed (err) {

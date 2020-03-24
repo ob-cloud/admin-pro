@@ -1,11 +1,11 @@
 import { getAction, postAction, putAction } from '@/utils/ajax'
 
 ////// Menu
-const getMenuList = (params) => getAction('/sys/menu/list', params)
+const getMenuList = (params) => getAction('/sys/permission/list', params)
 const addMenu = (params) => postAction('/sys/menu/add', params)
 const editMenu = (params) => putAction('/sys/menu/edit', params)
 
-const queryTreeList = (params) => getAction('/sys/menu/queryTreeList', params)
+const queryTreeList = (params) => getAction('/sys/permission/queryTreeList', params)
 // const queryTreeListForRole = (params) => getAction('/sys/role/queryTreeList', params)
 // const queryListAsync = (params) => getAction('/sys/permission/queryListAsync', params)
 
@@ -19,7 +19,8 @@ const frozenBatch = (params) => putAction('/sys/user/frozenBatch', params)
 const changePassword = (params) => putAction('/sys/user/changePassword', params)
 // 修改个人账号密码
 const updatePassword = (params) => putAction('/sys/user/updatePassword', params)
-const getUserPermissionList = (params) => getAction('/sys/user/getUserPermissionList', params)
+// 获取用户菜单、按钮权限
+const getUserPermissionList = (params) => getAction('/sys/permission/getUserPermission', params)
 
 ///// Role
 const addRole = (params) => postAction('/sys/role/add', params)
