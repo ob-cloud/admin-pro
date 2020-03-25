@@ -1,9 +1,11 @@
-import { getAction, postAction, putAction } from '@/utils/ajax'
+import { getAction, postAction, putAction, deleteAction } from '@/utils/ajax'
 
 ////// Menu
 const getMenuList = (params) => getAction('/sys/permission/list', params)
-const addMenu = (params) => postAction('/sys/menu/add', params)
-const editMenu = (params) => putAction('/sys/menu/edit', params)
+const addMenu = (params) => postAction('/sys/permission/add', params)
+const editMenu = (params) => putAction('/sys/permission/edit', params)
+const delMenu = (params) => deleteAction('/sys/permission/delete', params)
+const delMenuBatch = (params) => deleteAction('/sys/permission/deleteBatch', params)
 
 const queryTreeList = (params) => getAction('/sys/permission/queryTreeList', params)
 // const queryTreeListForRole = (params) => getAction('/sys/role/queryTreeList', params)
@@ -38,12 +40,15 @@ const addDict = (params) => postAction('/sys/dict/add', params)
 const editDict = (params) => putAction('/sys/dict/edit', params)
 const addDictItem = (params) => postAction('/sys/dictItem/add', params)
 const editDictItem = (params) => putAction('/sys/dictItem/edit', params)
-const duplicateCheck = (params) => getAction('/sys/duplicate/check', params)
+// const duplicateCheck = (params) => getAction('/sys/duplicate/check', params)
+const duplicateCheck = (params) => getAction('/sys/user/checkOnlyUser', params)
 
 ///// Permission
 const queryRolePermission = (params) => getAction('/sys/permission/queryRolePermission', params)
 const saveRolePermission = (params) => postAction('/sys/permission/saveRolePermission', params)
-const queryPermissionTreeList = (params) => getAction('/sys/role/queryPermissionTreeList', params)
+const queryPermissionTreeList = (params) => getAction('/sys/role/queryTreeList', params)
+// const queryPermissionTreeList = (params) => getAction('/sys/role/queryPermissionTreeList', params)
+
 
 ///// Annoucement
 const doReleaseData = (params) => getAction('/sys/announcement/doReleaseData', params)
@@ -63,6 +68,8 @@ export {
   getMenuList,
   addMenu,
   editMenu,
+  delMenu,
+  delMenuBatch,
   queryTreeList,
 
   // Role

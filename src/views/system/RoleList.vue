@@ -13,9 +13,9 @@
           </a-col>
           <a-col :md="10" :sm="12">
             <a-form-item label="创建时间" :labelCol="{span: 5}" :wrapperCol="{span: 18, offset: 1}">
-              <a-date-picker v-model="queryParam.createTime_begin" :showTime="true" format="YYYY-MM-DD HH:mm:ss" style="width:45%" placeholder="请选择开始时间" />
+              <pro-date v-model="queryParam.createTime_begin" :showTime="true" format="YYYY-MM-DD HH:mm:ss" style="width:45%" placeholder="请选择开始时间" />
               <span style="width: 10px;">~</span>
-              <a-date-picker v-model="queryParam.createTime_end" :showTime="true" format="YYYY-MM-DD HH:mm:ss" style="width:45%" placeholder="请选择结束时间" />
+              <pro-date v-model="queryParam.createTime_end" :showTime="true" format="YYYY-MM-DD HH:mm:ss" style="width:45%" placeholder="请选择结束时间" />
             </a-form-item>
           </a-col>
           <span style="float: left; overflow: hidden;" class="table-page-search-submitButtons">
@@ -102,13 +102,16 @@
   import RoleModal from './modules/RoleModal'
   import UserRoleModal from './modules/UserRoleModal'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
+  import ProDate from '@/components/Pro/ProDate'
+  import * as dayjs from 'dayjs'
 
   export default {
     name: 'RoleList',
     mixins:[ ProListMixin ],
     components: {
       RoleModal,
-      UserRoleModal
+      UserRoleModal,
+      ProDate
     },
     data () {
       return {
@@ -132,11 +135,11 @@
             align: 'center',
             dataIndex: 'roleName'
           },
-          {
-            title: '角色编码',
-            align: 'center',
-            dataIndex: 'roleCode'
-          },
+          // {
+          //   title: '角色编码',
+          //   align: 'center',
+          //   dataIndex: 'roleCode'
+          // },
           {
             title: '备注',
             align: 'center',
@@ -146,13 +149,19 @@
             title: '创建时间',
             dataIndex: 'createTime',
             align: 'center',
-            sorter: true
+            sorter: true,
+            customRender(t) {
+              return dayjs(new Date(t)).format('YYYY-MM-DD HH:mm:ss')
+            }
           },
           {
             title: '更新时间',
             dataIndex: 'updateTime',
             align: 'center',
-            sorter: true
+            sorter: true,
+            customRender(t) {
+              return dayjs(new Date(t)).format('YYYY-MM-DD HH:mm:ss')
+            }
           },
           {
             title: '操作',

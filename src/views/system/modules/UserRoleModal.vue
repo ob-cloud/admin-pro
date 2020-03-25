@@ -131,7 +131,7 @@
         }
         that.loading = true
         saveRolePermission(params).then((res)=>{
-          if (res.success) {
+          if (this.$isAjaxSuccess(res.code)) {
             that.$message.success(res.message)
             that.loading = false
             that.close()
@@ -147,15 +147,17 @@
     visible () {
       if (this.visible) {
         queryPermissionTreeList().then((res) => {
-          this.treeData = res.result.treeList
-          this.allTreeKeys = res.result.ids
-          queryRolePermission({
-            roleId: this.roleId
-          }).then((res) => {
-            this.checkedKeys = [...res.result]
-            this.defaultCheckedKeys = [...res.result]
-            this.expandedKeysss = this.allTreeKeys
-          })
+          if (this.$isAjaxSuccess(res.code)) {
+            this.treeData = res.result.treeList
+            this.allTreeKeys = res.result.ids
+            queryRolePermission({
+              roleId: this.roleId
+            }).then((res) => {
+              this.checkedKeys = [...res.result]
+              this.defaultCheckedKeys = [...res.result]
+              this.expandedKeysss = this.allTreeKeys
+            })
+          }
         })
       }
     }

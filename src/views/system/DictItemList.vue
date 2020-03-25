@@ -132,7 +132,7 @@
           itemValue: {rules: [{required: true, message: '请输入数据值!'}]},
         },
         url: {
-          list: '/sys/dictItem/list',
+          list: '/sys/dict/item/list',
           delete: '/sys/dictItem/delete',
           deleteBatch: '/sys/dictItem/deleteBatch',
         },

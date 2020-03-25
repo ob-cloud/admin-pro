@@ -34,7 +34,7 @@ export const ProListMixin = {
       /* 排序参数 */
       isorter: {
         column: 'createTime',
-        order: 'desc',
+        order: false, // true -asc, false - desc
       },
       /* 筛选参数 */
       filters: {},
@@ -70,7 +70,7 @@ export const ProListMixin = {
       let params = this.getQueryParams() //查询条件
       this.loading = true
       getAction(this.url.list, params).then((res) => {
-        if (res.success) {
+        if (this.$isAjaxSuccess(res.code)) {
           this.dataSource = res.result.records
           this.ipagination.total = res.result.total
         }
@@ -101,7 +101,7 @@ export const ProListMixin = {
         sqp['superQueryParams'] = encodeURI(this.superQueryParams)
       }
       let param = Object.assign(sqp, this.queryParam, this.isorter, this.filters)
-      param.field = this.getQueryField()
+      // param.field = this.getQueryField()
       param.pageNo = this.ipagination.current
       param.pageSize = this.ipagination.pageSize
       return filterObj(param)
@@ -175,7 +175,7 @@ export const ProListMixin = {
       deleteAction(that.url.delete, {
         id: id
       }).then((res) => {
-        if (res.success) {
+        if (this.$isAjaxSuccess(res.code)) {
           that.$message.success(res.message)
           that.loadData()
         } else {
@@ -198,7 +198,7 @@ export const ProListMixin = {
       //TODO 筛选
       if (Object.keys(sorter).length > 0) {
         this.isorter.column = sorter.field
-        this.isorter.order = 'ascend' == sorter.order ? 'asc' : 'desc'
+        this.isorter.order = 'ascend' == sorter.order ? true : false
       }
       this.ipagination = pagination
       this.loadData()

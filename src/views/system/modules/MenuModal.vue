@@ -100,6 +100,9 @@
             <a-switch checkedChildren="是" unCheckedChildren="否" v-model="alwaysShow" />
           </a-form-item>
 
+          <a-form-item v-show="show" :labelCol="labelCol" :wrapperCol="wrapperCol" label="打开方式">
+            <a-switch checkedChildren="外部" unCheckedChildren="内部" v-model="internalOrExternal" />
+          </a-form-item>
 
         </a-form>
 
@@ -138,6 +141,7 @@
         alwaysShow: false, //表单元素-聚合路由
         menuHidden: false, //表单元素-隐藏路由
         routeSwitch: true, //是否路由菜单
+        internalOrExternal:false,//菜单打开方式
         isKeepalive: true, //是否缓存路由
         show: true, //根据菜单类型，动态显示隐藏表单元素
         menuLabel: '菜单名称',
@@ -214,6 +218,12 @@
           this.isKeepalive = false // 升级兼容 如果没有（后台没有传过来、或者是新建）默认为false
         }
 
+        if (record.internalOrExternal) {
+          this.internalOrExternal = record.internalOrExternal ? true : false;
+        } else {
+          this.internalOrExternal = false;
+        }
+
         //console.log('record.menuType', record.menuType);
         this.show = record.menuType == 2 ? false : true
         this.menuLabel = record.menuType == 2 ? '按钮/权限' : '菜单名称'
@@ -246,6 +256,7 @@
             this.model.hidden = this.menuHidden
             this.model.route = this.routeSwitch
             this.model.keepAlive = this.isKeepalive
+            this.model.internalOrExternal = this.internalOrExternal
             let formData = Object.assign(this.model, values)
             if ((formData.menuType == 1 || formData.menuType == 2) && !formData.parentId) {
               that.validateStatus = 'error'
@@ -263,7 +274,7 @@
               obj = editMenu(formData)
             }
             obj.then((res) => {
-              if (res.success) {
+              if (this.$isAjaxSuccess(res.code)) {
                 that.$message.success(res.message)
                 that.$emit('ok')
               } else {

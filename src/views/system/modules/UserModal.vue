@@ -213,9 +213,9 @@
         this.modaltoggleFlag = !this.modaltoggleFlag;
       },
       initialRoleList () {
-        queryAllRole().then((res)=>{
-          if(res.success){
-            this.roleList = res.result
+        queryAllRole({column: '', order: true}).then((res)=>{
+          if(this.$isAjaxSuccess(res.code)){
+            this.roleList = res.result.records
           }else{
             console.log(res.message)
           }
@@ -223,7 +223,7 @@
       },
       loadUserRoles (userid) {
         queryUserRole({userid:userid}).then((res)=>{
-          if(res.success){
+          if(this.$isAjaxSuccess(res.code)){
             this.selectedRole = res.result
           }else{
             console.log(res.message)
@@ -236,7 +236,7 @@
       add () {
         this.picUrl = ''
         this.refresh()
-        this.edit({})
+        this.edit({activitiSync: false})
       },
       edit (record) {
         this.resetScreenSize() // 调用此方法,根据屏幕宽度自适应调整抽屉的宽度
@@ -250,7 +250,7 @@
         this.visible = true
         this.model = Object.assign({}, record)
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model, 'username', 'sex', 'realname', 'email', 'phone'))
+          this.form.setFieldsValue(pick(this.model, 'username', 'sex', 'realname', 'email', 'phone', 'activitiSync'))
         })
       },
       close () {
@@ -284,7 +284,7 @@
               obj = editUser(formData)
             }
             obj.then((res)=>{
-              if(res.success){
+              if(this.$isAjaxSuccess(res.code)){
                 that.$message.success(res.message)
                 that.$emit('ok')
               }else{
@@ -334,7 +334,7 @@
               dataId: this.userId
             };
             duplicateCheck(params).then((res) => {
-              if (res.success) {
+              if (this.$isAjaxSuccess(res.code)) {
                 callback()
               } else {
                 callback('手机号已存在!')
@@ -357,7 +357,7 @@
               dataId: this.userId
             };
             duplicateCheck(params).then((res) => {
-              if (res.success) {
+              if (this.$isAjaxSuccess(res.code)) {
                 callback()
               } else {
                 callback('邮箱已存在!')
@@ -376,7 +376,7 @@
           dataId: this.userId
         };
         duplicateCheck(params).then((res) => {
-          if (res.success) {
+          if (this.$isAjaxSuccess(res.code)) {
           callback()
         } else {
           callback("用户名已存在!")

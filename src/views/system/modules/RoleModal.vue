@@ -17,9 +17,9 @@
           <a-input placeholder="请输入角色名称" v-decorator="[ 'roleName', validatorRules.roleName]" />
         </a-form-item>
 
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="角色编码">
+        <!-- <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="角色编码">
           <a-input placeholder="请输入角色编码" :disabled="roleDisabled" v-decorator="[ 'roleCode', validatorRules.roleCode]" />
-        </a-form-item>
+        </a-form-item> -->
 
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="描述">
           <a-textarea :rows="5" placeholder="..." v-decorator="[ 'description', validatorRules.description ]" />
@@ -31,7 +31,7 @@
 
 <script>
   import pick from 'lodash.pick'
-  import { addRole, editRole, duplicateCheck } from '@/api/system'
+  import { addRole, editRole } from '@/api/system'
 
   export default {
     name: 'RoleModal',
@@ -57,12 +57,12 @@
               { required: true, message: '请输入角色名称!' },
               { min: 2, max: 30, message: '长度在 2 到 30 个字符', trigger: 'blur' }
             ]},
-          roleCode: {
-            rules: [
-              { required: true, message: '请输入角色名称!'},
-              { min: 0, max: 64, message: '长度不超过 64 个字符', trigger: 'blur' },
-              { validator: this.validateRoleCode}
-            ]},
+          // roleCode: {
+          //   rules: [
+          //     { required: true, message: '请输入角色名称!'},
+          //     { min: 0, max: 64, message: '长度不超过 64 个字符', trigger: 'blur' },
+          //     { validator: this.validateRoleCode}
+          //   ]},
           description: {
             rules: [
               { min: 0, max: 126, message: '长度不超过 126 个字符', trigger: 'blur' }
@@ -101,7 +101,7 @@
             let formData = Object.assign(this.model, values)
             let obj = !this.model.id ? addRole(formData) : editRole(formData)
             obj.then((res)=>{
-              if(res.success){
+              if(this.$isAjaxSuccess(res.code)){
                 that.$message.success(res.message)
                 that.$emit('ok')
               }else{
@@ -117,25 +117,25 @@
       handleCancel () {
         this.close()
       },
-      validateRoleCode (rule, value, callback){
-        if(/[\u4E00-\u9FA5]/g.test(value)){
-          callback('角色编码不可输入汉字!')
-        }else{
-          var params = {
-            tableName: 'sys_role',
-            fieldName: 'role_code',
-            fieldVal: value,
-            dataId: this.model.id,
-          };
-          duplicateCheck(params).then((res)=>{
-            if(res.success){
-              callback()
-            }else{
-              callback(res.message)
-            }
-          })
-        }
-      }
+      // validateRoleCode (rule, value, callback){
+      //   if(/[\u4E00-\u9FA5]/g.test(value)){
+      //     callback('角色编码不可输入汉字!')
+      //   }else{
+      //     var params = {
+      //       tableName: 'sys_role',
+      //       fieldName: 'role_code',
+      //       fieldVal: value,
+      //       dataId: this.model.id,
+      //     };
+      //     duplicateCheck(params).then((res)=>{
+      //       if(this.$isAjaxSuccess(res.code)){
+      //         callback()
+      //       }else{
+      //         callback(res.message)
+      //       }
+      //     })
+      //   }
+      // }
     }
   }
 </script>
