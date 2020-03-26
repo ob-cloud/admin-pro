@@ -206,8 +206,12 @@
             title: '性别',
             align: 'center',
             width: 80,
-            dataIndex: 'sex_dictText',
-            sorter: true
+            dataIndex: 'sex',
+            sorter: true,
+            customRender (t) {
+              const sexMap = {1: '男', 2: '女'}
+              return sexMap[t] || ''
+            }
           },
           {
             title: '生日',
@@ -230,7 +234,11 @@
             title: '状态',
             align: 'center',
             width: 80,
-            dataIndex: 'status_dictText'
+            dataIndex: 'status',
+            customRender (t) {
+              const statusMap = {1: '正常', 2: '冻结'}
+              return statusMap[t] || ''
+            }
           },
          /* {
             title: '创建时间',

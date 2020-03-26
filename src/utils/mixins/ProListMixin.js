@@ -154,7 +154,7 @@ export const ProListMixin = {
             deleteAction(that.url.deleteBatch, {
               ids: ids
             }).then((res) => {
-              if (res.success) {
+              if (that.$isAjaxSuccess(res.code)) {
                 that.$message.success(res.message)
                 that.loadData()
                 that.onClearSelected()
