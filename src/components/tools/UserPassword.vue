@@ -19,8 +19,10 @@
 </template>
 
 <script>
-import { updatePassword } from '@/api/system'
 import md5 from 'md5'
+import { updatePassword } from '@/api/system'
+import { mapActions } from 'vuex'
+
 export default {
   name: 'UserPassword',
   data () {
@@ -60,6 +62,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['Logout']),
     show (uname) {
       if (!uname) {
         return this.$message.warning('当前系统无登陆用户!')
@@ -91,9 +94,19 @@ export default {
             confirmpassword: md5(confirmpassword)
           }
           updatePassword(params).then((res) => {
-            if (res.success) {
+            if (that.$isAjaxSuccess(res.code)) {
               that.$message.success(res.message)
               that.close()
+              this.Logout({}).then(() => {
+                setTimeout(() => {
+                  window.location.reload()
+                }, 16)
+              }).catch(err => {
+                that.$message.error({
+                  title: '错误',
+                  description: err.message
+                })
+              })
             } else {
               that.$message.warning(res.message)
             }
