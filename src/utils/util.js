@@ -171,3 +171,7 @@ export function filterObj(obj) {
 export function isAjaxSuccess (code) {
   return code && code.toLowerCase() === 'ok'
 }
+
+// export function ajaxResponseFn (code, callback) {
+
+// }

@@ -9,6 +9,7 @@ const delMenu = (params) => deleteAction('/sys/permission/delete', params)
 // 批量删除菜单
 const delMenuBatch = (params) => deleteAction('/sys/permission/deleteBatch', params)
 
+// 获取系统菜单树列表
 const queryTreeList = (params) => getAction('/sys/permission/queryTreeList', params)
 // const queryTreeListForRole = (params) => getAction('/sys/role/queryTreeList', params)
 // const queryListAsync = (params) => getAction('/sys/permission/queryListAsync', params)
@@ -22,7 +23,7 @@ const getUserList = (params) => getAction('/sys/user/list', params)
 // 批量冻结用户
 const frozenBatch = (params) => putAction('/sys/user/frozenBatch', params)
 // 修改系统用户密码
-const changePassword = (params) => putAction('/sys/user/changePassword', params)
+const changePassword = (params) => putAction('/sys/user/changPassword', params)
 // 修改个人账号密码
 const updatePassword = (params) => putAction('/sys/user/updatePassword', params)
 // 获取用户菜单、按钮权限
@@ -41,18 +42,24 @@ const queryAllRole = (params) => getAction('/sys/role/all', params)
 const queryRoleTreeList = (params) => getAction('/sys/role/queryRoleTreeList', params)
 
 ///// Dict
+// 根据字典项code，获取字典项值
 const ajaxGetDictItems = (code, params) => getAction(`/sys/dict/getDictItems/${code}`, params)
+// 添加字典
 const addDict = (params) => postAction('/sys/dict/add', params)
 const editDict = (params) => putAction('/sys/dict/edit', params)
-const addDictItem = (params) => postAction('/sys/dictItem/add', params)
-const editDictItem = (params) => putAction('/sys/dictItem/edit', params)
+// 添加字典项
+const addDictItem = (params) => postAction('/sys/dict/item/add', params)
+const editDictItem = (params) => putAction('/sys/dict/item/edit', params)
 // 重复性检测
 const duplicateCheck = (params) => getAction('/sys/duplicate/check', params)
 // const duplicateCheck = (params) => getAction('/sys/user/checkOnlyUser', params)
 
 ///// Permission
+// 获取角色权限
 const queryRolePermission = (params) => getAction('/sys/permission/queryRolePermission', params)
+// 角色授权
 const saveRolePermission = (params) => postAction('/sys/permission/saveRolePermission', params)
+// 获取角色权限树列表
 const queryPermissionTreeList = (params) => getAction('/sys/role/queryTreeList', params)
 // const queryPermissionTreeList = (params) => getAction('/sys/role/queryPermissionTreeList', params)
 
