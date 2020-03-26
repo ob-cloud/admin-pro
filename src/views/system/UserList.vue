@@ -291,26 +291,26 @@
           });
           if (isAdmin) {
             that.$message.warning('管理员账号不允许此操作,请重新选择！')
-            return;
+            return
           }
           that.selectedRowKeys.forEach(function (val) {
             ids += val + ','
-          });
+          })
           that.$confirm({
             title: '确认操作',
             content: '是否' + (status == 1 ? '解冻' : '冻结') + '选中账号?',
             onOk: function () {
               frozenBatch({ids: ids, status: status}).then((res) => {
-                if (res.success) {
+                if (that.$isAjaxSuccess(res.code)) {
                   that.$message.success(res.message)
                   that.loadData()
                   that.onClearSelected()
                 } else {
                   that.$message.warning(res.message)
                 }
-              });
+              })
             }
-          });
+          })
         }
       },
       handleMenuClick (e) {
@@ -329,7 +329,7 @@
           return
         }
         frozenBatch({ids: id, status: status}).then((res) => {
-          if (res.success) {
+          if (this.$isAjaxSuccess(res.code)) {
             this.$message.success(res.message)
             this.loadData()
           } else {

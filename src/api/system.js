@@ -46,8 +46,9 @@ const addDict = (params) => postAction('/sys/dict/add', params)
 const editDict = (params) => putAction('/sys/dict/edit', params)
 const addDictItem = (params) => postAction('/sys/dictItem/add', params)
 const editDictItem = (params) => putAction('/sys/dictItem/edit', params)
-// const duplicateCheck = (params) => getAction('/sys/duplicate/check', params)
-const duplicateCheck = (params) => getAction('/sys/user/checkOnlyUser', params)
+// 重复性检测
+const duplicateCheck = (params) => getAction('/sys/duplicate/check', params)
+// const duplicateCheck = (params) => getAction('/sys/user/checkOnlyUser', params)
 
 ///// Permission
 const queryRolePermission = (params) => getAction('/sys/permission/queryRolePermission', params)

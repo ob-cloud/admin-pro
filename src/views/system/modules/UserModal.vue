@@ -118,6 +118,7 @@
   // import { disabledAuthFilter } from "@/utils/authFilter"
   import { duplicateCheck } from '@/api/system'
   import { isEmail } from '@/utils/validator'
+  import md5 from 'md5'
 
   export default {
     name: 'UserModal',
@@ -213,19 +214,24 @@
         this.modaltoggleFlag = !this.modaltoggleFlag;
       },
       initialRoleList () {
-        queryAllRole({column: '', order: true}).then((res)=>{
-          if(this.$isAjaxSuccess(res.code)){
+        queryAllRole({
+          column: '',
+          order: true
+        }).then((res) => {
+          if (this.$isAjaxSuccess(res.code)) {
             this.roleList = res.result.records
-          }else{
+          } else {
             console.log(res.message)
           }
         })
       },
       loadUserRoles (userid) {
-        queryUserRole({userid:userid}).then((res)=>{
-          if(this.$isAjaxSuccess(res.code)){
+        queryUserRole({
+          userid: userid
+        }).then((res) => {
+          if (this.$isAjaxSuccess(res.code)) {
             this.selectedRole = res.result
-          }else{
+          } else {
             console.log(res.message)
           }
         })
@@ -267,27 +273,22 @@
           if (!err) {
             that.confirmLoading = true
             let avatar = that.model.avatar
-            if (!values.birthday) {
-              values.birthday = ''
-            } else {
-              values.birthday = values.birthday.format(this.dateFormat)
-            }
+            values.birthday = values.birthday ? values.birthday.format(this.dateFormat) : ''
             let formData = Object.assign(this.model, values)
             formData.avatar = avatar
             formData.selectedroles = this.selectedRole.length > 0 ? this.selectedRole.join(',') : ''
 
-            let obj
             if (!this.model.id) {
               formData.id = this.userId
-              obj = addUser(formData)
-            } else {
-              obj = editUser(formData)
+              formData.password = md5(formData.password)
+              formData.confirmpassword = md5(formData.confirmpassword)
             }
-            obj.then((res)=>{
-              if(this.$isAjaxSuccess(res.code)){
+            let obj = !this.model.id ? addUser(formData) : editUser(formData)
+            obj.then((res) => {
+              if (this.$isAjaxSuccess(res.code)) {
                 that.$message.success(res.message)
                 that.$emit('ok')
-              }else{
+              } else {
                 that.$message.warning(res.message)
               }
             }).finally(() => {
@@ -322,11 +323,11 @@
           callback()
         }
       },
-      validatePhone (rule, value, callback){
-        if(!value){
+      validatePhone(rule, value, callback) {
+        if (!value) {
           callback()
-        }else{
-          if(new RegExp(/^1[3|4|5|7|8][0-9]\d{8}$/).test(value)){
+        } else {
+          if (new RegExp(/^1[3|4|5|7|8][0-9]\d{8}$/).test(value)) {
             var params = {
               tableName: 'sys_user',
               fieldName: 'phone',
@@ -340,16 +341,16 @@
                 callback('手机号已存在!')
               }
             })
-          }else{
+          } else {
             callback('请输入正确格式的手机号码!')
           }
         }
       },
-      validateEmail (rule, value, callback){
-        if(!value){
+      validateEmail(rule, value, callback) {
+        if (!value) {
           callback()
-        }else{
-          if(isEmail(value)){
+        } else {
+          if (isEmail(value)) {
             var params = {
               tableName: 'sys_user',
               fieldName: 'email',
@@ -363,12 +364,12 @@
                 callback('邮箱已存在!')
               }
             })
-          }else{
+          } else {
             callback('请输入正确格式的邮箱!')
           }
         }
       },
-      validateUsername (rule, value, callback){
+      validateUsername(rule, value, callback) {
         var params = {
           tableName: 'sys_user',
           fieldName: 'username',
@@ -377,11 +378,11 @@
         };
         duplicateCheck(params).then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
-          callback()
-        } else {
-          callback("用户名已存在!")
-        }
-      })
+            callback()
+          } else {
+            callback('用户名已存在!')
+          }
+        })
       },
       handleConfirmBlur (e) {
         const value = e.target.value
@@ -389,13 +390,12 @@
       },
 
       normFile (e) {
-        console.log('Upload event:', e);
         if (Array.isArray(e)) {
           return e
         }
         return e && e.fileList
       },
-      beforeUpload (file){
+      beforeUpload(file) {
         var fileType = file.type
         if (fileType.indexOf('image') < 0) {
           this.$message.warning('请上传图片')
@@ -412,22 +412,22 @@
           var response = info.file.response
           this.uploadLoading = false
           console.log(response)
-          if(response.success){
+          if (response.success) {
             this.model.avatar = response.message
             this.picUrl = 'Has no pic url yet'
-          }else{
-            this.$message.warning(response.message);
+          } else {
+            this.$message.warning(response.message)
           }
         }
       },
-      getAvatarView(){
+      getAvatarView() {
         // return this.url.imgerver + '/' + this.model.avatar
         return this.model.avatar
       },
 
       // 根据屏幕变化,设置抽屉尺寸
-      resetScreenSize(){
-        let screenWidth = document.body.clientWidth;
+      resetScreenSize() {
+        let screenWidth = document.body.clientWidth
         this.drawerWidth = screenWidth < 500 ? screenWidth : 700
       },
     }

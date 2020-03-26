@@ -17,7 +17,7 @@
         </a-form-item>
 
         <a-form-item label="登陆密码" :labelCol="labelCol" :wrapperCol="wrapperCol" hasFeedback>
-          <a-input type="password" placeholder="请输入登陆密码" v-decorator="[ 'password', validatorRules.password]" />
+          <a-input type="password" placeholder="请输入新的登陆密码" v-decorator="[ 'password', validatorRules.password]" />
         </a-form-item>
 
         <a-form-item label="确认密码" :labelCol="labelCol" :wrapperCol="wrapperCol" hasFeedback>
@@ -30,7 +30,7 @@
 
 <script>
   import { changePassword } from '@/api/system'
-
+  import md5 from 'md5'
   export default {
     name: 'PasswordModal',
     data () {
@@ -94,8 +94,10 @@
           if (!err) {
             this.confirmLoading = true
             let formData = Object.assign(this.model, values)
+            formData.password = md5(formData.password)
+            formData.confirmpassword = md5(formData.confirmpassword)
             changePassword(formData).then((res)=>{
-              if(res.success){
+              if(this.$isAjaxSuccess(res.code)){
                 this.$message.success(res.message)
                 this.$emit('ok')
               }else{
@@ -113,7 +115,7 @@
       },
       validateToNextPassword (rule, value, callback) {
         const form = this.form
-        const confirmpassword=form.getFieldValue('confirmpassword')
+        const confirmpassword = form.getFieldValue('confirmpassword')
         if (value && confirmpassword && value !== confirmpassword) {
           callback('两次输入的密码不一样！')
         }
