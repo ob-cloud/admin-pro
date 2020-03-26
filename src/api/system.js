@@ -1,10 +1,12 @@
 import { getAction, postAction, putAction, deleteAction } from '@/utils/ajax'
 
 ////// Menu
+// 获取菜单、按钮权限列表
 const getMenuList = (params) => getAction('/sys/permission/list', params)
 const addMenu = (params) => postAction('/sys/permission/add', params)
 const editMenu = (params) => putAction('/sys/permission/edit', params)
 const delMenu = (params) => deleteAction('/sys/permission/delete', params)
+// 批量删除菜单
 const delMenuBatch = (params) => deleteAction('/sys/permission/deleteBatch', params)
 
 const queryTreeList = (params) => getAction('/sys/permission/queryTreeList', params)
@@ -14,8 +16,10 @@ const queryTreeList = (params) => getAction('/sys/permission/queryTreeList', par
 ////// User
 const addUser = (params) => postAction('/sys/user/add', params)
 const editUser = (params) => putAction('/sys/user/edit', params)
+// 查询用户权限
 const queryUserRole = (params) => getAction('/sys/user/queryUserRole', params)
 const getUserList = (params) => getAction('/sys/user/list', params)
+// 批量冻结用户
 const frozenBatch = (params) => putAction('/sys/user/frozenBatch', params)
 // 修改系统用户密码
 const changePassword = (params) => putAction('/sys/user/changePassword', params)
@@ -31,7 +35,9 @@ const editRole = (params) => putAction('/sys/role/edit', params)
 // const deleteRole = (params) => deleteAction('/sys/role/delete', params)
 // const deleteRoleList = (params) => deleteAction('/sys/role/deleteBatch', params)
 const checkRoleCode = (params) => getAction('/sys/role/checkRoleCode', params)
+// 查询所有角色
 const queryAllRole = (params) => getAction('/sys/role/all', params)
+// 获取角色树列表
 const queryRoleTreeList = (params) => getAction('/sys/role/queryRoleTreeList', params)
 
 ///// Dict

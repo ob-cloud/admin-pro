@@ -59,18 +59,14 @@ export default {
     initDictData () {
       //根据字典Code, 初始化字典数组
       ajaxGetDictItems(this.dictCode, null).then((res) => {
-        if (res.success) {
+        if (this.$isAjaxSuccess(res.code)) {
           this.dictOptions = res.result
         }
       })
     },
     handleInput (e) {
       const val = this.tagType === 'radio' ? e.target.value : e
-      if (this.triggerChange) {
-        this.$emit('change', val)
-      } else {
-        this.$emit('input', val)
-      }
+      this.$emit(this.triggerChange ? 'change' : 'input', val)
     },
     setCurrentDictOptions (dictOptions) {
       this.dictOptions = dictOptions

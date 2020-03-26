@@ -126,7 +126,7 @@
   import pick from 'lodash.pick'
 
   export default {
-    name: "MenuModal",
+    name: 'MenuModal',
     components: { IconPicker, DictSelectTag },
     data () {
       return {
@@ -163,7 +163,7 @@
       }
     },
     computed:{
-      validatorRules:function() {
+      validatorRules: function() {
         return {
           name: { rules: [{ required: true, message: '请输入菜单标题!' }] },
           component: { rules: [{ required: this.show, message: '请输入前端组件!' }] },
@@ -177,22 +177,21 @@
       this.initDictConfig()
     },
     methods: {
-      loadTree (){
-        var that = this
-        queryTreeList().then((res)=>{
-          if(this.$isAjaxSuccess(res.code)){
+      loadTree () {
+        queryTreeList().then((res) => {
+          if (this.$isAjaxSuccess(res.code)) {
             console.log('----queryTreeList---')
             console.log(res)
-            that.treeData = []
+            this.treeData = []
             let treeList = res.result.treeList
-            that.treeData = treeList
+            this.treeData = treeList
             // for (let a = 0; a < treeList.length; a++) {
             //   let temp = treeList[a]
             //   // temp.isLeaf = temp.leaf
             //   that.treeData.push(temp)
             // }
           }
-        });
+        })
       },
       add () {
         // 默认值
@@ -202,38 +201,32 @@
         this.resetScreenSize() // 调用此方法,根据屏幕宽度自适应调整抽屉的宽度
         this.form.resetFields()
         this.model = Object.assign({}, record)
-        //--------------------------------------------------------------------------------------------------
         //根据菜单类型，动态展示页面字段
         console.log(record)
-        this.alwaysShow = !record.alwaysShow ? false : true
-        this.menuHidden = !record.hidden ? false : true
+        // this.alwaysShow = !record.alwaysShow ? false : true
+        // this.menuHidden = !record.hidden ? false : true
+        this.alwaysShow = !!record.alwaysShow
+        this.menuHidden = !!record.hidden
+        // if (record.route != null) {
+        //   this.routeSwitch = record.route ? true : false
+        // }
+        this.routeSwitch = !!record.route
 
-        if (record.route != null) {
-          this.routeSwitch = record.route ? true : false
-        }
-
-        if (record.keepAlive != null) {
-          this.isKeepalive = record.keepAlive ? true : false
-        } else {
-          this.isKeepalive = false // 升级兼容 如果没有（后台没有传过来、或者是新建）默认为false
-        }
-
-        if (record.internalOrExternal) {
-          this.internalOrExternal = record.internalOrExternal ? true : false;
-        } else {
-          this.internalOrExternal = false;
-        }
-
-        //console.log('record.menuType', record.menuType);
+        // if (record.keepAlive != null) {
+        //   this.isKeepalive = record.keepAlive ? true : false
+        // } else {
+        //   this.isKeepalive = false // 升级兼容 如果没有（后台没有传过来、或者是新建）默认为false
+        // }
+        this.isKeepalive = !!record.keepAlive || false
+        // if (record.internalOrExternal) {
+        //   this.internalOrExternal = record.internalOrExternal ? true : false;
+        // } else {
+        //   this.internalOrExternal = false;
+        // }
+        this.internalOrExternal = !!record.internalOrExternal || false
         this.show = record.menuType == 2 ? false : true
         this.menuLabel = record.menuType == 2 ? '按钮/权限' : '菜单名称'
-
-        if (this.model.parentId) {
-          this.localMenuType = 1
-        } else {
-          this.localMenuType = 0
-        }
-        //----------------------------------------------------------------------------------------------
+        this.localMenuType = this.model.parentId ? 1 : 0
 
         this.visible = true
         this.loadTree()
@@ -248,7 +241,6 @@
         this.visible = false
       },
       handleOk () {
-        const that = this
         // 触发表单验证
         this.form.validateFields((err, values) => {
           if (!err) {
@@ -258,31 +250,26 @@
             this.model.keepAlive = this.isKeepalive
             this.model.internalOrExternal = this.internalOrExternal
             let formData = Object.assign(this.model, values)
-            if ((formData.menuType == 1 || formData.menuType == 2) && !formData.parentId) {
-              that.validateStatus = 'error'
-              that.$message.error("请检查你填的类型以及信息是否正确！")
+            if ((formData.menuType === 1 || formData.menuType === 2) && !formData.parentId) {
+              this.validateStatus = 'error'
+              this.$message.error('请检查你填的类型以及信息是否正确！')
               return
             } else {
-              that.validateStatus = 'success'
+              this.validateStatus = 'success'
             }
-            that.confirmLoading = true
+            this.confirmLoading = true
             console.log(formData)
-            let obj
-            if (!this.model.id) {
-              obj = addMenu(formData)
-            } else {
-              obj = editMenu(formData)
-            }
+            let obj = !this.model.id ? addMenu(formData) : editMenu(formData)
             obj.then((res) => {
               if (this.$isAjaxSuccess(res.code)) {
-                that.$message.success(res.message)
-                that.$emit('ok')
+                this.$message.success(res.message)
+                this.$emit('ok')
               } else {
-                that.$message.warning(res.message)
+                this.$message.warning(res.message)
               }
             }).finally(() => {
-              that.confirmLoading = false
-              that.close()
+              this.confirmLoading = false
+              this.close()
             });
           }
         })
@@ -290,28 +277,29 @@
       handleCancel () {
         this.close()
       },
-      validateNumber(rule, value, callback){
-        if(!value || new RegExp(/^[0-9]*[1-9][0-9]*$/).test(value)){
-          callback();
-        }else{
-          callback("请输入正整数!");
+      validateNumber(rule, value, callback) {
+        if (!value || new RegExp(/^[0-9]*[1-9][0-9]*$/).test(value)) {
+          callback()
+        } else {
+          callback('请输入正整数!')
         }
       },
-      onChangeMenuType(e) {
-        //console.log('localMenuType checked', e.target.value)
-        this.localMenuType=e.target.value
-        if(e.target.value == 2){
-          this.show = false;
-          this.menuLabel = '按钮/权限';
-        }else{
-          this.show = true;
-          this.menuLabel = '菜单名称';
+      onChangeMenuType (e) {
+        this.localMenuType = e.target.value
+        if (e.target.value === 2) {
+          this.show = false
+          this.menuLabel = '按钮/权限'
+        } else {
+          this.show = true
+          this.menuLabel = '菜单名称'
         }
         this.$nextTick(() => {
-          this.form.validateFields(['url','component'], { force: true });
+          this.form.validateFields(['url', 'component'], {
+            force: true
+          })
         });
       },
-      selectIcons(){
+      selectIcons () {
         this.iconChooseVisible = true
       },
       handleIconCancel () {
@@ -324,22 +312,14 @@
         this.iconChooseVisible = false
       },
       // 根据屏幕变化,设置抽屉尺寸
-      resetScreenSize(){
-        let screenWidth = document.body.clientWidth;
-        if(screenWidth < 500){
-          this.drawerWidth = screenWidth;
-        }else{
-          this.drawerWidth = 700;
-        }
+      resetScreenSize () {
+        let screenWidth = document.body.clientWidth
+        this.drawerWidth = screenWidth < 500 ? screenWidth : 700
       },
-      initDictConfig() {
+      initDictConfig () {
       },
-      handleParentIdChange(value){
-        if(!value){
-          this.validateStatus="error"
-        }else{
-          this.validateStatus="success"
-        }
+      handleParentIdChange(value) {
+        this.validateStatus = value ? 'success' : 'error'
       }
     }
   }
