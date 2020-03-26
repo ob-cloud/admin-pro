@@ -203,26 +203,10 @@
         this.model = Object.assign({}, record)
         //根据菜单类型，动态展示页面字段
         console.log(record)
-        // this.alwaysShow = !record.alwaysShow ? false : true
-        // this.menuHidden = !record.hidden ? false : true
         this.alwaysShow = !!record.alwaysShow
         this.menuHidden = !!record.hidden
-        // if (record.route != null) {
-        //   this.routeSwitch = record.route ? true : false
-        // }
         this.routeSwitch = !!record.route
-
-        // if (record.keepAlive != null) {
-        //   this.isKeepalive = record.keepAlive ? true : false
-        // } else {
-        //   this.isKeepalive = false // 升级兼容 如果没有（后台没有传过来、或者是新建）默认为false
-        // }
         this.isKeepalive = !!record.keepAlive || false
-        // if (record.internalOrExternal) {
-        //   this.internalOrExternal = record.internalOrExternal ? true : false;
-        // } else {
-        //   this.internalOrExternal = false;
-        // }
         this.internalOrExternal = !!record.internalOrExternal || false
         this.show = record.menuType == 2 ? false : true
         this.menuLabel = record.menuType == 2 ? '按钮/权限' : '菜单名称'

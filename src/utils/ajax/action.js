@@ -3,7 +3,12 @@ import { axios } from './request'
 import { getReqBaseUrl } from '@/config/env.config'
 
 export function httpAction (url, parameter = {}, method = '', extra = {}) {
-  const opts = ['post', 'put'].includes(method.toLowerCase()) ? { data: parameter } : { params: parameter }
+  const methods = ['post', 'put']
+  if (extra.isData) {
+    methods.push(method)
+    delete extra.isData
+  }
+  const opts = methods.includes(method.toLowerCase()) ? { data: parameter } : { params: parameter }
   return axios({
     url,
     method: method,
@@ -26,6 +31,11 @@ export function getAction (url, parameter = {}, extra = {}) {
 
 export function deleteAction (url, parameter = {}, extra = {}) {
   return httpAction(url, parameter, 'delete', extra)
+}
+
+export function deleteJsonAction (url, parameter = {}, extra = {}) {
+  const headers = { headers: { 'Content-Type': 'application/json'} }
+  return deleteAction(url, parameter, {isData: false, ...headers, ...extra})
 }
 
 export function downloadAction (url, parameter = {}, extra = {}) {
