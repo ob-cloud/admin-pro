@@ -111,7 +111,7 @@
             formData.status = this.status
             let obj = !this.model.id ? addDictItem(formData) : editDictItem(formData)
             obj.then((res) => {
-              if (res.success) {
+              if (that.$isAjaxSuccess(res.code)) {
                 that.$message.success(res.message)
                 that.$emit('ok')
               } else {

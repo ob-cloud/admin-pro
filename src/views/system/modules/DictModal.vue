@@ -61,7 +61,7 @@
           dataId: this.model.id
         }
         duplicateCheck(params).then((res) => {
-          if (res.success) {
+          if (this.$isAjaxSuccess(res.code)) {
             callback()
           } else {
             callback(res.message)
@@ -97,7 +97,7 @@
             console.log(formData)
             let obj = !this.model.id ? addDict(formData) : editDict(formData)
             obj.then((res) => {
-              if (res.success) {
+              if (that.$isAjaxSuccess(res.code)) {
                 that.$message.success(res.message)
                 that.$emit('ok')
               } else {

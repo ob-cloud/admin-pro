@@ -133,8 +133,8 @@
         },
         url: {
           list: '/sys/dict/item/list',
-          delete: '/sys/dictItem/delete',
-          deleteBatch: '/sys/dictItem/deleteBatch',
+          delete: '/sys/dict/item/delete',
+          deleteBatch: '/sys/dict/item/deleteBatch',
         },
       }
     },
@@ -167,7 +167,7 @@
       getQueryParams() {
         var param = Object.assign({}, this.queryParam)
         param.dictId = this.dictId
-        param.field = this.getQueryField()
+        // param.field = this.getQueryField()
         param.pageNo = this.ipagination.current
         param.pageSize = this.ipagination.pageSize
         return filterObj(param)

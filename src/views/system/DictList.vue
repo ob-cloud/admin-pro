@@ -139,7 +139,7 @@
     methods: {
       getQueryParams () {
         const param = Object.assign({}, this.queryParam, this.isorter)
-        param.field = this.getQueryField()
+        // param.field = this.getQueryField()
         param.pageNo = this.ipagination.current
         param.pageSize = this.ipagination.pageSize
         return filterObj(param)

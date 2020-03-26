@@ -67,6 +67,11 @@ export default {
             description: `${timeFix()}，欢迎回来`
           })
         }, 1000)
+      } else {
+        this.$notification.error({
+            message: '错误',
+            description: res.message
+          })
       }
       this.isLoginError = false
     },
