@@ -256,7 +256,7 @@
           }
         ],
         url: {
-          imgServer: window._CONFIG['domianURL'] + '/sys/common/view',
+          // imgServer: window._CONFIG['domianURL'] + '/sys/common/view',
           syncUser: '/process/extActProcess/doSyncUser',
           list: '/sys/user/list',
           delete: '/sys/user/delete',
@@ -273,7 +273,8 @@
     },
     methods: {
       getAvatarView (avatar) {
-        return this.url.imgServer + '/' + avatar
+        // return this.url.imgServer + '/' + avatar
+        return avatar
       },
 
       batchFrozen (status) {
