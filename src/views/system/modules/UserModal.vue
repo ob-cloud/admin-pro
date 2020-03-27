@@ -412,8 +412,8 @@
           var response = info.file.response
           this.uploadLoading = false
           console.log(response)
-          if (response.success) {
-            this.model.avatar = response.message
+          if (this.$isAjaxSuccess(response.code)) {
+            this.model.avatar = response.result.url
             this.picUrl = 'Has no pic url yet'
           } else {
             this.$message.warning(response.message)
