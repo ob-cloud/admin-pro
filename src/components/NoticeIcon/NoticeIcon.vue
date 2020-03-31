@@ -35,7 +35,7 @@
               <a-list-item v-for="(record, index) in sysMsg" :key="index">
                 <div style="margin-left: 5%; width: 80%">
                   <p><a @click="showAnnouncement(record)">标题：{{ record.title }}</a></p>
-                  <p style="color: rgba(0,0,0,.45); margin-bottom: 0px">{{ record.createTime }} 发布</p>
+                  <p style="color: rgba(0,0,0,.45); margin-bottom: 0px">{{ record.createTime | dayjs('YYYY-MM-DD HH:mm:ss') }} 发布</p>
                 </div>
                 <div style="text-align: right">
                   <a-tag @click="showAnnouncement(record)" v-if="record.priority === 'L'" color="blue">一般消息</a-tag>
@@ -94,10 +94,10 @@ export default {
   methods: {
     loadData () {
       getAnnouncementListByUser().then(res => {
-        if (res.success) {
-          this.notice = res.result.noticeList
-          this.noticeCount = res.result.noticeTotal
-          this.noticeTitle = `通知(${res.result.noticeTotal})`
+        if (this.$isAjaxSuccess(res.code)) {
+          this.notice = res.result.anntMsgList
+          this.noticeCount = res.result.anntMsgTotal
+          this.noticeTitle = `通知(${res.result.anntMsgTotal})`
           this.sysMsg = res.result.sysMsgList
           this.sysMsgCount = res.result.sysMsgTotal
           this.sysMsgTitle = `系统消息(${this.sysMsgCount})`
@@ -147,7 +147,7 @@ export default {
       this.handleNotification(data)
     },
     handleNotification (data) {
-      const text = data.msgText
+      const text = data.msgTxt
       const key = `open${Date.now()}`
       this.$notification.open({
         message: '消息提醒',
