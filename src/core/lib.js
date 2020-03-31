@@ -17,6 +17,9 @@ import MultiTab from '@/components/MultiTab'
 // util
 import { isAjaxSuccess } from '@/utils/util'
 
+// global filter
+import '@/utils/filter'
+
 Vue.use(Antd)
 // Vue.use(Viser)
 Vue.use(MultiTab)
