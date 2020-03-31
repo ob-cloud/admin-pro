@@ -117,15 +117,15 @@
           },
         }],
         url: {
-          list: '/sys/announcement/getMyAnnouncement',
-          editAnnouncement: '/sys/announcement/editByAnntIdAndUserId',
-          readAllMsg: '/sys/announcement/readAll',
+          list: '/sys/sysAnnouncementSend/getMyAnnouncementSend',
+          editAnnouncement: '/sys/sysAnnouncementSend/editByAnntIdAndUserId',
+          readAllMsg: '/sys/sysAnnouncementSend/readAll',
         },
         loading: false,
       }
     },
     created () {
-      this.loadData()
+      // this.loadData()
     },
     methods: {
       handleDetail (record){
@@ -134,7 +134,7 @@
       },
       showAnnouncement (record){
         putAction(this.url.editAnnouncement, {anntId: record.anntId}).then((res)=>{
-          if(res.success){
+          if(this.$isAjaxSuccess(res.code)){
             this.loadData()
           }
         })
@@ -147,7 +147,7 @@
           content: '是否全部标注已读?',
           onOk() {
             putAction(that.url.readAllMsg).then((res) => {
-              if (res.success) {
+              if (this.$isAjaxSuccess(res.code)) {
                 that.$message.success(res.message)
                 that.loadData()
               }

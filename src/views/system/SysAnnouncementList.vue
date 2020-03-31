@@ -85,6 +85,9 @@
                   <a>撤销</a>
                 </a-popconfirm>
               </a-menu-item>
+              <a-menu-item>
+                <a @click="handleDetail(record)">查看</a>
+              </a-menu-item>
             </a-menu>
           </a-dropdown>
         </span>
@@ -102,6 +105,7 @@
   import SysAnnouncementModal from './modules/SysAnnouncementModal'
   import { doReleaseData, doReovkeData } from '@/api/system'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
+  import * as dayjs from 'dayjs'
 
   export default {
     name: 'SysAnnouncementList',
@@ -181,12 +185,18 @@
           {
             title: '发布时间',
             align: 'center',
-            dataIndex: 'sendTime'
+            dataIndex: 'sendTime',
+            customRender(t) {
+              return t && dayjs(new Date(t)).format('YYYY-MM-DD HH:mm:ss')
+            }
           },
           {
             title: '撤销时间',
             align: 'center',
-            dataIndex: 'cancelTime'
+            dataIndex: 'cancelTime',
+            customRender(t) {
+              return t && dayjs(new Date(t)).format('YYYY-MM-DD HH:mm:ss')
+            }
           },
           {
             title: '操作',
@@ -196,11 +206,11 @@
           }
         ],
         url: {
-          list: '/sys/announcement/list',
-          delete: '/sys/announcement/delete',
-          deleteBatch: '/sys/announcement/deleteBatch',
-          releaseDataUrl: '/sys/announcement/doReleaseData',
-          reovkeDataUrl: 'sys/announcement/doReovkeData',
+          list: '/sys/annountCement/list',
+          delete: '/sys/annountCement/delete',
+          deleteBatch: '/sys/annountCement/deleteBatch',
+          releaseDataUrl: '/sys/annountCement/doReleaseData',
+          reovkeDataUrl: '/sys/annountCement/doReovkeData',
           exportXlsUrl: 'sys/announcement/exportXls',
           importExcelUrl: 'sys/announcement/importExcel',
         },
@@ -215,7 +225,7 @@
       //执行发布操作
       releaseData (id) {
         doReleaseData({ id }).then((res) => {
-          if (res.success) {
+          if (this.$isAjaxSuccess(res.code)) {
             this.$message.success(res.message)
             this.loadData(1)
           } else {
@@ -226,7 +236,7 @@
       //执行撤销操作
       reovkeData (id) {
         doReovkeData({id}).then((res) => {
-          if (res.success) {
+          if (this.$isAjaxSuccess(res.code)) {
             this.$message.success(res.message)
             this.loadData(1)
           } else {
