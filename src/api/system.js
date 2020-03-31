@@ -65,13 +65,14 @@ const queryPermissionTreeList = (params) => getAction('/sys/role/queryTreeList',
 
 
 ///// Annoucement
-const doReleaseData = (params) => getAction('/sys/announcement/doReleaseData', params)
-const doReovkeData = (params) => getAction('/sys/announcement/doReovkeData', params)
+const doReleaseData = (params) => getAction('/sys/annountCement/doReleaseData', params)
+const doReovkeData = (params) => getAction('/sys/annountCement/doReovkeData', params)
 // 获取用户通告信息
-const getAnnouncementListByUser = (params) => getAction('/sys/announcement/listByUser', params)
+// const getAnnouncementListByUser = (params) => getAction('/sys/announcement/listByUser', params)
+const getAnnouncementListByUser = (params) => getAction('/sys/annountCement/listByUser', params)
 // 修改公告状态（已读）
 const editAnnouncementStatus = (params) => putAction('/sys/announcement/editStatus', params)
-const queryAnnouncementDetail = (params) => getAction('/sys/announcement/queryDetailById', params)
+const queryAnnouncementDetail = (params) => getAction('/sys/annountCement/queryById', params)
 
 ///// System Setting
 ///// 通过ajaxGetDictItems 使用
