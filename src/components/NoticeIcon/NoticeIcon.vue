@@ -17,7 +17,7 @@
               <a-list-item v-for="(record, index) in notice" :key="index">
                 <div style="margin-left: 5%; width: 80%">
                   <p><a @click="showAnnouncement(record)">标题：{{ record.title }}</a></p>
-                  <p style="color: rgba(0,0,0,.45);margin-bottom: 0px">{{ record.createTime }} 发布</p>
+                  <p style="color: rgba(0,0,0,.45);margin-bottom: 0px">{{ record.createTime | dayjs('YYYY-MM-DD HH:mm:ss') }} 发布</p>
                 </div>
                 <div style="text-align: right">
                   <a-tag @click="showAnnouncement(record)" v-if="record.priority === 'L'" color="blue">一般消息</a-tag>
@@ -62,11 +62,12 @@
 
 <script>
 import { getAnnouncementListByUser, editAnnouncementStatus, queryAnnouncementDetail } from '@/api/system'
-import { initWebSocket, onWebSocketClose } from '@/utils/websocket'
+import { WebSocketMixin } from '@/utils/websocket'
 import ShowAnnouncement from '@components/tools/ShowAnnouncement'
 
 export default {
   name: 'NoticeIcon',
+  mixins: [ WebSocketMixin ],
   components: { ShowAnnouncement },
   data () {
     return {
@@ -78,7 +79,6 @@ export default {
       sysMsg: [],
       sysMsgCount: '0',
       sysMsgTitle: '系统消息',
-      websocket: null
     }
   },
   computed: {
@@ -87,7 +87,7 @@ export default {
     }
   },
   mounted () {
-    this.websocket = initWebSocket(this.$store.getters.userInfo.id)
+    this.initWebSocket(this.$store.getters.userInfo.id)
     this.websocket.onmessage = this.onWebSocketMessage
     this.loadData()
   },
@@ -115,21 +115,6 @@ export default {
       setTimeout(() => {
         this.loading = false
       }, 500)
-      // this.loading = true
-      // getAnnouncementListByUser().then(res => {
-      //   this.loading = false
-      //   if (res.success) {
-      //     this.notice = res.result.noticeList
-      //     this.noticeCount = res.result.noticeTotal
-      //     this.noticeTitle = `通知(${res.result.noticeTotal})`
-      //     this.sysMsg = res.result.sysMsgList
-      //     this.sysMsgCount = res.result.sysMsgTotal
-      //     this.sysMsgTitle = `系统消息(${this.sysMsgCount})`
-      //   }
-      // }).catch(err => {
-      //   console.log(err)
-      //   this.loading = false
-      // })
     },
     toMyAnnouncement () {
       this.$router.push({
@@ -143,8 +128,12 @@ export default {
     },
     onWebSocketMessage (e) {
       const data = eval(`(${e.data})`)
-      this.loadData()
-      this.handleNotification(data)
+      if (data.cmd !== 'heartcheck') {
+        this.loadData()
+        this.handleNotification(data)
+      }
+      //心跳重置检测
+      this.startHeartBeat()
     },
     handleNotification (data) {
       const text = data.msgTxt
@@ -171,19 +160,19 @@ export default {
       this.$notification.close(key)
       const id = data.msgId
       queryAnnouncementDetail({id}).then(res => {
-        res.success && this.showAnnouncement(res.result)
+        this.$isAjaxSuccess(res.code) && this.showAnnouncement(res.result)
       })
     },
     showAnnouncement (record) {
       editAnnouncementStatus({ anntId: record.id }).then(res => {
-        res.success && this.fetchNotice()
+        this.$isAjaxSuccess(res.code) && this.loadData()
       })
       this.visible = false
       this.$refs.ShowAnnouncement.detail(record)
     }
   },
   destroyed () {
-    onWebSocketClose()
+    this.closeWebSocket()
   },
 }
 </script>
