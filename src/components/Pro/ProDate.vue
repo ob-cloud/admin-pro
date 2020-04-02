@@ -19,9 +19,9 @@
         default: '',
         required: false
       },
+      /* eslint-disable vue/require-default-prop */
       value: {
         type: String,
-        default: '',
         required: false
       },
       format: {

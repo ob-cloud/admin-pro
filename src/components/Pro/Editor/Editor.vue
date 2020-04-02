@@ -23,10 +23,10 @@
       Editor
     },
     props: {
+      /* eslint-disable vue/require-default-prop */
       value: {
         type: String,
-        required: false,
-        default: ''
+        required: false
       },
       triggerChange: {
         type: Boolean,
