@@ -71,7 +71,8 @@ const doReovkeData = (params) => getAction('/sys/annountCement/doReovkeData', pa
 // const getAnnouncementListByUser = (params) => getAction('/sys/announcement/listByUser', params)
 const getAnnouncementListByUser = (params) => getAction('/sys/annountCement/listByUser', params)
 // 修改公告状态（已读）
-const editAnnouncementStatus = (params) => putAction('/sys/announcement/editStatus', params)
+// const editAnnouncementStatus = (params) => putAction('/sys/announcement/editStatus', params)
+const editAnnouncementStatus = (params) => putAction('/sys/sysAnnouncementSend/editByAnntIdAndUserId', params)
 const queryAnnouncementDetail = (params) => getAction('/sys/annountCement/queryById', params)
 
 ///// System Setting
