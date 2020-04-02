@@ -147,7 +147,7 @@
           content: '是否全部标注已读?',
           onOk() {
             putAction(that.url.readAllMsg).then((res) => {
-              if (this.$isAjaxSuccess(res.code)) {
+              if (that.$isAjaxSuccess(res.code)) {
                 that.$message.success(res.message)
                 that.loadData()
               }
