@@ -65,7 +65,9 @@ const queryPermissionTreeList = (params) => getAction('/sys/role/queryTreeList',
 
 
 ///// Annoucement
+// 发布
 const doReleaseData = (params) => getAction('/sys/annountCement/doReleaseData', params)
+// 撤销
 const doReovkeData = (params) => getAction('/sys/annountCement/doReovkeData', params)
 // 获取用户通告信息
 // const getAnnouncementListByUser = (params) => getAction('/sys/announcement/listByUser', params)
@@ -73,7 +75,16 @@ const getAnnouncementListByUser = (params) => getAction('/sys/annountCement/list
 // 修改公告状态（已读）
 // const editAnnouncementStatus = (params) => putAction('/sys/announcement/editStatus', params)
 const editAnnouncementStatus = (params) => putAction('/sys/sysAnnouncementSend/editByAnntIdAndUserId', params)
+// 查询消息详情
 const queryAnnouncementDetail = (params) => getAction('/sys/annountCement/queryById', params)
+
+///// Message Template
+const addMessageTemplate = (params) => postAction('/message/sysMessageTemplate/add', params)
+const editMessageTemplate = (params) => putAction('/message/sysMessageTemplate/edit', params)
+const queryMessageTemplateList = (params) => getAction('/message/sysMessageTemplate/list', params)
+const queryMessageTemplateDetail = (params) => getAction('/message/sysMessageTemplate/queryById', params)
+const delessageTemplate = (params) => deleteAction('/message/sysMessageTemplate/delete', params)
+const delBatchMessageTemplate = (params) => deleteAction('/message/sysMessageTemplate/deleteBatch', params)
 
 ///// System Setting
 ///// 通过ajaxGetDictItems 使用
@@ -124,6 +135,14 @@ export {
   getAnnouncementListByUser,
   editAnnouncementStatus,
   queryAnnouncementDetail,
+
+  // Message Template
+  addMessageTemplate,
+  editMessageTemplate,
+  queryMessageTemplateList,
+  queryMessageTemplateDetail,
+  delessageTemplate,
+  delBatchMessageTemplate,
 
   // System
   getSystemConfig
