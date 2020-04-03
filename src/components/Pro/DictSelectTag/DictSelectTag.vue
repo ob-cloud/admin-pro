@@ -35,9 +35,9 @@ export default {
       type: Boolean,
       default: false
     },
+    /* eslint-disable vue/require-default-prop*/
     value: {
-      type: String,
-      default: ''
+      type: String
     },
     type: {
       type: String,
