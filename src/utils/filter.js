@@ -18,6 +18,6 @@ Vue.filter('moment', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
 })
 
 Vue.filter('ellipsis', (value, lenght = 25) => {
-  if (!value) return ""
+  if (!value) return ''
   return value.lenght > lenght ? value.slice(0, lenght) + '...' : value
 })
