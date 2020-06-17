@@ -158,8 +158,9 @@
             params[this.pidField] = record.id
             getAction(this.url.childList, params).then((res) => {
               if (this.$isAjaxSuccess(res.code)) {
-                if (res.result && res.result.length > 0) {
-                  record.children = this.getDataByResult(res.result)
+                const records = res.result.records
+                if (records && records.length > 0) {
+                  record.children = this.getDataByResult(records)
                   this.dataSource = [...this.dataSource]
                 } else {
                   record.children = ''
