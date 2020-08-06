@@ -63,30 +63,9 @@ export default {
   // TODO Delete 登录页面配置 - 迁移至脚手架
   LoginLayout: {
     mode: 'simple', // mode: simple, multiple
-    forgetPassword: true, // password forgotten
-    // otherLoginTypes: [{ // third-part login
-    //   iconCls: 'alipay-circle'
-    // }, {
-    //   iconCls: 'taobao-circle'
-    // }, {
-    //   iconCls: 'weibo-circle'
-    // }]
+    forgetPassword: false, // password forgotten
   },
-  // TODO 全局脚注配置 - 迁移至脚手架
   GlobalFooter: {
-    // links: [{
-    //   href: '',
-    //   iconType: '',
-    //   target: '_blank',
-    //   text: ''
-    // }, {
-    //   href: '',
-    //   iconType: '',
-    //   target: '_self',
-    //   text: ''
-    // }],
-    // copyright: {
-    //   text: ''
-    // }
+
   }
 }
