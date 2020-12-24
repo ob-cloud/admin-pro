@@ -25,37 +25,37 @@
   export default {
     name: 'TreeSelect',
     props: {
-      /* eslint-disable vue/require-default-prop*/
-      value:{
+      /* eslint-disable vue/require-default-prop */
+      value: {
         type: String,
         required: false
       },
-      placeholder:{
+      placeholder: {
         type: String,
         default: '请选择',
         required: false
       },
-      dict:{
+      dict: {
         type: String,
         default: '',
         required: false
       },
-      pidField:{
+      pidField: {
         type: String,
         default: 'pid',
         required: false
       },
-      pidValue:{
+      pidValue: {
         type: String,
         default: '0',
         required: false
       },
-      disabled:{
-        type:Boolean,
-        default:false,
-        required:false
+      disabled: {
+        type: Boolean,
+        default: false,
+        required: false
       },
-      hasChildField:{
+      hasChildField: {
         type: String,
         default: '',
         required: false
@@ -63,33 +63,32 @@
     },
     data () {
       return {
-        treeValue: "",
+        treeValue: '',
         treeData: [],
         url: '/sys/dict/loadTreeData',
         view: '/sys/dict/loadDictItem/',
         tableName: '',
         text: '',
-        code: '',
-
+        code: ''
       }
     },
     watch: {
       value () {
         this.loadItemByCode()
       },
-      dict() {
+      dict () {
         this.initDictInfo()
         this.loadRoot()
       }
     },
-    created() {
+    created () {
       this.initDictInfo()
       this.loadRoot()
       this.loadItemByCode()
     },
     methods: {
-      loadItemByCode() {
-        if (!this.value || this.value == '0') {
+      loadItemByCode () {
+        if (!this.value || this.value === '0') {
           this.treeValue = ''
         } else {
           getAction(`${this.view}${this.dict}`, {
@@ -105,8 +104,8 @@
           })
         }
       },
-      initDictInfo() {
-        let arr = this.dict.split(',')
+      initDictInfo () {
+        const arr = this.dict.split(',')
         this.tableName = arr[0]
         this.text = arr[1]
         this.code = arr[2]
@@ -117,8 +116,8 @@
             resolve()
             return
           }
-          let pid = treeNode.$vnode.key
-          let param = {
+          const pid = treeNode.$vnode.key
+          const param = {
             pid: pid,
             tableName: this.tableName,
             text: this.text,
@@ -129,7 +128,7 @@
           }
           getAction(this.url, param).then(res => {
             if (this.$isAjaxSuccess(res.code)) {
-              for (let i of res.result) {
+              for (const i of res.result) {
                 i.value = i.key
                 i.isLeaf = !!i.leaf
               }
@@ -140,9 +139,9 @@
           })
         })
       },
-      addChildren(pid, children, treeArray) {
+      addChildren (pid, children, treeArray) {
         if (treeArray && treeArray.length > 0) {
-          for (let item of treeArray) {
+          for (const item of treeArray) {
             if (item.key === pid) {
               if (!children || children.length === 0) {
                 item.isLeaf = true
@@ -156,8 +155,8 @@
           }
         }
       },
-      loadRoot() {
-        let param = {
+      loadRoot () {
+        const param = {
           pid: this.pidValue,
           tableName: this.tableName,
           text: this.text,
@@ -168,13 +167,13 @@
         }
         getAction(this.url, param).then(res => {
           if (this.$isAjaxSuccess(res.code)) {
-            for (let i of res.result) {
+            for (const i of res.result) {
               i.value = i.key
               i.isLeaf = !!i.leaf
             }
             this.treeData = [...res.result]
           } else {
-            console.log("数根节点查询结果-else", res)
+            console.log('数根节点查询结果-else', res)
           }
         })
       },
@@ -183,14 +182,14 @@
         this.treeValue = value
         this.$emit('change', value)
       },
-      onSearch(value) {
+      onSearch (value) {
         console.log(value)
       },
-      getCurrTreeData() {
+      getCurrTreeData () {
         return this.treeData
       }
     },
-    //2.2新增 在组件内定义 指定父组件调用时候的传值属性和事件类型 这个牛逼
+    // 2.2新增 在组件内定义 指定父组件调用时候的传值属性和事件类型 这个牛逼
     model: {
       prop: 'value',
       event: 'change'

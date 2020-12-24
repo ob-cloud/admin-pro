@@ -33,32 +33,32 @@ export default {
       confirmLoading: false,
       validatorRules: {
         oldpassword: {
-          rules: [{ required: true, message: '请输入旧密码!' }],
+          rules: [{ required: true, message: '请输入旧密码!' }]
         },
         password: {
           rules: [
-            { required: true, message: '请输入新密码!' },
+            { required: true, pattern: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>?,./]).{8,}$/, message: '密码由8位数字、大小写字母和特殊符号组成!' },
             { validator: this.validateToNextPassword }
-          ],
+          ]
         },
         confirmpassword: {
           rules: [
             { required: true, message: '请确认新密码!' },
             { validator: this.compareToFirstPassword }
-          ],
+          ]
         }
       },
       confirmDirty: false,
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 5 },
+        sm: { span: 5 }
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 },
+        sm: { span: 16 }
       },
       form: this.$form.createForm(this),
-      username: '',
+      username: ''
     }
   },
   methods: {
@@ -86,8 +86,8 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           that.confirmLoading = true
-          let { oldpassword, password, confirmpassword } = values
-          let params = {
+          const { oldpassword, password, confirmpassword } = values
+          const params = {
             username: this.username,
             oldpassword: md5(oldpassword),
             password: md5(password),

@@ -88,7 +88,6 @@
           <ellipsis :value="text" :length="25" />
         </span>
 
-
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
           <a-divider type="vertical" />
@@ -117,91 +116,91 @@
   </a-card>
 </template>
 <script>
-  import SysMessageTemplateModal from './modules/SysMessageTemplateModal'
-  import { ProListMixin } from '@/utils/mixins/ProListMixin'
-  import Ellipsis from '@/components/Pro/Ellipsis'
+import SysMessageTemplateModal from './modules/SysMessageTemplateModal'
+import { ProListMixin } from '@/utils/mixins/ProListMixin'
+import Ellipsis from '@/components/Pro/Ellipsis'
 
-  export default {
-    name: 'SysMessageTemplateList',
-    mixins: [ ProListMixin ],
-    components: {
-      Ellipsis,
-      SysMessageTemplateModal
-    },
-    data() {
-      return {
-        description: '消息模板管理页面',
-        // 表头
-        columns: [
-          {
-            title: '#',
-            dataIndex: '',
-            key: 'rowIndex',
-            width: 60,
-            align: 'center',
-            customRender: function (t, r, index) {
-              return parseInt(index) + 1
-            }
-          },
-          {
-            title: '模板CODE',
-            align: 'center',
-            dataIndex: 'templateCode'
-          },
-          {
-            title: '模板标题',
-            align: 'center',
-            dataIndex: 'templateName'
-          },
-          {
-            title: '模板内容',
-            align: 'center',
-            dataIndex: 'templateContent',
-            scopedSlots: {
-              customRender: 'templateContent'
-            },
-          },
-          {
-            title: '模板类型',
-            align: 'center',
-            dataIndex: 'templateType',
-            customRender (text) {
-              const typeMap = {
-                1: '短信',
-                2: '邮件',
-                3: '微信',
-                4: '系统'
-              }
-              return typeMap[text] || ''
-            }
-          },
-          {
-            title: '操作',
-            dataIndex: 'action',
-            align: 'center',
-            scopedSlots: {
-              customRender: 'action'
-            },
+export default {
+  name: 'SysMessageTemplateList',
+  mixins: [ ProListMixin ],
+  components: {
+    Ellipsis,
+    SysMessageTemplateModal
+  },
+  data () {
+    return {
+      description: '消息模板管理页面',
+      // 表头
+      columns: [
+        {
+          title: '#',
+          dataIndex: '',
+          key: 'rowIndex',
+          width: 60,
+          align: 'center',
+          customRender: function (t, r, index) {
+            return parseInt(index) + 1
           }
-        ],
-        url: {
-          list: '/message/sysMessageTemplate/list',
-          delete: '/message/sysMessageTemplate/delete',
-          deleteBatch: '/message/sysMessageTemplate/deleteBatch',
-          exportXlsUrl: 'message/sysMessageTemplate/exportXls',
-          importExcelUrl: 'message/sysMessageTemplate/importExcel',
         },
-      }
-    },
-    computed: {
-    },
-    methods: {
-      handleTest(record){
-        this.$refs.testModal.open(record)
-        this.$refs.testModal.title = "发送测试"
+        {
+          title: '模板CODE',
+          align: 'center',
+          dataIndex: 'templateCode'
+        },
+        {
+          title: '模板标题',
+          align: 'center',
+          dataIndex: 'templateName'
+        },
+        {
+          title: '模板内容',
+          align: 'center',
+          dataIndex: 'templateContent',
+          scopedSlots: {
+            customRender: 'templateContent'
+          }
+        },
+        {
+          title: '模板类型',
+          align: 'center',
+          dataIndex: 'templateType',
+          customRender (text) {
+            const typeMap = {
+              1: '短信',
+              2: '邮件',
+              3: '微信',
+              4: '系统'
+            }
+            return typeMap[text] || ''
+          }
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          align: 'center',
+          scopedSlots: {
+            customRender: 'action'
+          }
+        }
+      ],
+      url: {
+        list: '/message/sysMessageTemplate/list',
+        delete: '/message/sysMessageTemplate/delete',
+        deleteBatch: '/message/sysMessageTemplate/deleteBatch',
+        exportXlsUrl: 'message/sysMessageTemplate/exportXls',
+        importExcelUrl: 'message/sysMessageTemplate/importExcel'
       }
     }
+  },
+  computed: {
+  },
+  methods: {
+    handleTest (record) {
+      this.$refs.testModal.open(record)
+      this.$refs.testModal.title = '发送测试'
+    }
   }
+}
 </script>
 <style lang="less" scoped>
   /** Button按钮间距 */

@@ -1,34 +1,7 @@
-# vue-ts
+# 基础平台
 
-## Project setup
-```
-yarn install
-```
+> 第二种版式
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+`main.js`中启动了`mock`，使用时需替换处理
 
-### Compiles and minifies for production
-```
-yarn run build
-```
-
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Run your end-to-end tests
-```
-yarn run test:e2e
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+注意菜单的`RouteView`模式， 接口菜单返回值中的 `component`  需为 `RouteView` 等，而不是 `admin-pro` 中的 `Layout/RouteView`

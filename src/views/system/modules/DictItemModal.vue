@@ -52,19 +52,19 @@
         dictId: '',
         status: 1,
         labelCol: {
-          xs: {span: 24},
-          sm: {span: 5},
+          xs: { span: 24 },
+          sm: { span: 5 }
         },
         wrapperCol: {
-          xs: {span: 24},
-          sm: {span: 16},
+          xs: { span: 24 },
+          sm: { span: 16 }
         },
         confirmLoading: false,
         form: this.$form.createForm(this),
         validatorRules: {
-          itemText: { rules: [{required: true, message: '请输入名称!'}] },
-          itemValue: { rules: [{required: true, message: '请输入数据值!'}] },
-        },
+          itemText: { rules: [{ required: true, message: '请输入名称!' }] },
+          itemValue: { rules: [{ required: true, message: '请输入数据值!' }] }
+        }
       }
     },
     created () {
@@ -77,12 +77,12 @@
       edit (record) {
         if (record.id) {
           this.dictId = record.dictId
-          this.visibleCheck = (record.status == 1) ? true : false
+          this.visibleCheck = record.status === 1
         }
         this.form.resetFields()
         this.model = Object.assign({}, record)
-        this.model.dictId = this.dictId;
-        this.model.status = this.status;
+        this.model.dictId = this.dictId
+        this.model.status = this.status
         this.visible = true
         this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model, 'itemText', 'itemValue', 'description', 'sortOrder'))
@@ -98,7 +98,7 @@
         }
       },
       // 确定
-      handleOk() {
+      handleOk () {
         const that = this
         // 触发表单验证
         this.form.validateFields((err, values) => {
@@ -107,9 +107,9 @@
             values.itemText = (values.itemText || '').trim()
             values.itemValue = (values.itemValue || '').trim()
             values.description = (values.description || '').trim()
-            let formData = Object.assign(this.model, values)
+            const formData = Object.assign(this.model, values)
             formData.status = this.status
-            let obj = !this.model.id ? addDictItem(formData) : editDictItem(formData)
+            const obj = !this.model.id ? addDictItem(formData) : editDictItem(formData)
             obj.then((res) => {
               if (that.$isAjaxSuccess(res.code)) {
                 that.$message.success(res.message)
@@ -131,7 +131,7 @@
       close () {
         this.$emit('close')
         this.visible = false
-      },
+      }
     }
   }
 </script>

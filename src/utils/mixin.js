@@ -15,7 +15,7 @@ const mixin = {
       autoHideHeader: state => state.app.autoHideHeader,
       sidebarOpened: state => state.app.sidebar,
       multiTab: state => state.app.multiTab,
-      fixedMultiTab: state => state.app.fixedMultiTab,
+      fixedMultiTab: state => state.app.fixedMultiTab
     })
   },
   methods: {
@@ -70,4 +70,17 @@ const AppDeviceEnquire = {
   }
 }
 
-export { mixin, AppDeviceEnquire, mixinDevice }
+const i18nMixin = {
+  computed: {
+    ...mapState({
+      currentLang: state => state.app.lang
+    })
+  },
+  methods: {
+    setLang (lang) {
+      this.$store.dispatch('setLang', lang)
+    }
+  }
+}
+
+export { mixin, AppDeviceEnquire, mixinDevice, i18nMixin }

@@ -77,7 +77,7 @@
 
 <script>
   import pick from 'lodash.pick'
-  import {filterObj} from '@/utils/util'
+  import { filterObj } from '@/utils/util'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
   import DictItemModal from './modules/DictItemModal'
 
@@ -85,24 +85,24 @@
     name: 'DictItemList',
     mixins: [ ProListMixin ],
     components: { DictItemModal },
-    data() {
+    data () {
       return {
         columns: [
           {
             title: '名称',
             align: 'center',
-            dataIndex: 'itemText',
+            dataIndex: 'itemText'
           },
           {
             title: '数据值',
             align: 'center',
-            dataIndex: 'itemValue',
+            dataIndex: 'itemValue'
           },
           {
             title: '操作',
             dataIndex: 'action',
             align: 'center',
-            scopedSlots: {customRender: 'action'},
+            scopedSlots: { customRender: 'action' }
           }
         ],
         queryParam: {
@@ -110,7 +110,7 @@
           dictName: '',
           itemText: '',
           delFlag: '1',
-          status: [],
+          status: []
         },
         title: '操作',
         visible: false,
@@ -119,35 +119,43 @@
         dictId: '',
         status: 1,
         labelCol: {
-          xs: {span: 5},
-          sm: {span: 5},
+          xs: {
+            span: 5
+          },
+          sm: {
+            span: 5
+          }
         },
         wrapperCol: {
-          xs: {span: 12},
-          sm: {span: 12},
+          xs: {
+            span: 12
+          },
+          sm: {
+            span: 12
+          }
         },
         form: this.$form.createForm(this),
         validatorRules: {
-          itemText: {rules: [{required: true, message: '请输入名称!'}]},
-          itemValue: {rules: [{required: true, message: '请输入数据值!'}]},
+          itemText: { rules: [{ required: true, message: '请输入名称!' }] },
+          itemValue: { rules: [{ required: true, message: '请输入数据值!' }] }
         },
         url: {
           list: '/sys/dict/item/list',
           delete: '/sys/dict/item/delete',
-          deleteBatch: '/sys/dict/item/deleteBatch',
-        },
+          deleteBatch: '/sys/dict/item/deleteBatch'
+        }
       }
     },
-    created() {
+    created () {
       // 当页面初始化时,根据屏幕大小来给抽屉设置宽度
       this.resetScreenSize()
     },
     methods: {
-      add(dictId) {
+      add (dictId) {
         this.dictId = dictId
         this.edit({})
       },
-      edit(record) {
+      edit (record) {
         if (record.id) {
           this.dictId = record.id
         }
@@ -159,12 +167,12 @@
         this.visible = true
         this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model, 'itemText', 'itemValue'))
-        });
+        })
         // 当其它模块调用该模块时,调用此方法加载字典数据
         this.loadData()
       },
 
-      getQueryParams() {
+      getQueryParams () {
         var param = Object.assign({}, this.queryParam)
         param.dictId = this.dictId
         // param.field = this.getQueryField()
@@ -174,23 +182,23 @@
       },
 
       // 添加字典数据
-      handleAdd() {
+      handleAdd () {
         this.$refs.modalForm.add(this.dictId)
         this.$refs.modalForm.title = '新增'
       },
-      showDrawer() {
+      showDrawer () {
         this.visible = true
       },
-      onClose() {
+      onClose () {
         this.visible = false
         this.form.resetFields()
         this.dataSource = []
       },
       // 抽屉的宽度随着屏幕大小来改变
-      resetScreenSize() {
-        let screenWidth = document.body.clientWidth
+      resetScreenSize () {
+        const screenWidth = document.body.clientWidth
         this.screenWidth = screenWidth < 600 ? screenWidth : 600
-      },
+      }
     }
   }
 </script>

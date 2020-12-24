@@ -81,14 +81,14 @@
             align: 'center',
             scopedSlots: {
               customRender: 'action'
-            },
+            }
           }
         ],
         url: {
           list: '/sys/category/rootList',
           childList: '/sys/category/childList',
           delete: '/sys/category/delete',
-          deleteBatch: '/sys/category/deleteBatch',
+          deleteBatch: '/sys/category/deleteBatch'
         },
         expandedRowKeys: [],
         hasChildrenField: 'hasChild',
@@ -97,29 +97,29 @@
       }
     },
     computed: {
-      tableProps() {
-        let _this = this
+      tableProps () {
+        const _this = this
         return {
           // 列表项是否可选择
           rowSelection: {
             selectedRowKeys: _this.selectedRowKeys,
-            onChange: (selectedRowKeys) => _this.selectedRowKeys = selectedRowKeys
+            onChange: (selectedRowKeys) => { _this.selectedRowKeys = selectedRowKeys }
           }
         }
       }
     },
     methods: {
-      loadData(arg) {
+      loadData (arg) {
         if (arg === 1) {
           this.ipagination.current = 1
         }
         this.loading = true
         this.expandedRowKeys = []
-        let params = this.getQueryParams()
+        const params = this.getQueryParams()
         return new Promise((resolve) => {
           getAction(this.url.list, params).then(res => {
             if (this.$isAjaxSuccess(res.code)) {
-              let result = res.result
+              const result = res.result
               if (+result.total > 0) {
                 this.ipagination.total = +result.total
                 this.dataSource = this.getDataByResult(res.result.records)
@@ -135,11 +135,11 @@
           })
         })
       },
-      getDataByResult(result) {
+      getDataByResult (result) {
         return result.map(item => {
-          //判断是否标记了带有子节点
+          // 判断是否标记了带有子节点
           if (item[this.hasChildrenField] === '1') {
-            let loadChild = {
+            const loadChild = {
               id: item.id + '_loadChild',
               name: 'loading...',
               isLoading: true
@@ -149,12 +149,12 @@
           return item
         })
       },
-      handleExpand(expanded, record) {
+      handleExpand (expanded, record) {
         // 判断是否是展开状态
         if (expanded) {
           this.expandedRowKeys.push(record.id)
           if (record.children.length > 0 && record.children[0].isLoading === true) {
-            let params = this.getQueryParams() //查询条件
+            const params = this.getQueryParams() // 查询条件
             params[this.pidField] = record.id
             getAction(this.url.childList, params).then((res) => {
               if (this.$isAjaxSuccess(res.code)) {
@@ -172,14 +172,14 @@
             })
           }
         } else {
-          let keyIndex = this.expandedRowKeys.indexOf(record.id)
+          const keyIndex = this.expandedRowKeys.indexOf(record.id)
           if (keyIndex >= 0) {
             this.expandedRowKeys.splice(keyIndex, 1)
           }
         }
       },
-      initDictConfig() {},
-      modalFormOk(formData, arr) {
+      initDictConfig () {},
+      modalFormOk (formData, arr) {
         if (!formData.id) {
           this.addOk(formData, arr)
         } else {
@@ -187,7 +187,7 @@
           this.dataSource = [...this.dataSource]
         }
       },
-      editOk(formData, arr) {
+      editOk (formData, arr) {
         if (arr && arr.length > 0) {
           for (let i = 0; i < arr.length; i++) {
             if (arr[i].id === formData.id) {
@@ -199,22 +199,22 @@
           }
         }
       },
-      async addOk(formData, arr) {
+      async addOk (formData, arr) {
         if (!formData[this.pidField]) {
           this.loadData()
         } else {
           this.expandedRowKeys = []
-          for (let i of arr) {
+          for (const i of arr) {
             await this.expandTreeNode(i)
           }
         }
       },
-      expandTreeNode(nodeId) {
+      expandTreeNode (nodeId) {
         return new Promise((resolve, reject) => {
           this.getFormDataById(nodeId, this.dataSource)
-          let row = this.parentFormData
+          const row = this.parentFormData
           this.expandedRowKeys.push(nodeId)
-          let params = this.getQueryParams() //查询条件
+          const params = this.getQueryParams() // 查询条件
           params[this.pidField] = nodeId
 
           getAction(this.url.childList, params).then((res) => {
@@ -232,10 +232,10 @@
           })
         })
       },
-      getFormDataById(id, arr) {
+      getFormDataById (id, arr) {
         if (arr && arr.length > 0) {
           for (let i = 0; i < arr.length; i++) {
-            if (arr[i].id == id) {
+            if (arr[i].id === id) {
               this.parentFormData = arr[i]
             } else {
               this.getFormDataById(id, arr[i].children)

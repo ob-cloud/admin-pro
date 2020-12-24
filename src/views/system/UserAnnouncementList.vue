@@ -73,7 +73,7 @@
           title: '消息类型',
           align: 'center',
           dataIndex: 'msgCategory',
-          customRender(text) {
+          customRender (text) {
             if (text === '1') {
               return '通知公告'
             } else if (text === '2') {
@@ -94,18 +94,18 @@
           title: '优先级',
           align: 'center',
           dataIndex: 'priority',
-          customRender(text) {
+          customRender (text) {
             return {
               L: '低',
               M: '中',
               H: '高'
-            } [text] || text
+            }[text] || text
           }
         }, {
           title: '阅读状态',
           align: 'center',
           dataIndex: 'readFlag',
-          customRender(text) {
+          customRender (text) {
             return ['未读', '已读'][text] || text
           }
         }, {
@@ -114,27 +114,29 @@
           align: 'center',
           scopedSlots: {
             customRender: 'action'
-          },
+          }
         }],
         url: {
           list: '/sys/sysAnnouncementSend/getMyAnnouncementSend',
           editAnnouncement: '/sys/sysAnnouncementSend/editByAnntIdAndUserId',
-          readAllMsg: '/sys/sysAnnouncementSend/readAll',
+          readAllMsg: '/sys/sysAnnouncementSend/readAll'
         },
-        loading: false,
+        loading: false
       }
     },
     created () {
       // this.loadData()
     },
     methods: {
-      handleDetail (record){
+      handleDetail (record) {
         this.$refs.sysAnnouncementModal.detail(record)
         this.$refs.sysAnnouncementModal.title = '查看'
       },
-      showAnnouncement (record){
-        putAction(this.url.editAnnouncement, {anntId: record.anntId}).then((res)=>{
-          if(this.$isAjaxSuccess(res.code)){
+      showAnnouncement (record) {
+        putAction(this.url.editAnnouncement, {
+          anntId: record.anntId
+        }).then((res) => {
+          if (this.$isAjaxSuccess(res.code)) {
             this.loadData()
           }
         })
@@ -145,7 +147,7 @@
         that.$confirm({
           title: '确认操作',
           content: '是否全部标注已读?',
-          onOk() {
+          onOk () {
             putAction(that.url.readAllMsg).then((res) => {
               if (that.$isAjaxSuccess(res.code)) {
                 that.$message.success(res.message)
@@ -154,7 +156,7 @@
             })
           }
         })
-      },
+      }
     }
   }
 </script>

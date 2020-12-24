@@ -93,9 +93,9 @@
             values.dictName = (values.dictName || '').trim()
             values.dictCode = (values.dictCode || '').trim()
             values.description = (values.description || '').trim()
-            let formData = Object.assign(this.model, values)
+            const formData = Object.assign(this.model, values)
             console.log(formData)
-            let obj = !this.model.id ? addDict(formData) : editDict(formData)
+            const obj = !this.model.id ? addDict(formData) : editDict(formData)
             obj.then((res) => {
               if (that.$isAjaxSuccess(res.code)) {
                 that.$message.success(res.message)

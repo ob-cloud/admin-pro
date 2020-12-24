@@ -28,7 +28,6 @@
             </a-form-item>
           </a-col>
 
-
           <template v-if="toggleSearchStatus">
             <a-col :span="6">
               <a-form-item label="邮箱">
@@ -100,7 +99,7 @@
         }, {
           title: '真实姓名',
           align: 'center',
-          dataIndex: 'realname',
+          dataIndex: 'realname'
         }, {
           title: '性别',
           align: 'center',
@@ -138,12 +137,12 @@
         },
         isorter: {
           column: 'createTime',
-          order: 'desc',
+          order: 'desc'
         },
         selectedRowKeys: [],
         selectionRows: [],
         visible: false,
-        toggleSearchStatus: false,
+        toggleSearchStatus: false
       }
     },
     created () {
@@ -162,7 +161,7 @@
         if (arg === 1) {
           this.ipagination.current = 1
         }
-        let params = this.getQueryParams() //查询条件
+        const params = this.getQueryParams() // 查询条件
         getUserList(params).then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
             this.dataSource = res.result.records
@@ -171,7 +170,7 @@
         })
       },
       getQueryParams () {
-        let param = Object.assign({}, this.queryParam, this.isorter)
+        const param = Object.assign({}, this.queryParam, this.isorter)
         param.field = this.getQueryField()
         param.pageNo = this.ipagination.current
         param.pageSize = this.ipagination.pageSize
@@ -197,7 +196,7 @@
       handleTableChange (pagination, filters, sorter) {
         if (Object.keys(sorter).length > 0) {
           this.isorter.column = sorter.field
-          this.isorter.order = 'ascend' == sorter.order ? 'asc' : 'desc'
+          this.isorter.order = sorter.order === 'ascend' ? 'asc' : 'desc'
         }
         this.ipagination = pagination
         this.loadData()
@@ -216,7 +215,7 @@
       },
       handleToggleSearch () {
         this.toggleSearchStatus = !this.toggleSearchStatus
-      },
+      }
     }
   }
 </script>

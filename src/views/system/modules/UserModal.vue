@@ -7,7 +7,6 @@
     :closable="true"
     @close="handleCancel"
     :visible="visible"
-    style="height: calc(100% - 55px);overflow: auto;padding-bottom: 53px;"
   >
 
     <template slot="title">
@@ -55,7 +54,15 @@
           </a-select>
         </a-form-item>
 
-        <a-form-item label="头像" :labelCol="labelCol" :wrapperCol="wrapperCol">
+        <a-form-item label="用户类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <a-select v-decorator="[ 'type', { initialValue: 0 }]" placeholder="请选择用户类型">
+            <a-select-option :value="0">集团用户</a-select-option>
+            <a-select-option :value="1">酒店用户</a-select-option>
+            <a-select-option :value="2">超级用户</a-select-option>
+          </a-select>
+        </a-form-item>
+
+        <!-- <a-form-item label="头像" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-upload
             listType="picture-card"
             class="avatar-uploader"
@@ -72,7 +79,7 @@
               <div class="ant-upload-text">上传</div>
             </div>
           </a-upload>
-        </a-form-item>
+        </a-form-item> -->
 
         <a-form-item label="生日" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-date-picker
@@ -112,11 +119,11 @@
 <script>
   import pick from 'lodash.pick'
   import moment from 'moment'
-  import Vue from 'vue'
-  import { ACCESS_TOKEN } from '@/store/mutation-types'
+  // import Vue from 'vue'
+  // import { ACCESS_TOKEN } from '@/store/mutation-types'
   import { addUser, editUser, queryUserRole, queryAllRole } from '@/api/system'
   // import { disabledAuthFilter } from "@/utils/authFilter"
-  import { duplicateCheck } from '@/api/system'
+  // import { duplicateCheck } from '@/api/system'
   import { isEmail } from '@/utils/validator'
   import md5 from 'md5'
 
@@ -126,44 +133,44 @@
     },
     data () {
       return {
-        roleDisabled: false, //是否是角色维护调用该页面
+        roleDisabled: false, // 是否是角色维护调用该页面
         modalWidth: 800,
         drawerWidth: 700,
         modaltoggleFlag: true,
         confirmDirty: false,
-        userId: '', //保存用户id
+        userId: '', // 保存用户id
         disableSubmit: false,
         dateFormat: 'YYYY-MM-DD',
         validatorRules: {
           username: {
             rules: [{
               required: true, message: '请输入用户账号!'
-            },{
-              validator: this.validateUsername,
+            }, {
+              validator: this.validateUsername
             }]
           },
           password: {
             rules: [{
               required: true,
-              pattern:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>?,./]).{8,}$/,
+              pattern: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>?,./]).{8,}$/,
               message: '密码由8位数字、大小写字母和特殊符号组成!'
             }, {
-              validator: this.validateToNextPassword,
-            }],
+              validator: this.validateToNextPassword
+            }]
           },
           confirmpassword: {
             rules: [{
-              required: true, message: '请重新输入登陆密码!',
+              required: true, message: '请重新输入登陆密码!'
             }, {
-              validator: this.compareToFirstPassword,
-            }],
+              validator: this.compareToFirstPassword
+            }]
           },
-          realname: {rules: [{ required: true, message: '请输入用户名称!' }]},
-          phone: {rules: [{validator: this.validatePhone}]},
+          realname: { rules: [{ required: true, message: '请输入用户名称!' }] },
+          phone: { rules: [{ validator: this.validatePhone }] },
           email: {
             rules: [{
               validator: this.validateEmail
-            }],
+            }]
           },
           roles: {}
         },
@@ -174,11 +181,11 @@
         selectedRole: [],
         labelCol: {
           xs: { span: 24 },
-          sm: { span: 5 },
+          sm: { span: 5 }
         },
         wrapperCol: {
           xs: { span: 24 },
-          sm: { span: 16 },
+          sm: { span: 16 }
         },
         uploadLoading: false,
         confirmLoading: false,
@@ -186,19 +193,19 @@
         form: this.$form.createForm(this),
         picUrl: '',
         url: {
-          fileUpload: window._CONFIG['domianURL'] + '/sys/common/upload',
-          imgerver: window._CONFIG['domianURL'] + '/sys/common/view',
-          userId: '/sys/user/generateUserId', // 引入生成添加用户情况下的url
-        },
+          fileUpload: '/sys/common/upload',
+          imgerver: '/sys/common/view',
+          userId: '/sys/user/generateUserId' // 引入生成添加用户情况下的url
+        }
       }
     },
     created () {
-      const token = Vue.ls.get(ACCESS_TOKEN)
-      this.headers = {
-        'X-Access-Token': token
-      }
+      // const token = Vue.ls.get(ACCESS_TOKEN)
+      // this.headers = {
+      //   'X-Access-Token': token
+      // }
     },
-    computed:{
+    computed: {
       uploadAction () {
         return this.url.fileUpload
       }
@@ -208,10 +215,10 @@
         console.log(code)
         // return disabledAuthFilter(code)
       },
-      //窗口最大化切换
+      // 窗口最大化切换
       toggleScreen () {
         this.modalWidth = this.modaltoggleFlag ? window.innerWidth : 800
-        this.modaltoggleFlag = !this.modaltoggleFlag;
+        this.modaltoggleFlag = !this.modaltoggleFlag
       },
       initialRoleList () {
         queryAllRole({
@@ -219,7 +226,7 @@
           order: true
         }).then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
-            this.roleList = res.result.records
+            this.roleList = res.result
           } else {
             console.log(res.message)
           }
@@ -242,7 +249,7 @@
       add () {
         this.picUrl = ''
         this.refresh()
-        this.edit({activitiSync: false})
+        this.edit({ activitiSync: false })
       },
       edit (record) {
         this.resetScreenSize() // 调用此方法,根据屏幕宽度自适应调整抽屉的宽度
@@ -256,7 +263,7 @@
         this.visible = true
         this.model = Object.assign({}, record)
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model, 'username', 'sex', 'realname', 'email', 'phone', 'activitiSync'))
+          this.form.setFieldsValue(pick(this.model, 'username', 'sex', 'realname', 'email', 'phone', 'activitiSync', 'type'))
         })
       },
       close () {
@@ -272,10 +279,10 @@
         this.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true
-            let avatar = that.model.avatar
+            // let avatar = that.model.avatar
             values.birthday = values.birthday ? values.birthday.format(this.dateFormat) : ''
-            let formData = Object.assign(this.model, values)
-            formData.avatar = avatar
+            const formData = Object.assign(this.model, values)
+            // formData.avatar = avatar
             formData.selectedroles = this.selectedRole.length > 0 ? this.selectedRole.join(',') : ''
 
             if (!this.model.id) {
@@ -283,7 +290,7 @@
               formData.password = md5(formData.password)
               formData.confirmpassword = md5(formData.confirmpassword)
             }
-            let obj = !this.model.id ? addUser(formData) : editUser(formData)
+            const obj = !this.model.id ? addUser(formData) : editUser(formData)
             obj.then((res) => {
               if (this.$isAjaxSuccess(res.code)) {
                 that.$message.success(res.message)
@@ -323,66 +330,69 @@
           callback()
         }
       },
-      validatePhone(rule, value, callback) {
+      validatePhone (rule, value, callback) {
         if (!value) {
           callback()
         } else {
           if (new RegExp(/^1[3|4|5|7|8][0-9]\d{8}$/).test(value)) {
-            var params = {
-              tableName: 'sys_user',
-              fieldName: 'phone',
-              fieldVal: value,
-              dataId: this.userId
-            };
-            duplicateCheck(params).then((res) => {
-              if (this.$isAjaxSuccess(res.code)) {
-                callback()
-              } else {
-                callback('手机号已存在!')
-              }
-            })
+            callback()
+            // var params = {
+            //   tableName: 'sys_user',
+            //   fieldName: 'phone',
+            //   fieldVal: value,
+            //   dataId: this.userId
+            // };
+            // duplicateCheck(params).then((res) => {
+            //   if (this.$isAjaxSuccess(res.code)) {
+            //     callback()
+            //   } else {
+            //     callback('手机号已存在!')
+            //   }
+            // })
           } else {
             callback('请输入正确格式的手机号码!')
           }
         }
       },
-      validateEmail(rule, value, callback) {
+      validateEmail (rule, value, callback) {
         if (!value) {
           callback()
         } else {
           if (isEmail(value)) {
-            var params = {
-              tableName: 'sys_user',
-              fieldName: 'email',
-              fieldVal: value,
-              dataId: this.userId
-            };
-            duplicateCheck(params).then((res) => {
-              if (this.$isAjaxSuccess(res.code)) {
-                callback()
-              } else {
-                callback('邮箱已存在!')
-              }
-            })
+            callback()
+            // var params = {
+            //   tableName: 'sys_user',
+            //   fieldName: 'email',
+            //   fieldVal: value,
+            //   dataId: this.userId
+            // };
+            // duplicateCheck(params).then((res) => {
+            //   if (this.$isAjaxSuccess(res.code)) {
+            //     callback()
+            //   } else {
+            //     callback('邮箱已存在!')
+            //   }
+            // })
           } else {
             callback('请输入正确格式的邮箱!')
           }
         }
       },
-      validateUsername(rule, value, callback) {
-        var params = {
-          tableName: 'sys_user',
-          fieldName: 'username',
-          fieldVal: value,
-          dataId: this.userId
-        };
-        duplicateCheck(params).then((res) => {
-          if (this.$isAjaxSuccess(res.code)) {
-            callback()
-          } else {
-            callback('用户名已存在!')
-          }
-        })
+      validateUsername (rule, value, callback) {
+        callback()
+        // var params = {
+        //   tableName: 'sys_user',
+        //   fieldName: 'username',
+        //   fieldVal: value,
+        //   dataId: this.userId
+        // };
+        // duplicateCheck(params).then((res) => {
+        //   if (this.$isAjaxSuccess(res.code)) {
+        //     callback()
+        //   } else {
+        //     callback('用户名已存在!')
+        //   }
+        // })
       },
       handleConfirmBlur (e) {
         const value = e.target.value
@@ -395,7 +405,7 @@
         }
         return e && e.fileList
       },
-      beforeUpload(file) {
+      beforeUpload (file) {
         var fileType = file.type
         if (fileType.indexOf('image') < 0) {
           this.$message.warning('请上传图片')
@@ -420,16 +430,16 @@
           }
         }
       },
-      getAvatarView() {
+      getAvatarView () {
         // return this.url.imgerver + '/' + this.model.avatar
         return this.model.avatar
       },
 
       // 根据屏幕变化,设置抽屉尺寸
-      resetScreenSize() {
-        let screenWidth = document.body.clientWidth
+      resetScreenSize () {
+        const screenWidth = document.body.clientWidth
         this.drawerWidth = screenWidth < 500 ? screenWidth : 700
-      },
+      }
     }
   }
 </script>
@@ -456,7 +466,7 @@
 
   .drawer-bootom-button {
     position: absolute;
-    bottom: -8px;
+    bottom: 0;
     width: 100%;
     border-top: 1px solid #e8e8e8;
     padding: 10px 16px;

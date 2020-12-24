@@ -62,14 +62,14 @@
 </template>
 
 <script>
-  import { filterObj } from '@/utils/util';
+  import { filterObj } from '@/utils/util'
   import { ProListMixin } from '@/utils/mixins/ProListMixin'
   import DictModal from './modules/DictModal'
   import DictItemList from './DictItemList'
 
   export default {
     name: 'DictList',
-    mixins:[ ProListMixin ],
+    mixins: [ ProListMixin ],
     components: { DictModal, DictItemList },
     data () {
       return {
@@ -78,7 +78,7 @@
         // 查询条件
         queryParam: {
           dictCode: '',
-          dictName: '',
+          dictName: ''
         },
         // 表头
         columns: [
@@ -88,52 +88,52 @@
             key: 'rowIndex',
             width: 120,
             align: 'center',
-            customRender: function (t, r, index) {
-              return parseInt(index) + 1;
+            customRender (t, r, index) {
+              return parseInt(index) + 1
             }
           },
           {
             title: '字典名称',
             align: 'left',
-            dataIndex: 'dictName',
+            dataIndex: 'dictName'
           },
           {
             title: '字典编号',
             align: 'left',
-            dataIndex: 'dictCode',
+            dataIndex: 'dictCode'
           },
           {
             title: '描述',
             align: 'left',
-            dataIndex: 'description',
+            dataIndex: 'description'
           },
           {
             title: '操作',
             dataIndex: 'action',
-            align: "center",
-            scopedSlots: {customRender: 'action'},
+            align: 'center',
+            scopedSlots: { customRender: 'action' }
           }
         ],
         dict: '',
         labelCol: {
-          xs: {span: 8},
-          sm: {span: 5},
+          xs: { span: 8 },
+          sm: { span: 5 }
         },
         wrapperCol: {
-          xs: {span: 16},
-          sm: {span: 19},
+          xs: { span: 16 },
+          sm: { span: 19 }
         },
         url: {
           list: '/sys/dict/list',
           delete: '/sys/dict/delete',
           exportXlsUrl: 'sys/dict/exportXls',
-          importExcelUrl: 'sys/dict/importExcel',
-        },
+          importExcelUrl: 'sys/dict/importExcel'
+        }
       }
     },
     computed: {
       importExcelUrl () {
-        return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
+        return `/${this.url.importExcelUrl}`
       }
     },
     methods: {
@@ -144,28 +144,28 @@
         param.pageSize = this.ipagination.pageSize
         return filterObj(param)
       },
-      //取消选择
+      // 取消选择
       cancelDict () {
         this.dict = ''
         this.visible = false
         this.loadData()
       },
-      //编辑字典数据
+      // 编辑字典数据
       editDictItem (record) {
         this.$refs.dictItemList.edit(record)
       },
       // 重置字典类型搜索框的内容
-      searchReset() {
+      searchReset () {
         const that = this
         that.queryParam.dictName = ''
         that.queryParam.dictCode = ''
         that.loadData(this.ipagination.current)
-      },
+      }
     },
     watch: {
-      openKeys(val) {
+      openKeys (val) {
         console.log('openKeys', val)
-      },
-    },
+      }
+    }
   }
 </script>

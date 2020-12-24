@@ -35,7 +35,7 @@ export default {
       type: Boolean,
       default: false
     },
-    /* eslint-disable vue/require-default-prop*/
+    /* eslint-disable vue/require-default-prop */
     value: {
       type: String
     },
@@ -44,20 +44,20 @@ export default {
       default: ''
     }
   },
-  data() {
+  data () {
     return {
       dictOptions: [],
       tagType: ''
     }
   },
-  created() {
+  created () {
     this.tagType = !this.type || this.type === 'list' ? 'select' : this.type
-    //获取字典数据
+    // 获取字典数据
     this.initDictData()
   },
   methods: {
     initDictData () {
-      //根据字典Code, 初始化字典数组
+      // 根据字典Code, 初始化字典数组
       ajaxGetDictItems(this.dictCode, null).then((res) => {
         if (this.$isAjaxSuccess(res.code)) {
           this.dictOptions = res.result

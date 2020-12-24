@@ -43,11 +43,11 @@
         model: {},
         labelCol: {
           xs: { span: 24 },
-          sm: { span: 5 },
+          sm: { span: 5 }
         },
         wrapperCol: {
           xs: { span: 24 },
-          sm: { span: 16 },
+          sm: { span: 16 }
         },
         confirmLoading: false,
         form: this.$form.createForm(this),
@@ -56,7 +56,8 @@
             rules: [
               { required: true, message: '请输入角色名称!' },
               { min: 2, max: 30, message: '长度在 2 到 30 个字符', trigger: 'blur' }
-            ]},
+            ]
+          },
           // roleCode: {
           //   rules: [
           //     { required: true, message: '请输入角色名称!'},
@@ -66,8 +67,9 @@
           description: {
             rules: [
               { min: 0, max: 126, message: '长度不超过 126 个字符', trigger: 'blur' }
-            ]}
-        },
+            ]
+          }
+        }
       }
     },
     created () {
@@ -78,15 +80,14 @@
       },
       edit (record) {
         this.form.resetFields()
-        this.model = Object.assign({}, record);
+        this.model = Object.assign({}, record)
         this.visible = true
 
-        //编辑页面禁止修改角色编码
+        // 编辑页面禁止修改角色编码
         this.roleDisabled = !!this.model.id
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'roleName', 'description','roleCode'))
+          this.form.setFieldsValue(pick(this.model, 'roleName', 'description', 'roleCode'))
         })
-
       },
       close () {
         this.$emit('close')
@@ -98,13 +99,13 @@
         this.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true
-            let formData = Object.assign(this.model, values)
-            let obj = !this.model.id ? addRole(formData) : editRole(formData)
-            obj.then((res)=>{
-              if(this.$isAjaxSuccess(res.code)){
+            const formData = Object.assign(this.model, values)
+            const obj = !this.model.id ? addRole(formData) : editRole(formData)
+            obj.then(res => {
+              if (this.$isAjaxSuccess(res.code)) {
                 that.$message.success(res.message)
                 that.$emit('ok')
-              }else{
+              } else {
                 that.$message.warning(res.message)
               }
             }).finally(() => {
@@ -116,7 +117,7 @@
       },
       handleCancel () {
         this.close()
-      },
+      }
       // validateRoleCode (rule, value, callback){
       //   if(/[\u4E00-\u9FA5]/g.test(value)){
       //     callback('角色编码不可输入汉字!')

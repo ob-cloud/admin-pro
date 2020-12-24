@@ -1,26 +1,26 @@
 <template>
   <div class="tinymce-editor">
-    <editor v-model="myValue" :init="init" :disabled="disabled" @onClick="onClick">
-    </editor>
+    <!-- <editor v-model="myValue" :init="init" :disabled="disabled" @onClick="onClick">
+    </editor> -->
   </div>
 </template>
 
 <script>
-  import tinymce from 'tinymce/tinymce'
-  import Editor from '@tinymce/tinymce-vue'
-  import 'tinymce/themes/silver/theme'
-  import 'tinymce/plugins/image'
-  import 'tinymce/plugins/media'
-  import 'tinymce/plugins/table'
-  import 'tinymce/plugins/lists'
-  import 'tinymce/plugins/contextmenu'
-  import 'tinymce/plugins/wordcount'
-  import 'tinymce/plugins/colorpicker'
-  import 'tinymce/plugins/textcolor'
-  import 'tinymce/plugins/fullscreen'
+  // import tinymce from 'tinymce/tinymce'
+  // import Editor from '@tinymce/tinymce-vue'
+  // import 'tinymce/themes/silver/theme'
+  // import 'tinymce/plugins/image'
+  // import 'tinymce/plugins/media'
+  // import 'tinymce/plugins/table'
+  // import 'tinymce/plugins/lists'
+  // import 'tinymce/plugins/contextmenu'
+  // import 'tinymce/plugins/wordcount'
+  // import 'tinymce/plugins/colorpicker'
+  // import 'tinymce/plugins/textcolor'
+  // import 'tinymce/plugins/fullscreen'
   export default {
     components: {
-      Editor
+      // Editor
     },
     props: {
       /* eslint-disable vue/require-default-prop */
@@ -48,7 +48,7 @@
     },
     data () {
       return {
-        //初始化配置
+        // 初始化配置
         init: {
           language_url: '/tinymce/langs/zh_CN.js',
           language: 'zh_CN',
@@ -67,22 +67,22 @@
       }
     },
     mounted () {
-      tinymce.init({})
+      // tinymce.init({})
     },
     methods: {
-      onClick(e) {
-        this.$emit('onClick', e, tinymce)
+      onClick (e) {
+        // this.$emit('onClick', e, tinymce)
       },
-      //可以添加一些自己的自定义事件，如清空内容
-      clear() {
+      // 可以添加一些自己的自定义事件，如清空内容
+      clear () {
         this.myValue = ''
       }
     },
     watch: {
-      value(newValue) {
+      value (newValue) {
         this.myValue = newValue || ''
       },
-      myValue(newValue) {
+      myValue (newValue) {
         this.$emit(this.triggerChange ? 'change' : 'input', newValue)
       }
     }

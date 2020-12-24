@@ -7,7 +7,6 @@
     :closable="true"
     @close="close"
     :visible="visible"
-    style="height: calc(100% - 55px);overflow: auto;padding-bottom: 53px;"
   >
 
     <a-form>
@@ -58,7 +57,7 @@
 
   export default {
     name: 'UserRoleModal',
-    components:{
+    components: {
     },
     data () {
       return {
@@ -72,7 +71,7 @@
         checkStrictly: true,
         title: '角色权限配置',
         visible: false,
-        loading: false,
+        loading: false
       }
     },
     methods: {
@@ -123,14 +122,14 @@
         this.close()
       },
       handleSubmit () {
-        let that = this
-        let params = {
+        const that = this
+        const params = {
           roleId: that.roleId,
           permissionIds: that.checkedKeys.join(','),
-          lastpermissionIds: that.defaultCheckedKeys.join(','),
+          lastpermissionIds: that.defaultCheckedKeys.join(',')
         }
         that.loading = true
-        saveRolePermission(params).then((res)=>{
+        saveRolePermission(params).then((res) => {
           if (this.$isAjaxSuccess(res.code)) {
             that.$message.success(res.message)
             that.loading = false
@@ -141,7 +140,7 @@
             that.close()
           }
         })
-      },
+      }
     },
   watch: {
     visible () {

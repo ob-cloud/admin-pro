@@ -5,7 +5,6 @@
     @close="handleCancel"
     :visible="visible"
     :confirmLoading="confirmLoading"
-    :wrapStyle="{height: 'calc(100% - 108px)',overflow: 'auto',paddingBottom: '108px'}"
   >
     <div :style="{width: '100%',border: '1px solid #e9e9e9',padding: '10px 16px',background: '#fff',}">
       <a-spin :spinning="confirmLoading">
@@ -71,7 +70,11 @@
           </a-form-item> -->
 
           <a-form-item v-show="!show" :labelCol="labelCol" :wrapperCol="wrapperCol" label="状态">
-            <dict-select-tag v-decorator="['status', {initialValue: ''}]" placeholder="请选择状态" :type="'radio'" :triggerChange="true" dictCode="valid_status" />
+            <!-- <dict-select-tag v-decorator="['status', {initialValue: ''}]" placeholder="请选择状态" :type="'radio'" :triggerChange="true" dictCode="valid_status" /> -->
+            <a-radio-group v-decorator="['status', {initialValue: '1'}]">
+              <a-radio value="0">无效</a-radio>
+              <a-radio value="1">有效</a-radio>
+            </a-radio-group>
           </a-form-item>
 
           <a-form-item v-show="show" :labelCol="labelCol" :wrapperCol="wrapperCol" label="菜单图标">
@@ -122,37 +125,37 @@
 <script>
   import { addMenu, editMenu, queryTreeList } from '@/api/system'
   import IconPicker from '@/components/IconPicker'
-  import DictSelectTag from '@/components/Pro/DictSelectTag'
+  // import DictSelectTag from '@/components/Pro/DictSelectTag'
   import pick from 'lodash.pick'
 
   export default {
     name: 'MenuModal',
-    components: { IconPicker, DictSelectTag },
+    components: { IconPicker },
     data () {
       return {
         drawerWidth: 700,
         treeData: [],
         treeValue: '0-0-4',
-        title: "操作",
+        title: '操作',
         visible: false,
         disableSubmit: false,
         model: {},
         localMenuType: 0,
-        alwaysShow: false, //表单元素-聚合路由
-        menuHidden: false, //表单元素-隐藏路由
-        routeSwitch: true, //是否路由菜单
-        internalOrExternal:false,//菜单打开方式
-        isKeepalive: true, //是否缓存路由
-        show: true, //根据菜单类型，动态显示隐藏表单元素
+        alwaysShow: false, // 表单元素-聚合路由
+        menuHidden: false, // 表单元素-隐藏路由
+        routeSwitch: true, // 是否路由菜单
+        internalOrExternal: false, // 菜单打开方式
+        isKeepalive: true, // 是否缓存路由
+        show: true, // 根据菜单类型，动态显示隐藏表单元素
         menuLabel: '菜单名称',
         isRequrie: true, // 是否需要验证
         labelCol: {
           xs: { span: 24 },
-          sm: { span: 5 },
+          sm: { span: 5 }
         },
         wrapperCol: {
           xs: { span: 24 },
-          sm: { span: 16 },
+          sm: { span: 16 }
         },
 
         confirmLoading: false,
@@ -162,14 +165,14 @@
         validateStatus: ''
       }
     },
-    computed:{
-      validatorRules: function() {
+    computed: {
+      validatorRules () {
         return {
           name: { rules: [{ required: true, message: '请输入菜单标题!' }] },
           component: { rules: [{ required: this.show, message: '请输入前端组件!' }] },
-          url: {rules: [ { required: this.show, message: '请输入菜单路径!' }] },
+          url: { rules: [{ required: this.show, message: '请输入菜单路径!' }] },
           permsType: { rules: [{ required: true, message: '请输入授权策略!' }] },
-          sortNo: { initialValue: 1.0, rules: [{ validator: this.validateNumber }] },
+          sortNo: { initialValue: 1.0, rules: [{ validator: this.validateNumber }] }
         }
       }
     },
@@ -183,7 +186,7 @@
             console.log('----queryTreeList---')
             console.log(res)
             this.treeData = []
-            let treeList = res.result.treeList
+            const treeList = res.result.treeList
             this.treeData = treeList
             // for (let a = 0; a < treeList.length; a++) {
             //   let temp = treeList[a]
@@ -201,20 +204,20 @@
         this.resetScreenSize() // 调用此方法,根据屏幕宽度自适应调整抽屉的宽度
         this.form.resetFields()
         this.model = Object.assign({}, record)
-        //根据菜单类型，动态展示页面字段
+        // 根据菜单类型，动态展示页面字段
         console.log(record)
         this.alwaysShow = !!record.alwaysShow
         this.menuHidden = !!record.hidden
         this.routeSwitch = !!record.route
         this.isKeepalive = !!record.keepAlive || false
         this.internalOrExternal = !!record.internalOrExternal || false
-        this.show = record.menuType == 2 ? false : true
-        this.menuLabel = record.menuType == 2 ? '按钮/权限' : '菜单名称'
+        this.show = record.menuType !== 2
+        this.menuLabel = record.menuType === 2 ? '按钮/权限' : '菜单名称'
         this.localMenuType = this.model.parentId ? 1 : 0
 
         this.visible = true
         this.loadTree()
-        let fieldsVal = pick(this.model, 'name', 'perms', 'permsType', 'component', 'url', 'sortNo', 'menuType', 'status')
+        const fieldsVal = pick(this.model, 'name', 'perms', 'permsType', 'component', 'url', 'sortNo', 'menuType', 'status')
         this.$nextTick(() => {
           this.form.setFieldsValue(fieldsVal)
         })
@@ -233,7 +236,8 @@
             this.model.route = this.routeSwitch
             this.model.keepAlive = this.isKeepalive
             this.model.internalOrExternal = this.internalOrExternal
-            let formData = Object.assign(this.model, values)
+            const formData = Object.assign(this.model, values)
+            formData.children = undefined
             if ((formData.menuType === 1 || formData.menuType === 2) && !formData.parentId) {
               this.validateStatus = 'error'
               this.$message.error('请检查你填的类型以及信息是否正确！')
@@ -243,7 +247,7 @@
             }
             this.confirmLoading = true
             console.log(formData)
-            let obj = !this.model.id ? addMenu(formData) : editMenu(formData)
+            const obj = !this.model.id ? addMenu(formData) : editMenu(formData)
             obj.then((res) => {
               if (this.$isAjaxSuccess(res.code)) {
                 this.$message.success(res.message)
@@ -254,14 +258,14 @@
             }).finally(() => {
               this.confirmLoading = false
               this.close()
-            });
+            })
           }
         })
       },
       handleCancel () {
         this.close()
       },
-      validateNumber(rule, value, callback) {
+      validateNumber (rule, value, callback) {
         if (!value || new RegExp(/^[0-9]*[1-9][0-9]*$/).test(value)) {
           callback()
         } else {
@@ -281,7 +285,7 @@
           this.form.validateFields(['url', 'component'], {
             force: true
           })
-        });
+        })
       },
       selectIcons () {
         this.iconChooseVisible = true
@@ -297,12 +301,12 @@
       },
       // 根据屏幕变化,设置抽屉尺寸
       resetScreenSize () {
-        let screenWidth = document.body.clientWidth
+        const screenWidth = document.body.clientWidth
         this.drawerWidth = screenWidth < 500 ? screenWidth : 700
       },
       initDictConfig () {
       },
-      handleParentIdChange(value) {
+      handleParentIdChange (value) {
         this.validateStatus = value ? 'success' : 'error'
       }
     }

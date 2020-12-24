@@ -36,41 +36,41 @@
     data () {
       return {
         visible: false,
-          confirmLoading: false,
-          confirmDirty: false,
-          validatorRules: {
-            password: {
-              rules: [{
-                required: true,
-                pattern: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>?,./]).{8,}$/,
-                message: '密码由8位数字、大小写字母和特殊符号组成!'
-              }, {
-                validator: this.validateToNextPassword,
-              }],
-            },
-            confirmpassword: {
-              rules: [{
-                required: true,
-                message: '请重新输入登陆密码!',
-              }, {
-                validator: this.compareToFirstPassword,
-              }],
-            },
+        confirmLoading: false,
+        confirmDirty: false,
+        validatorRules: {
+          password: {
+            rules: [{
+              required: true,
+              pattern: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>?,./]).{8,}$/,
+              message: '密码由8位数字、大小写字母和特殊符号组成!'
+            }, {
+              validator: this.validateToNextPassword
+            }]
           },
+          confirmpassword: {
+            rules: [{
+              required: true,
+              message: '请重新输入登陆密码!'
+            }, {
+              validator: this.compareToFirstPassword
+            }]
+          }
+        },
         model: {},
         labelCol: {
           xs: { span: 24 },
-          sm: { span: 5 },
+          sm: { span: 5 }
         },
         wrapperCol: {
           xs: { span: 24 },
-          sm: { span: 16 },
+          sm: { span: 16 }
         },
         form: this.$form.createForm(this)
       }
     },
     created () {
-      console.log("created")
+      console.log('created')
     },
 
     methods: {
@@ -93,20 +93,20 @@
         this.form.validateFields((err, values) => {
           if (!err) {
             this.confirmLoading = true
-            let formData = Object.assign(this.model, values)
+            const formData = Object.assign(this.model, values)
             formData.password = md5(formData.password)
             formData.confirmpassword = md5(formData.confirmpassword)
-            changePassword(formData).then((res)=>{
-              if(this.$isAjaxSuccess(res.code)){
+            changePassword(formData).then((res) => {
+              if (this.$isAjaxSuccess(res.code)) {
                 this.$message.success(res.message)
                 this.$emit('ok')
-              }else{
+              } else {
                 this.$message.warning(res.message)
               }
             }).finally(() => {
               this.confirmLoading = false
               this.close()
-            });
+            })
           }
         })
       },
@@ -122,14 +122,14 @@
         if (value && this.confirmDirty) {
           form.validateFields(['confirm'], { force: true })
         }
-        callback()
+        callback && callback()
       },
       compareToFirstPassword (rule, value, callback) {
         const form = this.form
         if (value && value !== form.getFieldValue('password')) {
-          callback('两次输入的密码不一样！')
+          callback && callback('两次输入的密码不一样！')
         } else {
-          callback()
+          callback && callback()
         }
       },
       handleConfirmBlur (e) {

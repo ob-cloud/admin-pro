@@ -1,72 +1,125 @@
 const path = require('path')
+const webpack = require('webpack')
+const GitRevisionPlugin = require('git-revision-webpack-plugin')
+const GitRevision = new GitRevisionPlugin()
+const buildDate = JSON.stringify(new Date().toLocaleString())
 
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
-const isProEnv = process.env.NODE_ENV === 'production'
+// check Git
+function getGitHash () {
+  try {
+    return GitRevision.version()
+  } catch (e) {}
+  return 'unknown'
+}
+
+const isProd = process.env.NODE_ENV === 'production'
+
+const assetsCDN = {
+  // webpack build externals
+  externals: {
+    vue: 'Vue',
+    'vue-router': 'VueRouter',
+    vuex: 'Vuex',
+    axios: 'axios'
+  },
+  css: [],
+  // https://unpkg.com/browse/vue@2.6.10/
+  js: [
+    '//cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js',
+    '//cdn.jsdelivr.net/npm/vue-router@3.1.3/dist/vue-router.min.js',
+    '//cdn.jsdelivr.net/npm/vuex@3.1.1/dist/vuex.min.js',
+    '//cdn.jsdelivr.net/npm/axios@0.19.0/dist/axios.min.js'
+  ]
+}
 
 // vue.config.js
-module.exports = {
-  publicPath: isProEnv ? './' : '/',
-  /*
-    Vue-cli3:
-    Crashed when using Webpack `import()` #2463
-    https://github.com/vuejs/vue-cli/issues/2463
-   */
-  // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
-  productionSourceMap: false,
-  configureWebpack: config => {
-    //生产环境取消 console.log
-    if (process.env.NODE_ENV === 'production') {
-      config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
-    }
+const vueConfig = {
+  publicPath: isProd ? './' : '/',
+  configureWebpack: {
+    // webpack plugins
+    plugins: [
+      // Ignore all locale files of moment.js
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      new webpack.DefinePlugin({
+        APP_VERSION: `"${require('./package.json').version}"`,
+        GIT_HASH: JSON.stringify(getGitHash()),
+        BUILD_DATE: buildDate
+      })
+    ],
+    // if prod, add externals
+    externals: isProd ? assetsCDN.externals : {}
   },
+
   chainWebpack: (config) => {
     config.resolve.alias
       .set('@$', resolve('src'))
-      .set('@api', resolve('src/api'))
-      .set('@assets', resolve('src/assets'))
-      .set('@components', resolve('src/components'))
-      .set('@views', resolve('src/views'))
-      .set('@layout', resolve('src/components/Layouts'))
-      .set('@static', resolve('src/static'))
+
+    const svgRule = config.module.rule('svg')
+    svgRule.uses.clear()
+    svgRule
+      .oneOf('inline')
+      .resourceQuery(/inline/)
+      .use('vue-svg-icon-loader')
+      .loader('vue-svg-icon-loader')
+      .end()
+      .end()
+      .oneOf('external')
+      .use('file-loader')
+      .loader('file-loader')
+      .options({
+        name: 'assets/[name].[hash:8].[ext]'
+      })
+
+    // if prod is on
+    // assets require on cdn
+    if (isProd) {
+      config.plugin('html').tap(args => {
+        args[0].cdn = assetsCDN
+        return args
+      })
+    }
   },
 
   css: {
     loaderOptions: {
       less: {
         modifyVars: {
-          /* less 变量覆盖，用于自定义 ant design 主题 */
+          // less vars，customize ant design theme
 
-          /*
-          'primary-color': '#F5222D',
-          'link-color': '#F5222D',
-          'border-radius-base': '4px',
-          */
+          // 'primary-color': '#F5222D',
+          // 'link-color': '#F5222D',
+          'border-radius-base': '2px'
         },
-        javascriptEnabled: true,
+        // DO NOT REMOVE THIS LINE
+        javascriptEnabled: true
       }
     }
   },
 
   devServer: {
-    port: 3001,
+    // development server port 8000
+    port: 8000,
     proxy: {
-     '/pro': {
-        // target: 'http://yapi.demo.qunar.com/mock/66959', //mock API接口系统
-        // target: 'https://aliiot.on-bright.com/mock/13/pro',
-        // target: 'http://192.168.200.241',
-        // target: 'http://10.10.92.161:8082/nurse',
-        target: 'https://aliiot.on-bright.com/nurseTest',
+      '/pro': {
+        target: 'https://aliiot.on-bright.com/control',
         ws: false,
         changeOrigin: true,
         pathRewrite: {
-          '/pro': ''  //默认所有请求都加了/pro前缀，需要去掉
+          '/pro': '' //默认所有请求都加了/pro前缀，需要去掉
         }
-      },
+      }
     }
   },
 
-  lintOnSave: true
+  // disable source map in production
+  productionSourceMap: false,
+  lintOnSave: undefined,
+  // babel-loader no-ignore node_modules/*
+  transpileDependencies: []
 }
+
+module.exports = vueConfig

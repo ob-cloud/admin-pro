@@ -60,7 +60,7 @@
           },
           sm: {
             span: 5
-          },
+          }
         },
         wrapperCol: {
           xs: {
@@ -68,7 +68,7 @@
           },
           sm: {
             span: 16
-          },
+          }
         },
         confirmLoading: false,
         validatorRules: {
@@ -96,10 +96,10 @@
     created () {
     },
     methods: {
-      add() {
+      add () {
         this.edit({})
       },
-      edit(record) {
+      edit (record) {
         this.form.resetFields()
         this.model = Object.assign({}, record)
         this.visible = true
@@ -107,7 +107,7 @@
           this.form.setFieldsValue(pick(this.model, 'pid', 'name', 'code'))
         })
       },
-      close() {
+      close () {
         this.$emit('close')
         this.visible = false
       },
@@ -117,9 +117,9 @@
         this.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true
-            let httpurl = !this.model.id ? this.url.add : this.url.edit
-            let method = !this.model.id ? 'post' : 'put'
-            let formData = Object.assign(this.model, values)
+            const httpurl = !this.model.id ? this.url.add : this.url.edit
+            const method = !this.model.id ? 'post' : 'put'
+            const formData = Object.assign(this.model, values)
 
             httpAction(httpurl, formData, method).then((res) => {
               if (this.$isAjaxSuccess(res.code)) {
@@ -130,31 +130,31 @@
               }
             }).finally(() => {
               that.confirmLoading = false
-              that.close();
+              that.close()
             })
           }
         })
       },
-      handleCancel() {
+      handleCancel () {
         this.close()
       },
-      popupCallback(row) {
+      popupCallback (row) {
         this.form.setFieldsValue(pick(row, 'pid', 'name', 'code'))
       },
-      submitSuccess(formData) {
+      submitSuccess (formData) {
         if (!formData.id) {
-          let treeData = this.$refs.treeSelect.getCurrTreeData()
+          const treeData = this.$refs.treeSelect.getCurrTreeData()
           this.expandedRowKeys = []
           this.getExpandKeysByPid(formData[this.pidField], treeData, treeData)
           this.$emit('ok', formData, this.expandedRowKeys.reverse())
         } else {
-          this.$emit('ok', formData);
+          this.$emit('ok', formData)
         }
       },
-      getExpandKeysByPid(pid, arr, all) {
+      getExpandKeysByPid (pid, arr, all) {
         if (pid && arr && arr.length > 0) {
           for (let i = 0; i < arr.length; i++) {
-            if (arr[i].key == pid) {
+            if (arr[i].key === pid) {
               this.expandedRowKeys.push(arr[i].key)
               this.getExpandKeysByPid(arr[i]['parentId'], all, all)
             } else {
@@ -163,8 +163,8 @@
           }
         }
       },
-      validateMyCode(rule, value, callback) {
-        let params = {
+      validateMyCode (rule, value, callback) {
+        const params = {
           pid: this.form.getFieldValue('pid'),
           code: value
         }
@@ -175,7 +175,7 @@
             callback(res.message)
           }
         })
-      },
+      }
     }
   }
 </script>

@@ -417,16 +417,6 @@ const userNav = (options) => {
       'component': 'Analysis',
       'path': '/dashboard/analysis'
     },
-    {
-      'name': 'tests',
-      'parentId': 1,
-      'id': 8,
-      'meta': {
-        'title': '测试功能',
-        'show': true
-      },
-      'component': 'TestWork'
-    },
 
     // form
     {
@@ -766,63 +756,5 @@ const userNav = (options) => {
   return json
 }
 
-const queryPermissionList = (options) => {
-  const menu = [
-    {
-      component: 'dashboard/Analysis',
-      id: '9502685863ab87f0ad1134142788a385',
-      meta: { keepAlive: false, icon: 'home', title: '首页' },
-      icon: 'home',
-      keepAlive: false,
-      title: '首页',
-      name: 'dashboard-analysis',
-      path: '/dashboard/analysis',
-      redirect: null,
-      route: '1',
-    },
-    {
-      children: [{
-        component: 'jeecg/report/ArchivesStatisticst',
-        id: '2aeddae571695cd6380f6d6d334d6e7d',
-        meta: { keepAlive: false, title: '布局统计报表' },
-        keepAlive: false,
-        title: '布局统计报表',
-        name: 'report-ArchivesStatisticst',
-        path: '/report/ArchivesStatisticst',
-        route: '1'
-      }],
-      component: 'layouts/RouteView',
-      id: 'f0675b52d89100ee88472b6800754a08',
-      meta: { keepAlive: false, icon: 'bar-chart', title: '统计报表' },
-      name: 'report',
-      path: '/report',
-      redirect: null,
-      route: '1'
-    }
-  ]
-  const auth = [
-    {
-      action: 'online:goGenerateCode',
-      describe: '代码生成按钮',
-      type: '1'
-    },
-    {
-      action: 'user:form:phone',
-      describe: '手机号禁用',
-      type: '2'
-    },
-    {
-      action: 'user:add',
-      describe: '添加用户按钮',
-      type: '1'
-    }
-  ]
-  return {
-    menu,
-    auth
-  }
-}
-
 Mock.mock(/\/api\/user\/info/, 'get', info)
 Mock.mock(/\/api\/user\/nav/, 'get', userNav)
-Mock.mock(/\/api\/user\/queryPermissionList/, 'get', queryPermissionList)

@@ -12,10 +12,9 @@
       <a-button icon="fullscreen" class="custom-btn" @click="handleClickToggleFullScreen" />
     </template>
     <a-card class="daily-article" :loading="loading">
-      <a-card-meta :title="record.title" :description="'发布人：'+record.sender + ' 发布时间： ' + record.sendTime">
-      </a-card-meta>
+      <a-card-meta :title="record.title" :description="'酒店：'+record.hotelName + ' 发布时间： ' + record.date" />
       <a-divider />
-      <span v-html="record.msgContent" class="article-content"></span>
+      <span v-html="record.msg" class="article-content"></span>
     </a-card>
   </a-modal>
 </template>
@@ -29,18 +28,18 @@
         record: {},
         labelCol: {
           xs: { span: 24 },
-          sm: { span: 5 },
+          sm: { span: 5 }
         },
         wrapperCol: {
           xs: { span: 24 },
-          sm: { span: 16 },
+          sm: { span: 16 }
         },
         visible: false,
         loading: false,
         bodyStyle: {
           padding: '0',
           height: (window.innerHeight * 0.8) + 'px',
-          'overflow-y': 'auto',
+          'overflow-y': 'auto'
         },
         modelStyle: {
           width: '60%',
@@ -61,7 +60,7 @@
       },
       /** 切换全屏显示 */
       handleClickToggleFullScreen () {
-        let mode = !this.modelStyle.fullScreen
+        const mode = !this.modelStyle.fullScreen
         if (mode) {
           this.modelStyle.width = '100%'
           this.modelStyle.style.top = '20px'

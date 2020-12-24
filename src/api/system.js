@@ -1,6 +1,16 @@
-import { getAction, postAction, putAction, deleteAction } from '@/utils/ajax'
+import {
+  getAction,
+  postAction,
+  putAction,
+  deleteAction,
+  getRequestUrl
+} from '@/utils/ajax'
 
-////// Menu
+// 首页
+const getGroupStatistic = () => getAction('/home/getAgent')
+const getHotelStatistic = (hotelId) => getAction('/home/getHotel', { hotelId })
+
+/// Menu
 // 获取菜单、按钮权限列表
 const getMenuList = (params) => getAction('/sys/permission/list', params)
 const addMenu = (params) => postAction('/sys/permission/add', params)
@@ -14,12 +24,14 @@ const queryTreeList = (params) => getAction('/sys/permission/queryTreeList', par
 // const queryTreeListForRole = (params) => getAction('/sys/role/queryTreeList', params)
 // const queryListAsync = (params) => getAction('/sys/permission/queryListAsync', params)
 
-////// User
+/// User
 const addUser = (params) => postAction('/sys/user/add', params)
 const editUser = (params) => putAction('/sys/user/edit', params)
 // 查询用户权限
 const queryUserRole = (params) => getAction('/sys/user/queryUserRole', params)
 const getUserList = (params) => getAction('/sys/user/list', params)
+const getUserListUnPage = (params) => getAction('/sys/user/listAll', params)
+const getUserListByType = (type) => getAction('/sys/user/listByType', { type })
 // 批量冻结用户
 const frozenBatch = (params) => putAction('/sys/user/frozenBatch', params)
 // 修改系统用户密码
@@ -29,7 +41,7 @@ const updatePassword = (params) => putAction('/sys/user/updatePassword', params)
 // 获取用户菜单、按钮权限
 const getUserPermissionList = (params) => getAction('/sys/permission/getUserPermission', params)
 
-///// Role
+// Role
 const addRole = (params) => postAction('/sys/role/add', params)
 const editRole = (params) => putAction('/sys/role/edit', params)
 // const getRoleList = (params) => getAction('/sys/role/list', params)
@@ -41,7 +53,7 @@ const queryAllRole = (params) => getAction('/sys/role/all', params)
 // 获取角色树列表
 const queryRoleTreeList = (params) => getAction('/sys/role/queryRoleTreeList', params)
 
-///// Dict
+// Dict
 // 根据字典项code，获取字典项值
 const ajaxGetDictItems = (code, params) => getAction(`/sys/dict/getDictItems/${code}`, params)
 // 添加字典
@@ -54,7 +66,7 @@ const editDictItem = (params) => putAction('/sys/dict/item/edit', params)
 const duplicateCheck = (params) => getAction('/sys/duplicate/check', params)
 // const duplicateCheck = (params) => getAction('/sys/user/checkOnlyUser', params)
 
-///// Permission
+// Permission
 // 获取角色权限
 const queryRolePermission = (params) => getAction('/sys/permission/queryRolePermission', params)
 // 角色授权
@@ -63,22 +75,38 @@ const saveRolePermission = (params) => postAction('/sys/permission/saveRolePermi
 const queryPermissionTreeList = (params) => getAction('/sys/role/queryTreeList', params)
 // const queryPermissionTreeList = (params) => getAction('/sys/role/queryPermissionTreeList', params)
 
+// Annoucement
+// const getAnnouncementList = (params) => getAction('/sys/announcement/list', params)
+const getAnnouncementList = ({
+  title,
+  type,
+  pageNo,
+  pageSize
+}) => getAction('/sys/sysAnnouncementSend/list', {
+  title,
+  type,
+  pageNo,
+  pageSize
+})
+const delAnnouncementList = (annId) => getAction('/sys/sysAnnouncementSend/delAnnouncement', {
+  annId
+})
+const readAllAnnouncement = () => putAction('/sys/sysAnnouncementSend/readAll')
 
-///// Annoucement
 // 发布
 const doReleaseData = (params) => getAction('/sys/annountCement/doReleaseData', params)
 // 撤销
 const doReovkeData = (params) => getAction('/sys/annountCement/doReovkeData', params)
 // 获取用户通告信息
 // const getAnnouncementListByUser = (params) => getAction('/sys/announcement/listByUser', params)
-const getAnnouncementListByUser = (params) => getAction('/sys/annountCement/listByUser', params)
+const getAnnouncementListByUser = (params) => getAction('/sys/sysAnnouncementSend/getAnnBell', params)
 // 修改公告状态（已读）
 // const editAnnouncementStatus = (params) => putAction('/sys/announcement/editStatus', params)
 const editAnnouncementStatus = (params) => putAction('/sys/sysAnnouncementSend/editByAnntIdAndUserId', params)
 // 查询消息详情
 const queryAnnouncementDetail = (params) => getAction('/sys/annountCement/queryById', params)
 
-///// Message Template
+// Message Template
 const addMessageTemplate = (params) => postAction('/message/sysMessageTemplate/add', params)
 const editMessageTemplate = (params) => putAction('/message/sysMessageTemplate/edit', params)
 const queryMessageTemplateList = (params) => getAction('/message/sysMessageTemplate/list', params)
@@ -86,11 +114,21 @@ const queryMessageTemplateDetail = (params) => getAction('/message/sysMessageTem
 const delessageTemplate = (params) => deleteAction('/message/sysMessageTemplate/delete', params)
 const delBatchMessageTemplate = (params) => deleteAction('/message/sysMessageTemplate/deleteBatch', params)
 
-///// System Setting
-///// 通过ajaxGetDictItems 使用
+// System Setting
+// 通过ajaxGetDictItems 使用
 const getSystemConfig = () => getAction('/sys/common/setting')
 
+const getSysLogList = (log = {}) => getAction('/log/getLog', log)
+const exportsLogs = (startTime, endTime) => {
+  return getRequestUrl('/log/getExportLog', {
+    startTime,
+    endTime
+  })
+}
+
 export {
+  getGroupStatistic,
+  getHotelStatistic,
   // Menu
   getMenuList,
   addMenu,
@@ -116,6 +154,8 @@ export {
   editUser,
   queryUserRole,
   getUserList,
+  getUserListUnPage,
+  getUserListByType,
   frozenBatch,
   getUserPermissionList,
   changePassword,
@@ -130,6 +170,9 @@ export {
   duplicateCheck,
 
   // Annoucement
+  getAnnouncementList,
+  delAnnouncementList,
+  readAllAnnouncement,
   doReleaseData,
   doReovkeData,
   getAnnouncementListByUser,
@@ -145,5 +188,8 @@ export {
   delBatchMessageTemplate,
 
   // System
-  getSystemConfig
+  getSystemConfig,
+
+  getSysLogList,
+  exportsLogs
 }

@@ -69,7 +69,7 @@
         <a-row style="width: 100%;">
           <a-col :span="24">
             <a-form-item :labelCol="labelColM" :wrapperCol="wrapperColM" label="内容" class="j-field-content">
-              <editor v-decorator="[ 'msgContent', {} ]" triggerChange></editor>
+              <!-- <editor v-decorator="[ 'msgContent', {} ]" triggerChange></editor> -->
             </a-form-item>
           </a-col>
         </a-row>
@@ -82,8 +82,8 @@
 <script>
   import pick from 'lodash.pick'
   import { getAction, httpAction } from '@/utils/ajax'
-  import Editor from '@/components/Pro/Editor'
-  import SelectUserListModal from "./SelectUserListModal"
+  // import Editor from '@/components/Pro/Editor'
+  import SelectUserListModal from './SelectUserListModal'
   import ProDate from '@/components/Pro/ProDate'
   import moment from 'moment'
   import * as dayjs from 'dayjs'
@@ -91,7 +91,7 @@
   export default {
     name: 'SysAnnouncementModal',
     components: {
-      Editor,
+      // Editor,
       SelectUserListModal,
       ProDate
     },
@@ -103,39 +103,39 @@
         model: {},
         labelCol: {
           xs: { span: 24 },
-          sm: { span: 5 },
+          sm: { span: 5 }
         },
         wrapperCol: {
           xs: { span: 24 },
-          sm: { span: 16 },
+          sm: { span: 16 }
         },
         labelColM: {
           xs: { span: 24 },
-          sm: { span: 3 },
+          sm: { span: 3 }
         },
         wrapperColM: {
           xs: { span: 24 },
-          sm: { span: 21 },
+          sm: { span: 21 }
         },
         confirmLoading: false,
         form: this.$form.createForm(this),
         validatorRules: {
-          title: {rules: [{ required: true, message: '请输入标题!' }]},
-          msgCategory: {rules: [{ required: true, message: '请选择消息类型!' }]},
-          msgType: {rules: [{ required: true, message: '请选择通告对象类型!' }]},
-          endTime: {rules: [{validator: this.endTimeValidate}]},
-          startTime: {rules: [{validator: this.startTimeValidate}]}
+          title: { rules: [{ required: true, message: '请输入标题!' }] },
+          msgCategory: { rules: [{ required: true, message: '请选择消息类型!' }] },
+          msgType: { rules: [{ required: true, message: '请选择通告对象类型!' }] },
+          endTime: { rules: [{ validator: this.endTimeValidate }] },
+          startTime: { rules: [{ validator: this.startTimeValidate }] }
         },
         url: {
           queryByIds: '/sys/user/queryByIds',
           add: '/sys/annountCement/add',
-          edit: '/sys/annountCement/edit',
+          edit: '/sys/annountCement/edit'
         },
         userType: false,
         userIds: [],
         selectedUser: [],
         disabled: false,
-        msgContent: '',
+        msgContent: ''
       }
     },
     methods: {
@@ -149,13 +149,13 @@
         this.visible = true
         this.getUser(record)
       },
-      getUser(record){
+      getUser (record) {
         this.model = Object.assign({}, record)
         this.model.startTime = this.model.startTime && dayjs(new Date(this.model.startTime)).format('YYYY-MM-DD HH:mm:ss')
         this.model.endTime = this.model.endTime && dayjs(new Date(this.model.endTime)).format('YYYY-MM-DD HH:mm:ss')
         // 指定用户
         if (record && record.msgType === 'USER') {
-          this.userType =  true
+          this.userType = true
           this.userIds = record.userIds
           getAction(this.url.queryByIds, { userIds: this.userIds }).then((res) => {
             if (this.$isAjaxSuccess(res.code)) {
@@ -168,7 +168,7 @@
         }
         this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model, 'endTime', 'startTime', 'title', 'msgContent', 'sender', 'priority', 'msgCategory', 'msgType', 'sendStatus', 'delFlag'))
-        });
+        })
       },
       close () {
         this.$emit('close')
@@ -181,9 +181,9 @@
         this.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true
-            let httpurl = !this.model.id ? this.url.add : this.url.edit
-            let method = !this.model.id ? 'post' : 'put'
-            let formData = Object.assign(this.model, values)
+            const httpurl = !this.model.id ? this.url.add : this.url.edit
+            const method = !this.model.id ? 'post' : 'put'
+            const formData = Object.assign(this.model, values)
             if (this.userType) {
               formData.userIds = this.userIds
             }
@@ -217,7 +217,7 @@
         this.$refs.UserListModal.add(this.selectedUser, this.userIds)
       },
       chooseMsgType (value) {
-        if ('USER' == value) {
+        if (value === 'USER') {
           this.userType = true
         } else {
           this.userType = false
@@ -235,7 +235,7 @@
         }
       },
       startTimeValidate (rule, value, callback) {
-        let endTime = this.form.getFieldValue('endTime')
+        const endTime = this.form.getFieldValue('endTime')
         if (!value || !endTime) {
           callback()
         } else if (moment(value).isBefore(endTime)) {
@@ -245,7 +245,7 @@
         }
       },
       endTimeValidate (rule, value, callback) {
-        let startTime = this.form.getFieldValue('startTime')
+        const startTime = this.form.getFieldValue('startTime')
         if (!value || !startTime) {
           callback()
         } else if (moment(startTime).isBefore(value)) {

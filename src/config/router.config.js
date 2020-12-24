@@ -1,44 +1,10 @@
-import { UserLayout } from '@/components/Layouts'
+import { UserLayout } from '@/layouts'
+export const asyncRouterMap = []
 
 /**
- * @type {[null,null]}
+ * 基础路由
+ * @type { *[] }
  */
-export const asyncRouterMap = [
-  // {
-  //   path: '/',
-  //   name: 'dashboard',
-  //   component: BasicLayout,
-  //   meta: { title: '首页' },
-  //   redirect: '/dashboard/workplace',
-  //   children: [
-  //     {
-  //       path: '/dashboard',
-  //       name: 'dashboard',
-  //       redirect: '/dashboard/workplace',
-  //       component: RouteView,
-  //       meta: { title: '仪表盘', icon: 'dashboard' },
-  //       children: [
-  //         {
-  //           path: '/dashboard/analysis',
-  //           name: 'Analysis',
-  //           component: () => import(/* webpackChunkName: "dashboard" */ '@/views/dashboard/Analysis'),
-  //           meta: { title: '分析页' }
-  //         },
-  //         {
-  //           path: '/dashboard/workplace',
-  //           name: 'Workplace',
-  //           component: () => import(/* webpackChunkName: "dashboard" */ '@/views/dashboard/Workplace'),
-  //           meta: { title: '工作台' }
-  //         }
-  //       ]
-  //     },
-  //   ]
-  // },
-  // {
-  //   path: '*', redirect: '/404', hidden: true
-  // }
-]
-
 export const constantRouterMap = [
   {
     path: '/user',
@@ -61,10 +27,17 @@ export const constantRouterMap = [
         name: 'registerResult',
         component: () => import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
       },
+      {
+        path: 'recover',
+        name: 'recover',
+        component: undefined
+      }
     ]
   },
+
   {
     path: '/404',
     component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404')
   }
+
 ]

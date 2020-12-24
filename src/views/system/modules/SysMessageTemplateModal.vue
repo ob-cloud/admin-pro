@@ -50,7 +50,7 @@
         <a-row class="form-row" :gutter="24">
           <a-col :span="24" pull="4">
             <a-form-item v-show="useEditor" :labelCol="labelCol" :wrapperCol="wrapperCol" label="模板内容" style="margin-left: 4px;width: 126%">
-              <editor v-model="templateEditorContent"></editor>
+              <!-- <editor v-model="templateEditorContent"></editor> -->
             </a-form-item>
           </a-col>
         </a-row>
@@ -63,13 +63,13 @@
   import pick from 'lodash.pick'
   import { httpAction } from '@/utils/ajax'
   import { duplicateCheck } from '@/api/system'
-  import Editor from '@/components/Pro/Editor'
+  // import Editor from '@/components/Pro/Editor'
   import DictSelectTag from '@/components/Pro/DictSelectTag'
 
   export default {
     name: 'SysMessageTemplateModal',
-    components:{
-      Editor,
+    components: {
+      // Editor,
       DictSelectTag
     },
     data () {
@@ -84,7 +84,7 @@
           },
           sm: {
             span: 5
-          },
+          }
         },
         wrapperCol: {
           xs: {
@@ -92,7 +92,7 @@
           },
           sm: {
             span: 16
-          },
+          }
         },
         confirmLoading: false,
         form: this.$form.createForm(this),
@@ -119,11 +119,11 @@
               required: true,
               message: '请输入模板类型!'
             }]
-          },
+          }
         },
         url: {
           add: '/message/sysMessageTemplate/add',
-          edit: '/message/sysMessageTemplate/edit',
+          edit: '/message/sysMessageTemplate/edit'
         },
         useEditor: false,
         templateEditorContent: ''
@@ -136,10 +136,10 @@
         this.disable = false
         this.edit({})
       },
-      edit(record) {
+      edit (record) {
         this.form.resetFields()
-        this.model = Object.assign({ remark: ' '}, record)
-        this.useEditor = (record.templateType == 2 || record.templateType == 4)
+        this.model = Object.assign({ remark: ' ' }, record)
+        this.useEditor = (record.templateType === 2 || record.templateType === 4)
         this.templateEditorContent = this.useEditor ? record.templateContent : ''
         this.visible = true
         this.$nextTick(() => {
@@ -150,21 +150,21 @@
           }
         })
       },
-      close() {
+      close () {
         this.$emit('close')
         this.visible = false
         this.disable = true
       },
-      handleOk() {
+      handleOk () {
         this.model.templateType = this.templateType
         const that = this
         // 触发表单验证
         this.form.validateFields((err, values) => {
           if (!err) {
             that.confirmLoading = true
-            let httpurl = !this.model.id ? this.url.add : this.url.edit
-            let method = !this.model.id ? 'post' : 'put'
-            let formData = Object.assign(this.model, values)
+            const httpurl = !this.model.id ? this.url.add : this.url.edit
+            const method = !this.model.id ? 'post' : 'put'
+            const formData = Object.assign(this.model, values)
             if (this.useEditor) {
               formData.templateContent = this.templateEditorContent
             }
@@ -182,7 +182,7 @@
           }
         })
       },
-      validateTemplateCode(rule, value, callback) {
+      validateTemplateCode (rule, value, callback) {
         var params = {
           tableName: 'sys_sms_template',
           fieldName: 'template_code',
@@ -197,12 +197,12 @@
           }
         })
       },
-      handleCancel() {
+      handleCancel () {
         this.close()
       },
-      handleChangeTemplateType(value) {
-        //如果是邮件类型那么则改变模板内容是富文本编辑器
-        this.useEditor = (value == 2 || value == 4)
+      handleChangeTemplateType (value) {
+        // 如果是邮件类型那么则改变模板内容是富文本编辑器
+        this.useEditor = (value === 2 || value === 4)
       }
     }
   }

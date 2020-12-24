@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import storage from 'store'
 import { login, logout } from '@/api/login'
 import { getUserPermissionList } from '@/api/system'
 import { ACCESS_TOKEN, USER_NAME, USER_INFO, USER_AUTH } from '@/store/mutation-types'
@@ -7,7 +7,7 @@ import { welcome, isAjaxSuccess } from '@/utils/util'
 const user = {
   state: {
     token: '',
-    username: '',
+    name: '',
     welcome: '',
     avatar: '',
     roles: [],
@@ -20,7 +20,7 @@ const user = {
       state.token = token
     },
     SET_NAME: (state, { name, welcome }) => {
-      state.username = name
+      state.name = name
       state.welcome = welcome
     },
     SET_AVATAR: (state, avatar) => {
@@ -45,33 +45,27 @@ const user = {
           if (isAjaxSuccess(response.code)) {
             const result = response.result
             const userInfo = result.userInfo
-            Vue.ls.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
-            Vue.ls.set(USER_NAME, userInfo.username, 7 * 24 * 60 * 60 * 1000)
-            Vue.ls.set(USER_INFO, userInfo, 7 * 24 * 60 * 60 * 1000)
+            storage.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
+            storage.set(USER_NAME, userInfo.username)
+            storage.set(USER_INFO, userInfo)
             commit('SET_TOKEN', result.token)
             commit('SET_INFO', userInfo)
             commit('SET_NAME', { username: userInfo.username, realname: userInfo.realname, welcome: welcome() })
             commit('SET_AVATAR', userInfo.avatar)
-            resolve(response)
-          } else {
-            resolve(response)
           }
+          resolve(response)
         }).catch(error => {
           reject(error)
         })
       })
     },
-
     GetPermissionList ({ commit }) {
       return new Promise((resolve, reject) => {
         getUserPermissionList().then(response => {
-          if (!isAjaxSuccess(response.code)) {
-            reject()
-          }
+          if (!isAjaxSuccess(response.code)) { reject(response) }
           const menu = response.result.menu
           const auth = response.result.auth
-
-          sessionStorage.setItem(USER_AUTH, JSON.stringify(auth))
+          storage.set(USER_AUTH, JSON.stringify(auth))
           if (menu && menu.length > 0) {
             commit('SET_PERMISSIONLIST', menu)
           } else {
@@ -85,20 +79,17 @@ const user = {
     },
 
     // 登出
-    Logout ({ commit }) {
+    Logout ({ commit, state }) {
       return new Promise((resolve) => {
-        logout().then(() => {
+        logout(state.token).then(() => {
+          commit('SET_TOKEN', '')
+          commit('SET_PERMISSIONLIST', [])
+          storage.remove(ACCESS_TOKEN)
           resolve()
         }).catch(() => {
           resolve()
         }).finally(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
-          Vue.ls.remove(ACCESS_TOKEN)
         })
-        // commit('SET_TOKEN', '')
-        // commit('SET_PERMISSIONLIST', [])
-        // Vue.ls.remove(ACCESS_TOKEN)
       })
     }
 

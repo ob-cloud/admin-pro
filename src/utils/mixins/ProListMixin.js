@@ -5,15 +5,15 @@
  */
 import { filterObj } from '@/utils/util'
 import { deleteAction, getAction } from '@/utils/ajax'
-import Vue from 'vue'
+import storage from 'store'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 
 export const ProListMixin = {
   data () {
     return {
-      //token header
+      // token header
       tokenHeader: {
-        'X-Access-Token': Vue.ls.get(ACCESS_TOKEN)
+        'X-Access-Token': storage.get(ACCESS_TOKEN)
       },
       /* 查询条件-请不要在queryParam中声明非字符串值的属性 */
       queryParam: {},
@@ -34,28 +34,31 @@ export const ProListMixin = {
       /* 排序参数 */
       isorter: {
         column: 'createTime',
-        order: false, // true -asc, false - desc
+        order: false // true -asc, false - desc
       },
       /* 筛选参数 */
       filters: {},
       /* table加载状态 */
       loading: false,
-      /* table选中keys*/
+      /* table选中keys */
       selectedRowKeys: [],
-      /* table选中records*/
+      /* table选中records */
       selectionRows: [],
       /* 查询折叠 */
       toggleSearchStatus: false,
       /* 高级查询条件生效状态 */
       superQueryFlag: false,
       /* 高级查询条件 */
-      superQueryParams: ''
+      superQueryParams: '',
+      /* 内容窗口高度 */
+      contentHeight: 400
     }
   },
   created () {
     this.loadData()
-    //初始化字典配置 在自己页面定义
+    // 初始化字典配置 在自己页面定义
     this.initDictConfig()
+    // 初始化高度
   },
   methods: {
     loadData (arg) {
@@ -63,11 +66,11 @@ export const ProListMixin = {
         this.$message.error('请设置url.list属性!')
         return
       }
-      //加载数据 若传入参数1则加载第一页的内容
+      // 加载数据 若传入参数1则加载第一页的内容
       if (arg === 1) {
         this.ipagination.current = 1
       }
-      let params = this.getQueryParams() //查询条件
+      const params = this.getQueryParams() // 查询条件
       this.loading = true
       getAction(this.url.list, params).then((res) => {
         if (this.$isAjaxSuccess(res.code)) {
@@ -84,7 +87,7 @@ export const ProListMixin = {
       // console.log("--这是一个假的方法!")
     },
     handleSuperQuery (arg) {
-      //高级查询方法
+      // 高级查询方法
       if (!arg) {
         this.superQueryParams = ''
         this.superQueryFlag = false
@@ -95,19 +98,19 @@ export const ProListMixin = {
       this.loadData()
     },
     getQueryParams () {
-      //获取查询条件
-      let sqp = {}
+      // 获取查询条件
+      const sqp = {}
       if (this.superQueryParams) {
         sqp['superQueryParams'] = encodeURI(this.superQueryParams)
       }
-      let param = Object.assign(sqp, this.queryParam, this.isorter, this.filters)
+      const param = Object.assign(sqp, this.queryParam, this.isorter, this.filters)
       // param.field = this.getQueryField()
       param.pageNo = this.ipagination.current
       param.pageSize = this.ipagination.pageSize
       return filterObj(param)
     },
     getQueryField () {
-      //TODO 字段权限控制
+      // TODO 字段权限控制
       let str = 'id,'
       this.columns.forEach(function (value) {
         str += ',' + value.dataIndex
@@ -135,25 +138,23 @@ export const ProListMixin = {
     },
     batchDel () {
       if (!this.url.deleteBatch) {
-        this.$message.error('请设置url.deleteBatch属性!')
-        return
+        return this.$message.error('请设置url.deleteBatch属性!')
       }
       if (this.selectedRowKeys.length <= 0) {
-        this.$message.warning('请选择一条记录！')
-        return
+        return this.$message.warning('请选择一条记录！')
       } else {
         let ids = ''
         for (let a = 0; a < this.selectedRowKeys.length; a++) {
           ids += this.selectedRowKeys[a] + ','
         }
-        let that = this;
+        const that = this
         this.$confirm({
           title: '确认删除',
           content: '是否删除选中数据?',
           onOk: function () {
             deleteAction(that.url.deleteBatch, {
               ids: ids
-            }).then((res) => {
+            }).then(res => {
               if (that.$isAjaxSuccess(res.code)) {
                 that.$message.success(res.message)
                 that.loadData()
@@ -161,9 +162,9 @@ export const ProListMixin = {
               } else {
                 that.$message.warning(res.message)
               }
-            });
+            })
           }
-        });
+        })
       }
     },
     handleDelete (id) {
@@ -171,7 +172,7 @@ export const ProListMixin = {
         this.$message.error('请设置url.delete属性!')
         return
       }
-      let that = this
+      const that = this
       deleteAction(that.url.delete, {
         id: id
       }).then((res) => {
@@ -181,7 +182,7 @@ export const ProListMixin = {
         } else {
           that.$message.warning(res.message)
         }
-      });
+      })
     },
     handleEdit (record) {
       this.$refs.modalForm.edit(record)
@@ -194,11 +195,11 @@ export const ProListMixin = {
       this.$refs.modalForm.disableSubmit = false
     },
     handleTableChange (pagination, filters, sorter) {
-      //分页、排序、筛选变化时触发
-      //TODO 筛选
+      // 分页、排序、筛选变化时触发
+      // TODO 筛选
       if (Object.keys(sorter).length > 0) {
         this.isorter.column = sorter.field
-        this.isorter.order = 'ascend' == sorter.order ? true : false
+        this.isorter.order = sorter.order === 'ascend'
       }
       this.ipagination = pagination
       this.loadData()
@@ -217,15 +218,15 @@ export const ProListMixin = {
     },
     /* 导出 */
     handleExportXls2 () {
-      let paramsStr = encodeURI(JSON.stringify(this.getQueryParams()))
-      let url = `${window._CONFIG['domianURL']}/${this.url.exportXlsUrl}?paramsStr=${paramsStr}`
+      const paramsStr = encodeURI(JSON.stringify(this.getQueryParams()))
+      const url = `/${this.url.exportXlsUrl}?paramsStr=${paramsStr}`
       window.location.href = url
     },
     handleExportXls (fileName) {
-      if (!fileName || typeof fileName != 'string') {
+      if (!fileName || typeof fileName !== 'string') {
         fileName = '导出文件'
       }
-      let param = {
+      const param = {
         ...this.queryParam
       }
       if (this.selectedRowKeys && this.selectedRowKeys.length > 0) {
@@ -273,7 +274,7 @@ export const ProListMixin = {
       if (text && text.indexOf(',') > 0) {
         text = text.substring(0, text.indexOf(','))
       }
-      return window._CONFIG['imgDomainURL'] + '/' + text
+      return '/' + text
     },
     /* 文件下载 */
     downloadFile (text) {
@@ -284,7 +285,19 @@ export const ProListMixin = {
       if (text.indexOf(',') > 0) {
         text = text.substring(0, text.indexOf(','))
       }
-      window.open(window._CONFIG['domianURL'] + '/sys/common/download/' + text)
+      window.open('/sys/common/download/' + text)
     },
+    calculateContentHeight () {
+      this.contentHeight = document.body.clientHeight - 64 - 40 - 85 /* search */ - 48 /* margin */ - 48 /* padding */
+    },
+    // 页面刷新
+    pageReload () {
+      this.$store.dispatch('ToggleMultiTab', false)
+      this.$store.dispatch('SetReloadFlag', false)
+      this.$nextTick(() => {
+        this.$store.dispatch('ToggleMultiTab', true)
+        this.$store.dispatch('SetReloadFlag', true)
+      })
+    }
   }
 }

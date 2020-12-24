@@ -49,24 +49,24 @@
         default: () => document.body
       }
     },
-    data() {
-      let dateStr = this.value
+    data () {
+      const dateStr = this.value
       return {
         decorator: '',
         momVal: !dateStr ? null : moment(dateStr, this.format)
       }
     },
     watch: {
-      value(val) {
+      value (val) {
         this.momVal = val ? moment(val, this.format) : null
       }
     },
     methods: {
-      handleDateChange(mom, dateStr) {
+      handleDateChange (mom, dateStr) {
         this.$emit('change', dateStr)
       }
     },
-    //2.2新增 在组件内定义 指定父组件调用时候的传值属性和事件类型 这个牛逼
+    // 2.2新增 在组件内定义 指定父组件调用时候的传值属性和事件类型 这个牛逼
     model: {
       prop: 'value',
       event: 'change'
