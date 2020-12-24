@@ -1,28 +1,49 @@
 <template>
-  <a-config-provider :locale="locale">
-    <div id="app">
-      <router-view/>
-    </div>
-  </a-config-provider>
+    <a-locale-provider :locale="zh_CN">
+        <a-config-provider :getPopupContainer="getPopupContainer">
+            <div id="app" @click.capture="captureClick" @mousedown="mouseDownEvent" @mouseup.stop="mouseUpEvent">
+                <router-view/>
+            </div>
+        </a-config-provider>
+    </a-locale-provider>
 </template>
-
 <script>
-import { domTitle, setDocumentTitle } from '@/utils/domUtil'
-import { i18nRender } from '@/locales'
+    import zh_CN from 'ant-design-vue/lib/locale-provider/zh_CN';
 
-export default {
-  data () {
-    return {
-    }
-  },
-  computed: {
-    locale () {
-      // 只是为了切换语言时，更新标题
-      const { title } = this.$route.meta
-      title && (setDocumentTitle(`${i18nRender(title)} - ${domTitle}`))
-
-      return this.$i18n.getLocaleMessage(this.$store.getters.lang).antLocale
-    }
-  }
-}
+    export default {
+        data() {
+            return {
+                zh_CN,
+                mouseDownX: null,
+                mouseDownY: null,
+                mouseUpX: null,
+                mouseUpY: null,
+            };
+        },
+        methods:{
+            getPopupContainer(triggerNode) {
+                return triggerNode.parentNode;
+            },
+            captureClick(){
+                if (Math.abs(this.mouseDownX - this.mouseUpX)<=5 && (Math.abs(this.mouseDownY - this.mouseUpY)<=5)){
+                }else{
+                    event.stopPropagation()
+                }
+            },
+            mouseDownEvent(){
+                this.mouseDownX = event.screenX
+                this.mouseDownY = event.screenY
+            },
+            mouseUpEvent(){
+                this.mouseUpX = event.screenX
+                this.mouseUpY = event.screenY
+            }
+        }
+    };
 </script>
+<style lang="less">
+    body{
+        overflow: hidden;
+    }
+
+</style>

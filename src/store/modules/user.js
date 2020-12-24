@@ -1,99 +1,51 @@
-import storage from 'store'
-import { login, logout } from '@/api/login'
-import { getUserPermissionList } from '@/api/system'
-import { ACCESS_TOKEN, USER_NAME, USER_INFO, USER_AUTH } from '@/store/mutation-types'
-import { welcome, isAjaxSuccess } from '@/utils/util'
+import Vue from 'vue'
+import {login} from '@/api/login'
+import {ACCESS_TOKEN, RECKID} from '@/store/mutation-types'
 
 const user = {
-  state: {
-    token: '',
-    name: '',
-    welcome: '',
-    avatar: '',
-    roles: [],
-    info: {},
-    permissionList: []
-  },
-
-  mutations: {
-    SET_TOKEN: (state, token) => {
-      state.token = token
+    state: {
+        token: '',
+        firstRouter: [],
+        secondRouter: []
     },
-    SET_NAME: (state, { name, welcome }) => {
-      state.name = name
-      state.welcome = welcome
+    getters: {
+        token(state) {
+            return state.token;
+        },
+        firstRouter(state) {
+            return state.firstRouter;
+        },
+        secondRouter(state) {
+            return state.secondRouter;
+        },
     },
-    SET_AVATAR: (state, avatar) => {
-      state.avatar = avatar
+    mutations: {
+        SET_TOKEN: (state, token) => {
+            state.token = token
+        },
+        FIRST_ROUTER(state, payload) {
+            state.firstRouter = payload;
+        },
+        SECOND_ROUTER(state, payload) {
+            state.secondRouter = payload;
+        },
     },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
-    },
-    SET_INFO: (state, info) => {
-      state.info = info
-    },
-    SET_PERMISSIONLIST: (state, permissionList) => {
-      state.permissionList = permissionList
+    actions: {
+        // 登录
+        userLogin({commit}, userInfo) {
+            return new Promise((resolve, reject) => {
+                login(userInfo).then(response => {
+                    const result = response.data
+                    Vue.ls.set(RECKID, result.ckid);    // 刷新token时的请求参数
+                    Vue.ls.set(ACCESS_TOKEN, result.token, response.data.expiration)
+                    commit('SET_TOKEN', result.token)
+                    resolve(response)
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
     }
-  },
-
-  actions: {
-    // 登录
-    Login ({ commit }, userInfo) {
-      return new Promise((resolve, reject) => {
-        login(userInfo).then(response => {
-          if (isAjaxSuccess(response.code)) {
-            const result = response.result
-            const userInfo = result.userInfo
-            storage.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
-            storage.set(USER_NAME, userInfo.username)
-            storage.set(USER_INFO, userInfo)
-            commit('SET_TOKEN', result.token)
-            commit('SET_INFO', userInfo)
-            commit('SET_NAME', { username: userInfo.username, realname: userInfo.realname, welcome: welcome() })
-            commit('SET_AVATAR', userInfo.avatar)
-          }
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    GetPermissionList ({ commit }) {
-      return new Promise((resolve, reject) => {
-        getUserPermissionList().then(response => {
-          if (!isAjaxSuccess(response.code)) { reject(response) }
-          const menu = response.result.menu
-          const auth = response.result.auth
-          storage.set(USER_AUTH, JSON.stringify(auth))
-          if (menu && menu.length > 0) {
-            commit('SET_PERMISSIONLIST', menu)
-          } else {
-            reject(new Error('getPermissionList: permissions must be a non-null array!'))
-          }
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-
-    // 登出
-    Logout ({ commit, state }) {
-      return new Promise((resolve) => {
-        logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_PERMISSIONLIST', [])
-          storage.remove(ACCESS_TOKEN)
-          resolve()
-        }).catch(() => {
-          resolve()
-        }).finally(() => {
-        })
-      })
-    }
-
-  }
 }
 
 export default user

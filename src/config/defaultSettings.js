@@ -25,12 +25,17 @@ export default {
   menu: {
     locale: true
   },
-  title: '昂宝智慧中控系统',
+  title: '智慧公寓系统',
   logo: 'logo.svg',
   pwa: false,
   iconfontUrl: '',
   production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
   pageOption: {
     loginMode: 'simple'
+  },
+  storageOptions: {
+    namespace: 'pro__', // key prefix
+    name: 'ls', // name variable Vue.[ls] or this.[$ls],
+    storage: 'session' // storage name session, local, memory
   }
 }

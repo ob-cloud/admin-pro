@@ -1,0 +1,518 @@
+<template>
+  <div class="chaoyiWaterList-box">
+    <div class="house_info">
+      需绑水表房源地址：{{houseObj.houseAlias?houseObj.houseAlias+'/':''}}{{houseObj.fullAddress}}
+    </div>
+    <div class="detail_info">
+      <div class="set_info f-clearfix">
+        <div class="selectItem f-fl cityTree">
+          <div class="titleTip1 titleTip1With1 f-fl">城市/区域</div>
+          <city-town-tree class="f-fl" style="width: 150px;" placeholder="不限" ref="selectCityTown" :showArea="true" :showTown="false" @selectChange="selectCityTownChange"></city-town-tree>
+        </div>
+        <div class="selectItem f-fl">
+          <div class="titleTip1 titleTip1With2 f-fl">设备编号</div>
+          <a-input placeholder="请输入" v-model="sendData.deviceNo" style="width: 150px;height: 34px"></a-input>
+        </div>
+        <div class="selectItem f-fl">
+          <div class="titleTip1 titleTip1With2 f-fl">详细地址</div>
+          <a-input class="overHidde" placeholder="请输入" v-model="sendData.houseAddress" style="width: 340px;height: 34px"></a-input>
+        </div>
+        <div class="selectItem searchButtonStyle cursor f-fl" @click="waterList">
+          <icon-font type="iconyumengtubiao_sousuo" />
+        </div>
+        <div class="clearStyle f-fl cursor" @click="clearWaterList">
+          清空
+        </div>
+      </div>
+      <div class="waterList_info">
+        <div class="basicsInfo" :style="tableData.length==0?'padding-bottom: 20px;':''">
+          <div class="table">
+            <div class="table-title">
+              <div style="max-width: 180px;text-align: left;padding-left: 15px;border-radius: 4px 0px 0px 0px;">产品型号</div>
+              <div style="max-width: 180px;text-align: left;padding-left: 15px;">设备编号</div>
+              <div style="max-width: 180px;text-align: left;padding-left: 15px;">小区名称</div>
+              <div style="max-width: 320px;text-align: left;padding-left: 15px;">详细地址</div>
+              <div style="max-width: 98px;text-align: center;border-radius: 0px 4px 0px 0px;">选择</div>
+            </div>
+            <div class="house-data u-no-border" v-for="(item) in tableData" :key="item.houseId" >
+              <div class="item" style="max-width: 180px;text-align: left;padding-left: 15px;">
+                {{item.productNo?item.productNo:'-'}}
+              </div>
+              <div class="item" style="max-width: 180px;text-align: left;padding-left: 15px;">
+                {{item.deviceNo?item.deviceNo:'-'}}
+              </div>
+              <div class="item" style="max-width: 180px;text-align: left;padding-left: 15px;">
+                {{item.roomCode?item.roomCode:'-'}}
+              </div>
+              <div class="item" style="max-width: 320px;text-align: left;padding-left: 15px;">
+                {{item.fullAddress?item.fullAddress:'-'}}
+              </div>
+              <div class="item" style="max-width: 98px;text-align: center;background: #F7F8FB;font-size: 14px;color: #BBBBBB;" v-if="selectedWaterIds.indexOf(item.deviceId)>-1&&houseObj.waterId!=item.deviceId">
+                已选择
+              </div>
+              <div class="checkStyle item cursor" @click="selectedWaterUuidFn(item)" style="max-width: 98px;text-align: center;" v-if="(selectedWaterIds.indexOf(item.deviceId)==-1||houseObj.waterId==item.deviceId)">
+                <icon-font class="selectStyle" v-if="selectedWaterUuid==item.deviceId" type="iconyumengtubiao_danxuan-yixuanze" />
+                <icon-font class="unSelectStyle" v-else type="iconyumengtubiao_danxuan-weixuanze" />
+              </div>
+            </div>
+            <div class="house-no-data u-no-border" v-if="tableData.length==0">
+              <div style="padding-top: 40px;text-align: center;">
+                <img style="width: 130px;height: 122px;" src="../../../assets/login/no-collect.png">
+              </div>
+              <div style="margin:20px 0 100px 0;color: #777777;font-size: 14px;text-align: center">
+                没有可选择水表
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="contFoot" v-show="tableData.length>0">
+        <a-pagination size="small" v-model="pagination.current" :total="pagination.total" :showTotal="total => `共 ${total} 条`" :pageSize="pagination.pageSize" showSizeChanger @change="onSizeChange" @showSizeChange="onShowSizeChange" />
+      </div>
+      </div>
+      <div class="clearfix" style="margin-top: 15px;">
+        <div class="warningStyle clearfix f-fl cursor" @click="freshData()">
+          <div class="f-fl" style="color: #FFA036;font-size: 14px;">
+            <a-icon style="color: #FFA036;margin-right: 5px;" type="exclamation-circle" />如找不到您要的设备，请点击“同步设备数据”
+          </div>
+          <div class="f-fl" style="color: #0A87F8;font-size: 14px;margin-left: 30px;">
+            <icon-font :class="{'imgrotate_common':syncInfoLoading}" style="margin-right: 3px;" type="iconyumengtubiao_zhongzhi" />同步设备数据
+          </div>
+        </div>
+        <div class="buttonDiv f-fr">
+          <a-button size="large" class="formItemMarginButton cancelFont" @click="cancelSelect">
+            取消
+          </a-button>
+          <a-button size="large" type="primary" class="formItemMarginButton saveFont" @click="confirmSelect">
+            确定选择
+          </a-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import CityTownTree from '@/components/CityTownTree';
+import * as API from "@/api/smartDevices";
+
+export default {
+  name: "chaoyiWaterList",
+  components: {
+    CityTownTree,
+  },
+  props: {
+    houseObj: {
+      type: Object,
+    },
+    selectedWaterIds:{
+      type:Array,
+    },
+  },
+  data() {
+    return {
+      sendData:{
+        authAccountId:'',
+        current:1,
+        size:10,
+        cityName:'',
+        areaName:'',
+        fuzzyKeyword:'',
+        deviceNo:'',
+        houseAddress:'',
+        waterMeterType:1,
+      },
+      tableData:[],
+      pagination: {
+        total: 0,
+        current: 1,
+        pageSize: 10,//每页中显示10条数据
+        showSizeChanger: true,
+        pageSizeOptions: ["10", "20", "50", "100"],//每页中显示的数据
+        showTotal: total => `共有 ${total} 条数据`,  //分页中显示总的数据
+      },
+      selectedWaterUuid:'',
+      selectedObj:{
+        houseAddress:'',
+        custName:'',
+        deviceHouseId:'',
+        deviceHousePid:'',
+        gwName:'',
+        gwOnlineStatus:'',
+        gwUuid:'',
+        modelName:'',
+        onlineStatus:'',
+        sn:'',
+        uuid:'',
+      },
+      index:'',
+      waterIndex:-1,
+      syncInfoLoading:false,
+    }
+  },
+  created() {
+    if(this.houseObj){
+      if(this.houseObj.authAccountId){
+        this.sendData.authAccountId = this.houseObj.authAccountId;
+      }
+      this.index = this.houseObj.index;
+      this.waterIndex = this.houseObj.waterIndex;
+      if(this.houseObj.waterId){
+        this.selectedWaterUuid = this.houseObj.waterId;
+      }
+      this.sendData.waterMeterType = this.houseObj.meterType;
+    }
+    this.waterList();
+  },
+  methods: {
+    freshData(){
+      let parameter = {
+        id:this.sendData.authAccountId,
+      };
+      this.syncInfoLoading = true;
+      API.joyDeviceSync(parameter).then(res => {
+        if(!res){
+          this.syncInfoLoading = false;
+        }
+        if (res&&res.code === "200") {
+          this.$message.success('同步成功');
+          this.waterList();
+          this.syncInfoLoading = false;
+        }
+        else{
+          this.syncInfoLoading = false;
+        }
+      })
+    },
+    selectCityTownChange(selectObj){
+      if(selectObj.cityId&&!selectObj.areaId&&selectObj.name){
+        this.sendData.cityName = selectObj.name;
+      }
+      if(selectObj.areaId&&selectObj.name){
+        this.sendData.areaName = selectObj.name;
+      }
+      if(!selectObj.cityId&&!selectObj.areaId&&!selectObj.name){
+        this.sendData.cityName = '';
+        this.sendData.areaName = '';
+      }
+      this.waterList();
+    },
+    selectedWaterUuidFn(item){
+      this.selectedObj.houseAddress = item.fullAddress;
+      this.selectedObj.address = item.fullAddress;
+      this.selectedObj.community = item.community;
+      this.selectedObj.deviceNo = item.deviceNo;
+      this.selectedObj.uuid = item.deviceNo;
+      this.selectedObj.deviceType = item.deviceType;
+      this.selectedObj.productNo = item.productNo;
+      this.selectedObj.deviceId = item.deviceId;
+      this.selectedWaterUuid = item.deviceId;
+    },
+    cancelSelect(){
+      this.$emit('cancelSelect');
+    },
+    confirmSelect(){
+      if(!this.selectedObj.deviceId){
+        this.$message.warning('请选择一水表');
+        return ;
+      }
+      this.$emit('confirmSelect',this.selectedObj,this.index,this.waterIndex)
+    },
+    onSizeChange(current){
+      this.sendData.current = current;
+      this.pagination.current = current;
+      this.waterList();
+    },
+    onShowSizeChange(current, pageSize){
+      this.sendData.current = current;
+      this.sendData.size = pageSize;
+      this.pagination.pageSize = pageSize;
+      this.pagination.current = current;
+      this.waterList();
+    },
+    waterList(){
+      if(!this.sendData.lockNo){
+        this.sendData.lockNo = undefined;
+      }
+      if(!this.sendData.gwNo){
+        this.sendData.gwNo = undefined;
+      }
+      if(!this.sendData.houseNo){
+        this.sendData.houseNo = undefined;
+      }
+      if(!this.sendData.roomNo){
+        this.sendData.roomNo = undefined;
+      }
+      API.listPullJoyWaterMeter(this.sendData).then(res => {
+        if (res&&res.code === "200") {
+          this.tableData = res.data.records;
+          this.pagination.total = res.data.total;
+          if(this.selectedWaterUuid){
+            this.tableData.forEach((item)=>{
+              if(this.selectedWaterUuid == item.deviceId){
+                this.selectedWaterUuidFn(item);
+              }
+            })
+          }
+        }
+      })
+    },
+    clearWaterList(){
+      this.sendData.current = 1;
+      this.sendData.size = 10;
+      this.sendData.cityName = '';
+      this.sendData.areaName = '';
+      this.sendData.deviceNo = '';
+      this.sendData.houseAddress = '';
+      this.waterList();
+    },
+  },
+}
+</script>
+
+<style scoped lang="less">
+  .chaoyiWaterList-box{
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+    .house_info{
+      height: 40px;
+      line-height: 40px;
+      background: #E9F1FF;
+      opacity: 0.99;
+      color: #777777;
+      font-size: 14px;
+      padding-left: 20px;
+    }
+    .detail_info{
+      padding: 20px;
+      .set_info {
+        margin-bottom: 20px;
+        .searchButtonStyle{
+          width: 34px;
+          height: 34px;
+          background: #0A87F8;
+          border-radius: 4px;
+          svg{
+            margin: 7px;
+            width: 20px;
+            height: 20px;
+            color: #ffffff;
+          }
+        }
+        .clearStyle{
+          width: 42px;
+          height: 34px;
+          line-height: 34px;
+          text-align: center;
+          background: #EEEEEE;
+          border-radius: 4px;
+          border: 1px solid #DDDDDD;
+          color: #111111;
+          font-size: 13px;
+        }
+        .selectItem {
+          margin:0px 10px 0 0px;
+          & > .titleTip1 {
+            border: 1px solid @borderColor;
+            border-right:0px;
+            background: @bigBackgroundColor;
+            font-size: 13px;
+            color: #777777;
+            border-radius:4px 0 0 4px;
+            height: 34px;
+            line-height: 34px;
+            text-align: center;
+          }
+          .titleTip1With1{
+            width: 73px;
+          }
+          .titleTip1With2{
+            width: 62px;
+          }
+          .titleTip1With3{
+            width: 49px;
+          }
+          & > .titleTip2 {
+            border: 1px solid @borderColor;
+            border-right:0px;
+            background: @bigBackgroundColor;
+            font-size: 14px;
+            color: @mainFontColor;
+            border-radius:4px 0 0 4px;
+            width: 50px;
+            height: 34px;
+            line-height: 34px;
+            text-align: center;
+          }
+          /deep/ .ant-select-selection{
+            border-radius:0 4px 4px 0
+          }
+          /deep/ .ant-select-selection__rendered{
+            height: 34px;
+            line-height: 34px;
+          }
+          /deep/ .ant-select-selection--single{
+            height: 34px;
+            line-height: 34px;
+          }
+          /deep/ .ant-input{
+            border-radius:0 4px 4px 0;
+            height: 34px;
+            line-height: 34px;
+            border: 1px solid #DDDDDD;
+            padding-left: 8px;
+          }
+          /deep/ .tree-wrap .tree{
+            width: 250px;
+            top:34px !important;
+          }
+        }
+        .cityTree{
+          /deep/ .tree-wrap .tree .content{
+            border-top: 1px solid #DDDDDD;
+          }
+        }
+      }
+      .waterList_info{
+        min-height: 400px;
+        .basicsInfo{
+          width: 100%;
+          display: flex;
+          justify-content: flex-start;
+          flex-wrap: wrap;
+          .table{
+            width: 954px;
+            border-left: 1px solid #EEEEEE;
+            border-top: 1px solid #EEEEEE;
+            font-size: 12px;
+            border-radius: 4px;
+            .table-title{
+              width: 954px;
+              display: flex;
+              background: #F7F8FB;
+              color: #777777;
+              font-size: 13px;
+              border-radius: 4px 4px 0px 0px;
+              & > div {
+                flex: 1;
+                height: 40px;
+                line-height: 40px;
+                border-right: 1px solid #EEEEEE;
+                border-bottom: 1px solid #EEEEEE;
+              }
+            }
+            .house-no-data{
+              width: 954px;
+              border-radius: 0px 0px 4px 4px;
+              border-right: 1px solid #EEEEEE;
+              border-bottom: 1px solid #EEEEEE;
+              background-color: #ffffff;
+            }
+            .house-data {
+              width: 954px;
+              display: flex;
+              color: #111111;
+              font-size: 13px;
+              border-radius: 0px 0px 4px 4px;
+              .item {
+                flex: 1;
+                text-align: left;
+                border-right: 1px solid #EEEEEE;
+                border-bottom: 1px solid #EEEEEE;
+                background-color: #ffffff;
+                height: 40px;
+                line-height: 40px;
+              }
+              .checkStyle{
+                svg{
+                  width: 16px;
+                  height: 16px;
+                }
+                .selectStyle{
+                  color: #0A87F8;
+                }
+                .unSelectStyle{
+                  color:#777777;
+                }
+              }
+              .houseAddress{
+                height:20px;
+                border-radius:2px;
+                color: #0A87F8;
+                background-color: #f0f8ff;
+                font-size: 12px;
+                text-align: center;
+                padding: 5px 5px;
+                margin-right: 5px;
+              }
+              /deep/ .ant-input{
+                height: 38px;
+                line-height: 38px;
+                padding-left: 14px;
+              }
+              .borderRed{
+                border: 1px solid red !important;
+              }
+              .mustStyle{
+                input::-webkit-input-placeholder {
+                  color: #FB4246;
+                }
+
+                input:-moz-placeholder {
+                  color: #FB4246;
+                }
+
+                input::-moz-placeholder {
+                  color: #FB4246;
+                }
+
+                input::-ms-input-placeholder {
+                  color: #FB4246;
+                }
+              }
+            }
+          }
+        }
+        .contFoot {
+          margin-top: 0px;
+          width: 100%;
+          height: 56px;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          margin-right: 20px; // position: absolute;
+          background-color: #fff;
+        }
+      }
+      .warningStyle{
+        height: 40px;
+        line-height: 40px;
+        svg{
+          width: 15px;
+          height: 15px;
+        }
+      }
+      .buttonDiv {
+        .formItemMarginButton {
+          width: 120px;
+          height: 40px;
+          margin-left: 18px;
+        }
+        .cancelFont {
+          color: #666666;
+        }
+        .saveFont {
+          color: #FFFFFF;
+          background-color: #0A87F8;
+        }
+      }
+    }
+    @-webkit-keyframes changeright{
+      0%{-webkit-transform:rotate(0deg);}
+      50%{-webkit-transform:rotate(-180deg);}
+      100%{-webkit-transform:rotate(-360deg);}
+    }
+    .imgrotate_common{
+      -webkit-animation:changeright 3s linear infinite;
+    }
+  }
+</style>

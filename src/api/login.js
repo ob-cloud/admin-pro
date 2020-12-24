@@ -1,10 +1,23 @@
-import { postAction } from '@/utils/ajax'
+import Vue from 'vue'
+import { axios } from '@/utils/request'
+import { RECKID } from '@/store/mutation-types'
 
-// 授权登录模块
-const login = (params) => postAction('/auth/login', params)
-const logout = (token) => postAction('/auth/logout', {}, { headers: { 'X-Access-Token': token } })
+export function login (parameter) {
+  axios.defaults.isEncryption = 'encryption'; //登录接口加密
+  return axios({
+    url: '/isc/emp_login',
+    method: 'post',
+    data: parameter,
+  })
+}
 
-export {
-  login,
-  logout
+export function refreshToken() {
+  let requestUrl = '/isc/refresh_token';
+  if (Vue.ls.get(RECKID)) {
+    requestUrl = requestUrl + '/' + Vue.ls.get(RECKID);
+  }
+  return axios.request({
+    url: requestUrl,
+    method: 'post'
+  });
 }

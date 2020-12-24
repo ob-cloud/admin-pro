@@ -1,86 +1,71 @@
-import { deviceEnquire, DEVICE_TYPE } from '@/utils/device'
-import { mapState } from 'vuex'
-
-const mixin = {
-  computed: {
-    ...mapState({
-      layoutMode: state => state.app.layout,
-      navTheme: state => state.app.theme,
-      primaryColor: state => state.app.color,
-      colorWeak: state => state.app.weak,
-      fixedHeader: state => state.app.fixedHeader,
-      fixSiderbar: state => state.app.fixSiderbar,
-      fixSidebar: state => state.app.fixSiderbar,
-      contentWidth: state => state.app.contentWidth,
-      autoHideHeader: state => state.app.autoHideHeader,
-      sidebarOpened: state => state.app.sidebar,
-      multiTab: state => state.app.multiTab,
-      fixedMultiTab: state => state.app.fixedMultiTab
-    })
+/*
+注意：
+    混入对象(mixin.js)需保证路由的属性的唯一性  以免发生覆盖
+    混入对象(mixin.js)中务必保证通用性，避免使用this对象调用除了当前混入对象(mixin.js)外 其他组件中的属性、方法
+ */
+import { clearNoNum, setInteger, clearArea, delSpecialMark } from '@/utils/util';
+export default {
+  data() {
+    return {};
   },
-  methods: {
-    isTopMenu () {
-      return this.layoutMode === 'topmenu'
-    },
-    isSideMenu () {
-      return !this.isTopMenu()
-    }
-  }
-}
 
-const mixinDevice = {
-  computed: {
-    ...mapState({
-      device: state => state.app.device
-    })
-  },
   methods: {
-    isMobile () {
-      return this.device === DEVICE_TYPE.MOBILE
-    },
-    isDesktop () {
-      return this.device === DEVICE_TYPE.DESKTOP
-    },
-    isTablet () {
-      return this.device === DEVICE_TYPE.TABLET
-    }
-  }
-}
-
-const AppDeviceEnquire = {
-  mounted () {
-    const { $store } = this
-    deviceEnquire(deviceType => {
-      switch (deviceType) {
-        case DEVICE_TYPE.DESKTOP:
-          $store.commit('TOGGLE_DEVICE', 'desktop')
-          $store.dispatch('setSidebar', true)
-          break
-        case DEVICE_TYPE.TABLET:
-          $store.commit('TOGGLE_DEVICE', 'tablet')
-          $store.dispatch('setSidebar', false)
-          break
-        case DEVICE_TYPE.MOBILE:
-        default:
-          $store.commit('TOGGLE_DEVICE', 'mobile')
-          $store.dispatch('setSidebar', true)
-          break
+    mixin_integerFilter(str, isZero = true, max = -1) {
+      /**
+       * 正整数过滤 max默认值设置为-1是因为setInteger方法中已处理，此方法中也可不设置
+       * */
+      let keyArr = str.split('.');
+      if (keyArr.length === 1) {
+        this[str] = setInteger(this[str], isZero);
+      } else if (keyArr.length === 2) {
+        this[keyArr[0]][keyArr[1]] = setInteger(this[keyArr[0]][keyArr[1]], isZero, max);
+      } else if (keyArr.length === 3) {
+        this[keyArr[0]][keyArr[1]][keyArr[2]] = setInteger(
+          this[keyArr[0]][keyArr[1]][keyArr[2]], isZero, max
+        );
       }
-    })
-  }
-}
-
-const i18nMixin = {
-  computed: {
-    ...mapState({
-      currentLang: state => state.app.lang
-    })
-  },
-  methods: {
-    setLang (lang) {
-      this.$store.dispatch('setLang', lang)
+    },
+    mixin_moneyFilter(str, max = -1) {
+      /**
+       * 金额过滤 小数点后两位
+       * max默认值设置为-1是因为setInteger方法中已处理，此方法中也可不设置
+      */
+      let keyArr = str.split('.');
+      if (keyArr.length === 1) {
+        this[str] = clearNoNum(this[str]);
+      } else if (keyArr.length === 2) {
+        this[keyArr[0]][keyArr[1]] = clearNoNum(this[keyArr[0]][keyArr[1]], max);
+      } else if (keyArr.length === 3) {
+        this[keyArr[0]][keyArr[1]][keyArr[2]] = clearNoNum(
+          this[keyArr[0]][keyArr[1]][keyArr[2]], max
+        );
+      }
+    },
+    // 面积过滤 小数点后两位 最大9999.99
+    mixin_areaFilter(str) {
+      let keyArr = str.split('.');
+      if (keyArr.length === 1) {
+        this[str] = clearArea(this[str]);
+      } else if (keyArr.length === 2) {
+        this[keyArr[0]][keyArr[1]] = clearArea(this[keyArr[0]][keyArr[1]]);
+      } else if (keyArr.length === 3) {
+        this[keyArr[0]][keyArr[1]][keyArr[2]] = clearArea(
+          this[keyArr[0]][keyArr[1]][keyArr[2]]
+        );
+      }
+    },
+    // 特殊字符过滤
+    mixin_specialMarkFilter(str, isAll = true) {
+      let keyArr = str.split('.');
+      if (keyArr.length === 1) {
+        this[str] = delSpecialMark(this[str], isAll);
+      } else if (keyArr.length === 2) {
+        this[keyArr[0]][keyArr[1]] = delSpecialMark(this[keyArr[0]][keyArr[1]], isAll);
+      } else if (keyArr.length === 3) {
+        this[keyArr[0]][keyArr[1]][keyArr[2]] = delSpecialMark(
+          this[keyArr[0]][keyArr[1]][keyArr[2]], isAll
+        );
+      }
     }
   }
-}
-
-export { mixin, AppDeviceEnquire, mixinDevice, i18nMixin }
+};
