@@ -1,0 +1,102 @@
+<template>
+  <div class="bindBatchSetOne-box">
+    <div>
+      <label-item class="u-bottom-border" title="表数统计方式" :mustFill="true">
+        <a-select v-model="billingMethodValue" style="width: 100%" >
+          <a-select-option :value="1">余数</a-select-option>
+          <a-select-option :value="2">底数</a-select-option>
+          <a-select-option :value="3">金额</a-select-option>
+        </a-select>
+      </label-item>
+    </div>
+    <div style="margin-top: 25px;position: relative;">
+      <label-item class="u-bottom-border" title="电费单价" :mustFill="true">
+        <a-input placeholder="最多可输入 0.01 - 9.99" v-model="unitPriceValue" v-validate="'area|min(0.01)|max(9.99)'"></a-input>
+      </label-item>
+      <div style="position: absolute;color: #777777;font-size: 14px;right: 0px;top: 30px;">{{billingMethodValue==3?'元':'元/度'}}</div>
+    </div>
+    <div class="clearfix" style="width: 100%;padding-top: 50px;">
+      <div class="buttonDiv f-fr">
+        <a-button size="large" class="formItemMarginButton cancelFont" @click="cancelSet">
+          取消
+        </a-button>
+        <a-button size="large" type="primary" class="formItemMarginButton saveFont" @click="batchSetPrice">
+          保存
+        </a-button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "bindBatchSetOne",
+  components: {
+  },
+  props: {
+    batchSetOneObj:{
+      type:Object,
+    }
+  },
+  data() {
+    return {
+      billingMethodValue:1,
+      unitPriceValue:''
+    }
+  },
+  created() {
+    if(this.batchSetOneObj&&this.batchSetOneObj.billingMethod){
+      this.billingMethodValue = this.billingMethod;
+      if(!this.billingMethodValue){
+        this.billingMethodValue = 1;
+      }
+    }
+    if(this.batchSetOneObj&&this.batchSetOneObj.unitPrice){
+      this.unitPriceValue = this.batchSetOneObj.unitPrice
+    }
+  },
+  methods: {
+    cancelSet(){
+      this.$emit('cancelSet');
+    },
+    batchSetPrice(){
+      if(!this.billingMethodValue){
+        this.$message.warning('请选择表数统计方式');
+        return ;
+      }
+      if(!this.unitPriceValue){
+        this.$message.warning('请选择电费单价');
+        return ;
+      }
+      let obj = {
+        billingMethod:this.billingMethodValue,
+        unitPrice:this.unitPriceValue,
+      }
+      this.$emit('setSuccess',obj);
+    },
+  }
+}
+</script>
+
+<style scoped lang="less">
+  .bindBatchSetOne-box{
+    padding: 20px;
+    /deep/ .ant-select-selection__rendered{
+      margin-left: 0px;
+    }
+    .buttonDiv {
+      .formItemMarginButton {
+        width: 120px;
+        height: 40px;
+        margin-left: 18px;
+      }
+      .cancelFont {
+        color: #666666;
+      }
+      .saveFont {
+        color: #FFFFFF;
+        background-color: #0A87F8;
+      }
+    }
+  }
+</style>
