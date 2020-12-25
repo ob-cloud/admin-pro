@@ -22,7 +22,7 @@ import moment from 'moment';
 import mixin from '@/utils/mixin';
 import Print from 'vue-print-nb';
 import GlobalConfig from './GlobalConfig';
-import './assets/common.less'
+import './assets/common.less';
 import '@/utils/directives'
 import '@/utils/lazy_use'
 import 'moment/locale/zh-cn'

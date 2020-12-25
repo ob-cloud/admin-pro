@@ -99,6 +99,13 @@ const vueConfig = {
       }
     }
   },
+  // 全局使用 less 变量
+  pluginOptions: {
+    'style-resources-loader': {
+      preProcessor: 'less',
+      patterns: ['D:\\Project\\on-bright\\项目-A平台系统基础框架\\admin-pro\\src\\assets\\common.less']
+    }
+  },
 
   devServer: {
     // development server port 8000

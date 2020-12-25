@@ -528,41 +528,41 @@ export const constantRouterMap = [{
     name: 'login',
     component: () => import( /* webpackChunkName: "login" */ '@/views/login/Login'),
   },
-  {
-    path: '/enterpriseList',
-    name: 'enterpriseList',
-    component: () => import( /* webpackChunkName: "enterpriseList" */ '@/views/login/plug/enterpriseList'),
-  },
-  {
-    path: '/addRegister',
-    name: 'addRegister',
-    component: () => import( /* webpackChunkName: "addRegister" */ '@/views/login/plug/addRegister'),
-  },
-  {
-    path: '/JoinCompany',
-    name: 'JoinCompany',
-    component: () => import( /* webpackChunkName: "JoinCompany" */ '@/views/login/plug/JoinCompany'),
-  },
-  {
-    path: '/enterpriseOk',
-    name: 'enterpriseOk',
-    component: () => import( /* webpackChunkName: "enterpriseOk" */ '@/views/login/plug/enterpriseOk'),
-  },
-  {
-    path: '/addPersonInfo',
-    name: 'addPersonInfo',
-    component: () => import( /* webpackChunkName: "addPersonInfo" */ '@/views/register/addPersonInfo'),
-  },
-  {
-    path: '/invitationOk',
-    name: 'invitationOk',
-    component: () => import( /* webpackChunkName: "invitationOk" */ '@/views/register/invitationOk'),
-  },
-  {
-    path: '/walletSign',
-    name: 'walletSign',
-    component: () => import( /* webpackChunkName: "addPersonInfo" */ '@/views/wallet/signedSuccess'),
-  },
+  // {
+  //   path: '/enterpriseList',
+  //   name: 'enterpriseList',
+  //   component: () => import( /* webpackChunkName: "enterpriseList" */ '@/views/login/plug/enterpriseList'),
+  // },
+  // {
+  //   path: '/addRegister',
+  //   name: 'addRegister',
+  //   component: () => import( /* webpackChunkName: "addRegister" */ '@/views/login/plug/addRegister'),
+  // },
+  // {
+  //   path: '/JoinCompany',
+  //   name: 'JoinCompany',
+  //   component: () => import( /* webpackChunkName: "JoinCompany" */ '@/views/login/plug/JoinCompany'),
+  // },
+  // {
+  //   path: '/enterpriseOk',
+  //   name: 'enterpriseOk',
+  //   component: () => import( /* webpackChunkName: "enterpriseOk" */ '@/views/login/plug/enterpriseOk'),
+  // },
+  // {
+  //   path: '/addPersonInfo',
+  //   name: 'addPersonInfo',
+  //   component: () => import( /* webpackChunkName: "addPersonInfo" */ '@/views/register/addPersonInfo'),
+  // },
+  // {
+  //   path: '/invitationOk',
+  //   name: 'invitationOk',
+  //   component: () => import( /* webpackChunkName: "invitationOk" */ '@/views/register/invitationOk'),
+  // },
+  // {
+  //   path: '/walletSign',
+  //   name: 'walletSign',
+  //   component: () => import( /* webpackChunkName: "addPersonInfo" */ '@/views/wallet/signedSuccess'),
+  // },
   {
     path: '/',
     component: BasicLayout,
