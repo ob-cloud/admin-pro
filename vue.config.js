@@ -103,7 +103,9 @@ const vueConfig = {
   pluginOptions: {
     'style-resources-loader': {
       preProcessor: 'less',
-      patterns: ['D:\\Project\\on-bright\\项目-A平台系统基础框架\\admin-pro\\src\\assets\\common.less']
+      patterns: [
+        path.resolve(__dirname, './src/assets/common.less'),
+      ]
     }
   },
 
